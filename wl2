@@ -1,12 +1,32 @@
+
+getgenv().DungeonFarm = true
+getgenv().DungeonReset = true
+getgenv().DungeonWave = 26
+getgenv().DungeonMoves = true -- keep on for dungeons, uses gojo skills
+
+getgenv().AutoQuest = false
+getgenv().InstaKill = false
+getgenv().AutoFarm = false
+getgenv().AutoM1 = false
+
+getgenv().automoves = false
+getgenv().moveset = {
+    {Name = "Reversal Red", MoveIndex = "FirstMove"},
+		{Name = ".2 Second Domain", MoveIndex = "FifthMove"}
+} -- Must have exact move name, fourth move would be FourthMove, fifth is FifthMove
+
+
+getgenv().QuestType = "Boss" -- Boss / Normal
+getgenv().QuestNumber = 24 
+
+getgenv().MobNames = {"Kokoshibo"} 
+
 local Player = game.Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local TeleportService = game:GetService("TeleportService")
 
-local GojoMove = {
-    {Name = "Reversal Red", MoveIndex = "FirstMove"},
-    {Name = ".2 Second Domain", MoveIndex = "FifthMove"}
-}
+local AutoFarmMoves = getgenv().moveset
 
 local GojoDungeon = {
     {Name = "Lapse Blue", MoveIndex = "SecondMove"}
@@ -176,13 +196,13 @@ task.spawn(function()
 	end
 end)
 
--- Auto Gojo Skill
+-- Auto Skills
 task.spawn(function()
 	local currentMove = 1
 	while task.wait(0) do
-		if getgenv().AutoGojo then
+		if getgenv().automoves then
 			pcall(function()
-				local move = GojoMove[currentMove]
+				local move = AutoFarmMoves[currentMove]
 				local args = {
 					[1] = "Skill",
 					[2] = move.Name,
@@ -192,7 +212,7 @@ task.spawn(function()
 				}
 				ReplicatedStorage.Remotes.Attack:FireServer(unpack(args))
 				currentMove += 1
-				if currentMove > #GojoMove then currentMove = 1 end
+				if currentMove > #AutoFarmMoves then currentMove = 1 end
 			end)
 		end
 	end
@@ -229,7 +249,7 @@ task.spawn(function()
             end)
             if success then
                 local waveNumber = tonumber(waveText:match("%d+"))
-                if waveNumber and waveNumber >= DungeonWave then
+                if waveNumber and waveNumber >= getgenv().DungeonWave then
                     pcall(function()
                         getgenv().DungeonFarm = false
                         getgenv().AutoGojo = false
