@@ -9,7 +9,7 @@ getgenv().InstaKill = true
 getgenv().DungeonMoves = false
 
 getgenv().MobNames = {"Demon Slayer"}
-getgenv().MobNames2 = {"Yahaba"}
+getgenv().MobNames2 = {"Tanjiro (Water)"}
 getgenv().MobNames3 = {"Tanjiro (Water)"}
 
 local MoonV2Taken = false
@@ -34,7 +34,7 @@ task.spawn(function()
 				getgenv().boss = true
 				wait(0)
 				local args = {
-					[1] = "Quest Boss Dummy 23",
+					[1] = "Quest Boss Dummy 1",
 					[2] = 1,
 					[3] = "2K YEN, 20K XP",
 					[4] = "TANJIRO",
