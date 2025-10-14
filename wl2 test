@@ -89,14 +89,16 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	while task.wait() do
+	while task.wait(0.2) do
 		if getgenv().InstaKill then
 			pcall(function()
-				for _, v in pairs(Workspace:FindFirstChild("CharactersAndNPCs"):GetChildren()) do
+				local chars = Workspace:FindFirstChild("CharactersAndNPCs")
+				if not chars then return end
+				for _, v in pairs(chars:GetChildren()) do
 					if v ~= Player.Character then
-						local hum = v:FindFirstChildOfClass("Humanoid")
 						local hrp = v:FindFirstChild("HumanoidRootPart")
-						if hum and hrp and isnetworkowner(hrp) and hum.Health > 0 then
+						local hum = v:FindFirstChildOfClass("Humanoid")
+						if hrp and hum and isnetworkowner(hrp) and hum.Health > 0 and hum.Health <= (0.89 * hum.MaxHealth) then
 							hum.Health = 0
 						end
 					end
