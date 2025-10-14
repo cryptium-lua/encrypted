@@ -46,17 +46,7 @@ task.spawn(function()
 				getgenv().WaterV2 = false
 			end
 
-			if mastery >= 30 and not getgenv().WaterV2 and not MoonV2Taken then
-				getgenv().boss = false
-				getgenv().setup = false
-				getgenv().WaterV2 = true
-				MoonV2Taken = true
-				TakeQuest("Moon V2 Breathing")
-				task.wait(0.5)
-				getgenv().DungeonMoves = true
-			end
-
-			if moveset == "Water V2 Breathing" then
+			if mastery >= 30 then
 				getgenv().boss = false
 				getgenv().setup = false
 				getgenv().WaterV2 = false
