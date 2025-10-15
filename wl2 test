@@ -60,7 +60,6 @@ task.spawn(function()
 	end
 end)
 
-local GojoDungeon = {{Name = "Reversal Red", MoveIndex = "FirstMove"}}
 task.spawn(function()
 	local currentMove = 1
 	while task.wait() do
