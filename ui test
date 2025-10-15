@@ -1,1 +1,24 @@
-period
+local Maclib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
+local Window = MacLib:Window({
+    Title = "Lua / C97",
+    Subtitle = "WL2 | V2.0",
+    Size = UDim2.fromOffset(868, 650),
+    DragStyle = 2,
+    DisabledWindowControls = {},
+    ShowUserInfo = true,
+    Keybind = Enum.KeyCode.RightControl,
+    AcrylicBlur = false,
+})
+
+
+
+
+MacLib:SetFolder("Lua-WL2")
+tabs.Settings:InsertConfigSection("Left")
+
+Window.onUnloaded(function()
+	print("Unloaded!")
+end)
+
+tabs.Main:Select()
+MacLib:LoadAutoLoadConfig()
