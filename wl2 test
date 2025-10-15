@@ -19,6 +19,10 @@ local function TakeQuest(name)
 	ReplicatedStorage.Events.QuestTake:FireServer(unpack(args))
 end
 
+local GojoDungeon = {
+    {Name = "Reversal Red", MoveIndex = "FirstMove"}
+}
+
 TakeQuest("Gojo")
 task.wait(0.5)
 getgenv().setup = true
