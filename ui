@@ -5400,20 +5400,20 @@ end
 				end
 			end
 		},
-		["Input"] = {
-			Save = function(Flag, data)
-				return {
-					type = "Input", 
-					flag = Flag, 
-					text = data.Text
-				}
-			end,
-			Load = function(Flag, data)
-				if MacLib.Options[Flag] and data.text and type(data.text) == "string" then
-					MacLib.Options[Flag]:UpdateText(data.text)
-				end
-			end
-		},
+["Input"] = {
+    Save = function(Flag, data)
+        return {
+            type = "Input",
+            flag = Flag,
+            text = data.Text or data.Settings.Default or ""
+        }
+    end,
+    Load = function(Flag, data)
+        if MacLib.Options[Flag] and data.text and type(data.text) == "string" then
+            MacLib.Options[Flag]:UpdateText(data.text)
+        end
+    end
+}
 		["Keybind"] = {
 			Save = function(Flag, data)
 				return {
