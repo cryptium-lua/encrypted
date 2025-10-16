@@ -25,7 +25,7 @@ local GojoDungeon = {
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
 local Window = MacLib:Window({
     Title = "LUA / C97",
-    Subtitle = "WL2 | V2.0",
+    Subtitle = "WL2 | V2.67",
     Size = UDim2.fromOffset(868, 650),
     DragStyle = 2,
     DisabledWindowControls = {},
@@ -51,6 +51,7 @@ local tabGroups = {
 
 local tabs = {
     Autofarm = tabGroups.TabGroup1:Tab({ Name = "Farm" }),
+    Dungeon = tabGroups.TabGroup1:Tab({ Name = "Dungeon" }),
     Settings = tabGroups.TabGroup2:Tab({ Name = "Settings" })
 }
 
@@ -58,6 +59,7 @@ local sections = {
     MainSection1 = tabs.Autofarm:Section({ Side = "Left" }),
     MainSection2 = tabs.Autofarm:Section({ Side = "Right" }),
     MainSection3 = tabs.Autofarm:Section({ Side = "Left" }),
+    DungeonSection1 = tabs.Dungeon:Section({ Side = "Left" }),
     SettingsSection1 = tabs.Settings:Section({ Side = "Left" })
 }
 
@@ -202,6 +204,42 @@ sections.SettingsSection1:Input({
         })
     end
 }, "Input")
+
+sections.DungeonSection1:Toggle({
+    Name = "Dungeon Farm",
+    Default = false,
+    Callback = function(value)
+        getgenv().DungeonFarm = value
+    end
+}, "DungeonFarm")
+
+sections.DungeonSection1:Toggle({
+    Name = "Auto Reset",
+    Default = false,
+    Callback = function(value)
+        getgenv().DungeonReset = value
+    end
+}, "DungeonReset")
+
+sections.MainSection3:Input({
+    Name = "Reset At",
+    Placeholder = "5",
+    AcceptedCharacters = "Numeric",
+    Callback = function(input)
+        getgenv().DungeonWave = input
+    end
+}, "ResetWave")
+
+sections.MainSection3:Input({
+    Name = "Auto Ability",
+    Placeholder = "1",
+    AcceptedCharacters = "Numeric",
+    Callback = function(input)
+        getgenv().DungeonMoves = input
+    end
+}, "AutoAbilityDungeon")
+
+-- functions
 
 task.spawn(function()
     while task.wait(1) do
