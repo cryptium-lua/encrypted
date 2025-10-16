@@ -1,4 +1,5 @@
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
+
 local Window = MacLib:Window({
     Title = "Lua / C97",
     Subtitle = "WL2 | V2.0",
@@ -12,25 +13,156 @@ local Window = MacLib:Window({
 Window:SetScale(0.78)
 
 local TabGroup1 = Window:TabGroup()
+
 local SettingsTab = TabGroup1:Tab({
-  Name = "Settings",
-  Image = nil
+    Name = "Settings",
+    Image = nil
 })
 
 local SettingsSection = SettingsTab:Section({
-  Side = "Left"
+    Side = "Left"
 })
 
 SettingsSection:Input({
-	Name = "UI Scale",
-	Placeholder = "1 = 100%",
-	AcceptedCharacters = "All",
-	Callback = function(input)
-		Window:SetScale(input)
-	end,
-}, "TargetInput")
+    Name = "UI Scale",
+    Placeholder = "1 = 100%",
+    AcceptedCharacters = "All",
+    Callback = function(input)
+        local num = tonumber(input)
+        if num then
+            Window:SetScale(num)
+        else
+            Window:Notify({
+                Title = "Error",
+                Description = "Please enter a valid number!"
+            })
+        end
+    end,
+})
 
+local configSection = SettingsTab:Section({
+    Side = "Right"
+})
 
+local inputPath = nil
+local selectedConfig = nil
+
+configSection:Input({
+    Name = "Config Name",
+    Placeholder = "Name",
+    AcceptedCharacters = "All",
+    Callback = function(input)
+        inputPath = input
+    end,
+})
+
+local configSelection = configSection:Dropdown({
+    Name = "Select Config",
+    Multi = false,
+    Required = false,
+    Options = MacLib:RefreshConfigList(),
+    Callback = function(Value)
+        selectedConfig = Value
+    end,
+})
+
+configSection:Button({
+    Name = "Create Config",
+    Callback = function()
+        if not inputPath or string.gsub(inputPath, " ", "") == "" then
+            Window:Notify({
+                Title = "Config",
+                Description = "Config name cannot be empty."
+            })
+            return
+        end
+
+        local success, returned = MacLib:SaveConfig(inputPath)
+        if not success then
+            Window:Notify({
+                Title = "Config",
+                Description = "Failed to save config: " .. tostring(returned)
+            })
+            return
+        end
+
+        Window:Notify({
+            Title = "Config",
+            Description = "Created config: " .. inputPath
+        })
+
+        configSelection:ClearOptions()
+        configSelection:InsertOptions(MacLib:RefreshConfigList())
+    end,
+})
+
+configSection:Button({
+    Name = "Load Config",
+    Callback = function()
+        if not selectedConfig then
+            Window:Notify({
+                Title = "Config",
+                Description = "No config selected!"
+            })
+            return
+        end
+        local success, returned = MacLib:LoadConfig(selectedConfig)
+        if not success then
+            Window:Notify({
+                Title = "Config",
+                Description = "Failed to load config: " .. tostring(returned)
+            })
+            return
+        end
+        Window:Notify({
+            Title = "Config",
+            Description = "Loaded config: " .. selectedConfig
+        })
+    end,
+})
+
+configSection:Button({
+    Name = "Overwrite Config",
+    Callback = function()
+        if not selectedConfig then
+            Window:Notify({
+                Title = "Config",
+                Description = "No config selected!"
+            })
+            return
+        end
+        local success, returned = MacLib:SaveConfig(selectedConfig)
+        if not success then
+            Window:Notify({
+                Title = "Config",
+                Description = "Failed to overwrite config: " .. tostring(returned)
+            })
+            return
+        end
+        Window:Notify({
+            Title = "Config",
+            Description = "Overwrote config: " .. selectedConfig
+        })
+    end,
+})
+
+configSection:Button({
+    Name = "Refresh Config List",
+    Callback = function()
+        configSelection:ClearOptions()
+        configSelection:InsertOptions(MacLib:RefreshConfigList())
+        Window:Notify({
+            Title = "Config",
+            Description = "Refreshed config list."
+        })
+    end,
+})
+
+Window:Notify({
+    Title = "PC USERS",
+    Description = "Right Click to hide UI.",
+    Lifetime = 5
+})
 
 MacLib:SetFolder("Lua-WL2")
 tabs.Settings:InsertConfigSection("Left")
