@@ -354,6 +354,16 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+	while task.wait(0) do
+		if getgenv().AutoBreath then
+		pcall(function()
+			local args = {[1] = "BeginHamonBreathing"}
+			ReplicatedStorage.Events.Breathing:FireServer(unpack(args))
+		end)
+	end
+end)
+
 MacLib:SetFolder("Lua-WL2")
 tabs.Settings:InsertConfigSection("Right")
 Window.onUnloaded(function()
