@@ -12,12 +12,11 @@ getgenv().InstaKill = false
 getgenv().AutoFarm = false
 getgenv().AutoM1 = false
 getgenv().automoves = false
+getgenv().AutoBreath = false
 getgenv().moveset = {}
 getgenv().QuestType = "Normal"
 getgenv().QuestNumber = 1
 getgenv().MobNames = {}
-
-local AutoFarmMoves = getgenv().moveset
 
 local GojoDungeon = {
     {Name = "Lapse Blue", MoveIndex = "SecondMove"}
@@ -57,6 +56,8 @@ local tabs = {
 
 local sections = {
     MainSection1 = tabs.Autofarm:Section({ Side = "Left" }),
+    MainSection2 = tabs.Autofarm:Section({ Side = "Right" }),
+    MainSection3 = tabs.Autofarm:Section({ Side = "Left" }),
     SettingsSection1 = tabs.Settings:Section({ Side = "Left" })
 }
 
@@ -110,7 +111,7 @@ sections.MainSection1:Toggle({
     end,
 }, "AutoM1")
 
-sections.MainSection1:Toggle({
+sections.MainSection2:Toggle({
     Name = "Auto Moves",
     Default = false,
     Callback = function(value)
@@ -123,7 +124,7 @@ sections.MainSection1:Toggle({
     end,
 }, "AutoMoves")
 
-local MovesDropdown = sections.MainSection1:Dropdown({
+local MovesDropdown = sections.MainSection2:Dropdown({
     Name = "Moves",
     Search = true,
     Multi = true,
@@ -139,12 +140,30 @@ local MovesDropdown = sections.MainSection1:Dropdown({
             [".2 Second Domain"] = "FifthMove"
         }
         local selectedMoves = {}
-        for _, name in ipairs(Value) do
-            table.insert(selectedMoves, {Name = name, MoveIndex = allMoves[name]})
+        for name, selected in pairs(Value) do
+            if selected and allMoves[name] then
+                table.insert(selectedMoves, {Name = name, MoveIndex = allMoves[name]})
+            end
         end
         getgenv().moveset = selectedMoves
     end,
 }, "UseMoves")
+
+sections.MainSection2:Toggle({
+    Name = "Instant Kill",
+    Default = false,
+    Callback = function(value)
+        getgenv().InstaKill = value
+    end,
+}, "InstantKill")
+
+sections.MainSection2:Toggle({
+    Name = "Auto Breath",
+    Default = false,
+    Callback = function(value)
+        getgenv().AutoBreath = value
+    end,
+}, "AutoBreath")
 
 sections.SettingsSection1:Input({
     Name = "UI Scale",
@@ -190,7 +209,7 @@ task.spawn(function()
 
 			local closest, dist = nil, math.huge
 			for _, mob in pairs(chars:GetChildren()) do
-				if table.find(getgenv().MobNames, mob.Name) then
+				if getgenv().MobNames[mob.Name] then
 					local hrp = mob:FindFirstChild("HumanoidRootPart")
 					local hum = mob:FindFirstChildOfClass("Humanoid")
 					if hrp and hum and hum.Health > 0 then
@@ -281,7 +300,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	while task.wait(0.2) do
+	while task.wait(0) do
 		if getgenv().AutoM1 then
 			pcall(function()
 				local args = {[1] = "M1", [2] = "Katana", [3] = false}
@@ -289,17 +308,6 @@ task.spawn(function()
 			end)
 		end
 	end
-end)
-
-task.spawn(function()
-    while task.wait(0) do
-        if getgenv().AutoBreath then
-            pcall(function()
-                local args = {[1] = "BeginHamonBreathing"}
-                ReplicatedStorage.Events.Breathing:FireServer(unpack(args))
-            end)
-        end
-    end
 end)
 
 task.spawn(function()
