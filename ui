@@ -5371,107 +5371,107 @@ end
 		return baseUIScale.Scale
 	end
 
-	local ClassParser = {
-		["Toggle"] = {
-			Save = function(Flag, data)
-				return {
-					type = "Toggle", 
-					flag = Flag, 
-					state = data.State or false
-				}
-			end,
-			Load = function(Flag, data)
-				if MacLib.Options[Flag] and data.state then
-					MacLib.Options[Flag]:UpdateState(data.state)
-				end
+local ClassParser = {
+	["Toggle"] = {
+		Save = function(Flag, data)
+			return {
+				type = "Toggle", 
+				flag = Flag, 
+				state = data.State or false
+			}
+		end,
+		Load = function(Flag, data)
+			if MacLib.Options[Flag] and data.state then
+				MacLib.Options[Flag]:UpdateState(data.state)
 			end
-		},
-		["Slider"] = {
-			Save = function(Flag, data)
-				return {
-					type = "Slider", 
-					flag = Flag, 
-					value = (data.Value and tostring(data.Value)) or false
-				}
-			end,
-			Load = function(Flag, data)
-				if MacLib.Options[Flag] and data.value then
-					MacLib.Options[Flag]:UpdateValue(data.value)
-				end
+		end
+	},
+	["Slider"] = {
+		Save = function(Flag, data)
+			return {
+				type = "Slider", 
+				flag = Flag, 
+				value = (data.Value and tostring(data.Value)) or false
+			}
+		end,
+		Load = function(Flag, data)
+			if MacLib.Options[Flag] and data.value then
+				MacLib.Options[Flag]:UpdateValue(data.value)
 			end
-		},
-		["Input"] = {
-			Save = function(Flag, data)
-				return {
-					type = "Input", 
-					flag = Flag, 
-					text = data.Text
-				}
-			end,
-			Load = function(Flag, data)
-				if MacLib.Options[Flag] and data.text and type(data.text) == "string" then
-					MacLib.Options[Flag]:UpdateText(data.text)
-				end
+		end
+	},
+	["Input"] = {
+		Save = function(Flag, data)
+			return {
+				type = "Input", 
+				flag = Flag, 
+				text = data.Text or data.Settings.Default or ""
+			}
+		end,
+		Load = function(Flag, data)
+			if MacLib.Options[Flag] and data.text and type(data.text) == "string" then
+				MacLib.Options[Flag]:UpdateText(data.text)
 			end
-		},
-		["Keybind"] = {
-			Save = function(Flag, data)
-				return {
-					type = "Keybind", 
-					flag = Flag, 
-					bind = (typeof(data.Bind) == "EnumItem" and data.Bind.Name) or nil
-				}
-			end,
-			Load = function(Flag, data)
-				if MacLib.Options[Flag] and data.bind then
-					MacLib.Options[Flag]:Bind(Enum.KeyCode[data.bind])
-				end
+		end
+	},
+	["Keybind"] = {
+		Save = function(Flag, data)
+			return {
+				type = "Keybind", 
+				flag = Flag, 
+				bind = (typeof(data.Bind) == "EnumItem" and data.Bind.Name) or nil
+			}
+		end,
+		Load = function(Flag, data)
+			if MacLib.Options[Flag] and data.bind then
+				MacLib.Options[Flag]:Bind(Enum.KeyCode[data.bind])
 			end
-		},
-		["Dropdown"] = {
-			Save = function(Flag, data)
-				return {
-					type = "Dropdown", 
-					flag = Flag, 
-					value = data.Value
-				}
-			end,
-			Load = function(Flag, data)
-				if MacLib.Options[Flag] and data.value then
-					MacLib.Options[Flag]:UpdateSelection(data.value)
-				end
+		end
+	},
+	["Dropdown"] = {
+		Save = function(Flag, data)
+			return {
+				type = "Dropdown", 
+				flag = Flag, 
+				value = data.Value
+			}
+		end,
+		Load = function(Flag, data)
+			if MacLib.Options[Flag] and data.value then
+				MacLib.Options[Flag]:UpdateSelection(data.value)
 			end
-		},
-		["Colorpicker"] = {
-			Save = function(Flag, data)
-				local function Color3ToHex(color)
-					return string.format("#%02X%02X%02X", math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255))
-				end
+		end
+	},
+	["Colorpicker"] = {
+		Save = function(Flag, data)
+			local function Color3ToHex(color)
+				return string.format("#%02X%02X%02X", math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255))
+			end
 
-				return {
-					type = "Colorpicker", 
-					flag = Flag, 
-					color = Color3ToHex(data.Color) or nil,
-					alpha = data.Alpha
-				}
-			end,
-			Load = function(Flag, data)
-				local function HexToColor3(hex)
-					local r = tonumber(hex:sub(2, 3), 16) / 255
-					local g = tonumber(hex:sub(4, 5), 16) / 255
-					local b = tonumber(hex:sub(6, 7), 16) / 255
-					return Color3.new(r, g, b)
-				end
+			return {
+				type = "Colorpicker", 
+				flag = Flag, 
+				color = Color3ToHex(data.Color) or nil,
+				alpha = data.Alpha
+			}
+		end,
+		Load = function(Flag, data)
+			local function HexToColor3(hex)
+				local r = tonumber(hex:sub(2, 3), 16) / 255
+				local g = tonumber(hex:sub(4, 5), 16) / 255
+				local b = tonumber(hex:sub(6, 7), 16) / 255
+				return Color3.new(r, g, b)
+			end
 
-				if MacLib.Options[Flag] and data.color then
-					MacLib.Options[Flag]:SetColor(HexToColor3(data.color)) 
-					if data.alpha then
-						MacLib.Options[Flag]:SetAlpha(data.alpha)
-					end
+			if MacLib.Options[Flag] and data.color then
+				MacLib.Options[Flag]:SetColor(HexToColor3(data.color)) 
+				if data.alpha then
+					MacLib.Options[Flag]:SetAlpha(data.alpha)
 				end
 			end
-		}
+		end
 	}
+}
 
 	local function BuildFolderTree()
 		if isStudio or not (isfolder and makefolder) then return "Config system unavailable." end
