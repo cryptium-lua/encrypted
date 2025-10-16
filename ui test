@@ -1,3 +1,18 @@
+-- Variables
+
+local Player = game.Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local TeleportService = game:GetService("TeleportService")
+
+local AutoFarmMoves = getgenv().moveset
+
+local GojoDungeon = {
+    {Name = "Lapse Blue", MoveIndex = "SecondMove"}
+}
+
+-- UI
+
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
 
 	local Window = MacLib:Window({
