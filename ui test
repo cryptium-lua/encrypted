@@ -25,7 +25,7 @@ local sections = {
 	Setting = tabs.Settings:Section({Side = "Left"})
 }
 
-sections.Settings:Input({
+sections.Setting:Input({
     Name = "UI Scale",
     Placeholder = "1 = 100%",
     AcceptedCharacters = "All",
