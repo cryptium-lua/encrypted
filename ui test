@@ -17,6 +17,8 @@ getgenv().moveset = {}
 getgenv().QuestType = nil
 getgenv().QuestNumber = 1
 getgenv().MobNames = {}
+getgenv().wantedClan = {}
+getgenv().ClanSpin = false
 
 task.spawn(function()
     while task.wait(10) do
@@ -37,6 +39,31 @@ local function MobSelected(name)
     if not m then return false end
     return m[name] == true
 end
+
+task.spawn(function()
+while task.wait(0.3) do
+if getgenv().ClanSpin then
+pcall(function()
+    local data = Player.Data
+    local currentClan = data.Clan.Value
+
+    for _, wanted in ipairs(getgenv().wantedClan) do
+        if currentClan == wanted then
+            getgenv().ClanSpin = false
+            return
+        end
+    end
+    
+
+local args = {
+    [1] = "Spin_Race"
+}
+
+game:GetService("ReplicatedStorage").SharedFramework.Network.Remotes.Character_RE:FireServer(unpack(args))
+end)
+end
+end
+end)
 
 local GojoDungeon = {
     {Name = "Lapse Blue", MoveIndex = "SecondMove"}
@@ -71,6 +98,7 @@ local tabGroups = {
 
 local tabs = {
     Autofarm = tabGroups.TabGroup1:Tab({ Name = "Farm" }),
+    Clan = tabGroups.TabGroup1:Tab({ Name = "Spin" }),
     Dungeon = tabGroups.TabGroup1:Tab({ Name = "Dungeon" }),
     Settings = tabGroups.TabGroup2:Tab({ Name = "Settings" })
 }
@@ -81,6 +109,7 @@ local sections = {
     MainSection3 = tabs.Autofarm:Section({ Side = "Left" }),
     DungeonSection1 = tabs.Dungeon:Section({ Side = "Left" }),
     DungeonSection2 = tabs.Dungeon:Section({ Side = "Right" }),
+    ClanSection1 = tabs.Clan:Section({ Side = "Left" }),
     SettingsSection1 = tabs.Settings:Section({ Side = "Left" })
 }
 
@@ -501,6 +530,34 @@ sections.DungeonSection2:Toggle({
         getgenv().InstaKill2 = value
     end
 })
+
+-- Clan
+
+sections.ClanSection1:Toggle({
+    Name = "Auto Spin Clan",
+    Default = false,
+    Callback = function(value)
+        getgenv().ClanSpin = value
+    end
+}, "SpinClan")
+
+local Clans = sections.ClanSection1:Dropdown({
+    Name = "Clans",
+    Search = true,
+    Multi = true,
+    Required = false,
+    Options = {"Tsugikuni", "Kamado", "Iguro", "Rengoku", "Shinazugawa", "Agatsuma", "Tomioka", "Uzui", "Tsuyuri", "Tokito", "Kocho", "Haganezuka", "Kanroji", "Sabito", "Tamayo", "Makomo", "Kanzaki", "Toma", "Hashibira", "None"},
+    Default = {},
+		Callback = function(Value)
+    local clanTable = {}
+    for clanName, selected in pairs(Value) do
+        if selected then
+            clanTable[clanName] = true
+        end
+    end
+    getgenv().wantedClan = clanTable
+end
+}, "clanTable")
 
 -- settings
 
