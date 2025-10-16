@@ -5879,7 +5879,7 @@ function MacLib:Demo()
 	MacLib:LoadAutoLoadConfig()
 end
 
-local function createButton()
+function MacLib:createButton()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "MyScreenGui"
     screenGui.ResetOnSpawn = false
