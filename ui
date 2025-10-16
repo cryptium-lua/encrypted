@@ -261,29 +261,6 @@ function MacLib:Window(Settings)
 
 	maximize.Parent = controls
 
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "MyScreenGui"
-    screenGui.ResetOnSpawn = false
-    screenGui.Parent = player:FindFirstChildOfClass("PlayerGui") or game:GetService("CoreGui")
-
-    local button = Instance.new("ImageButton")
-    button.Size = UDim2.fromScale(0.07, 0.14) -- scale-based size
-    button.Position = UDim2.fromScale(0.024, 0.35) -- scale-based position
-    button.Image = "rbxassetid://111621789759656"
-    button.BackgroundTransparency = 0 -- no white background
-    button.BorderSizePixel = 0
-    button.Name = "MyButton"
-    button.Parent = screenGui
-    button.Draggable = true
-
-    local uiCorner = Instance.new("UICorner")
-    uiCorner.CornerRadius = UDim.new(0, 100)
-    uiCorner.Parent = button
-
-button.MouseButton1Click:Connect(function()
-    Base.Visible = not Base.Visible
-end)
-
 	local function applyState(button, enabled)
 		local size = enabled and windowControlSettings.sizes.enabled or windowControlSettings.sizes.disabled
 		local transparency = enabled and windowControlSettings.transparencies.enabled or windowControlSettings.transparencies.disabled
