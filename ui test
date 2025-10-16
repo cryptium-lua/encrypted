@@ -13,7 +13,14 @@ local Window = MacLib:Window({
 
 local Scale = 0.78
 
+task.spawn(function()
+while true do
+pcall(function()
+wait(0)
 Window:SetScale(Scale)
+end)
+end
+end)
 
 local tabGroups = {
 	TabGroup1 = Window:TabGroup()
