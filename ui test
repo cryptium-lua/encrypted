@@ -782,6 +782,28 @@ task.spawn(function()
 	end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if getgenv().DungeonReset then
+            local success, waveText = pcall(function()
+                return Player.PlayerGui:WaitForChild("HUD"):WaitForChild("Dungeon"):WaitForChild("Wave").Text
+            end)
+            if success then
+                local waveNumber = tonumber(waveText:match("%d+"))
+                if waveNumber and waveNumber >= getgenv().DungeonWave then
+                    pcall(function()
+                        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+                            Player.Character.Humanoid.Health = 0
+                            task.wait(8)
+                            TeleportService:Teleport(18337464872, Player)
+                        end
+                    end)
+                end
+            end
+        end
+    end
+end)
+
 MacLib:SetFolder("Lua-WL2")
 tabs.Settings:InsertConfigSection("Right")
 Window.onUnloaded(function()
