@@ -12,17 +12,20 @@ local Window = MacLib:Window({
 })
 Window:SetScale(0.78)
 
-local TabGroup1 = Window:TabGroup()
-local SettingsTab = TabGroup1:Tab({
-    Name = "Settings",
-    Image = nil
-})
+local tabGroups = {
+	TabGroup1 = Window:TabGroup()
+}
 
-local SettingsSection = SettingsTab:Section({
-    Side = "Left"
-})
+local tabs = {
+	Main = tabGroups.TabGroup1:Tab({ Name = "Demo", Image = nil }),
+	Settings = tabGroups.TabGroup1:Tab({ Name = "Settings", Image = nil })
+}
 
-SettingsSection:Input({
+local sections = {
+	Setting = tabs.Settings:Section({Side = "Left"})
+}
+
+sections.Settings:Input({
     Name = "UI Scale",
     Placeholder = "1 = 100%",
     AcceptedCharacters = "All",
@@ -46,10 +49,11 @@ Window:Notify({
 })
 
 MacLib:SetFolder("Lua-WL2")
-SettingsTab:InsertConfigSection("Right")
+tabs.Settings:InsertConfigSection("Right")
 
 Window.onUnloaded(function()
 	print("Unloaded!")
 end)
 
+tabs.Settings:Select()
 MacLib:LoadAutoLoadConfig()
