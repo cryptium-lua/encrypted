@@ -451,7 +451,32 @@ sections.DungeonSection2:Button({
         {
             Name = "Confirm",
             Callback = function()
-            	print("Confirmed!")
+TakeQuest("Gojo")
+task.wait(0.5)
+getgenv().setup = true
+getgenv().DungeonMoves2 = true
+
+task.spawn(function()
+	while task.wait() do
+		pcall(function()
+			local moveset = Player.Movesets.Moveset.Value
+			local mastery = Player.Mastery.Gojo.Mastery.Value
+
+			if moveset == "Gojo" then
+				getgenv().boss = true
+				getgenv().setup = false
+				getgenv().WaterV2 = false
+			end
+
+			if mastery >= 30 then
+				getgenv().boss = false
+				getgenv().setup = false
+				getgenv().WaterV2 = false
+				getgenv().DungeonMoves2 = false
+			end
+		end)
+	end
+end)
             end,
         },
         {
@@ -460,6 +485,14 @@ sections.DungeonSection2:Button({
     }
 })
 	end,
+})
+
+sections.DungeonSection2:Toggle({
+    Name = "Instant Kill (Dungeon Req)",
+    Default = false,
+    Callback = function(value)
+        getgenv().InstaKill2 = value
+    end
 })
 
 -- settings
