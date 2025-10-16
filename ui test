@@ -254,12 +254,211 @@ local GojoDungeon2 = {
     {Name = "Reversal Red", MoveIndex = "FirstMove"}
 }
 
+task.spawn(function()
+	local currentMove = 1
+	while task.wait() do
+		if getgenv().DungeonMoves2 then
+			pcall(function()
+				local move = GojoDungeon2[currentMove]
+				local args = {
+					[1] = "Skill",
+					[2] = move.Name,
+					[3] = "Release",
+					[4] = move.MoveIndex,
+					[6] = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and Player.Character.HumanoidRootPart.CFrame or CFrame.new()
+				}
+				ReplicatedStorage.Remotes.Attack:FireServer(unpack(args))
+				currentMove += 1
+				if currentMove > #GojoDungeon2 then currentMove = 1 end
+			end)
+		end
+	end
+end)
+
+task.spawn(function()
+	while task.wait(0) do
+		if getgenv().InstaKill2 then
+			pcall(function()
+				local char = Workspace:FindFirstChild("CharactersAndNPCs")
+				if not char then return end
+				for _, v in pairs(char:GetChildren()) do
+					if v ~= Player.Character then
+						local hrp = v:FindFirstChild("HumanoidRootPart")
+						local hum = v:FindFirstChildOfClass("Humanoid")
+						if hrp and hum and isnetworkowner(hrp) and hum.Health > 0 and hum.Health <= (0.89 * hum.MaxHealth) then
+							hum.Health = 0
+						end
+					end
+				end
+			end)
+		end
+	end
+end)
+
+task.spawn(function()
+	local antifall
+	while task.wait(0.1) do
+		pcall(function()
+			if not getgenv().setup then
+				if antifall then antifall:Destroy() antifall = nil end
+				return
+			end
+			local chars = Workspace:FindFirstChild("CharactersAndNPCs")
+			if not chars then return end
+
+			local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+			if not myhrp then return end
+
+			local closest, dist = nil, math.huge
+			for _, mob in pairs(chars:GetChildren()) do
+				if table.find(getgenv().MobNames2, mob.Name) then
+					local hrp = mob:FindFirstChild("HumanoidRootPart")
+					local hum = mob:FindFirstChildOfClass("Humanoid")
+					if hrp and hum and hum.Health > 0 then
+						local mag = (myhrp.Position - hrp.Position).Magnitude
+						if mag < dist then
+							dist = mag
+							closest = mob
+						end
+					end
+				end
+			end
+
+			if closest then
+				local hrp = closest:FindFirstChild("HumanoidRootPart")
+				if hrp then
+					if not antifall then
+						antifall = Instance.new("BodyVelocity")
+						antifall.Velocity = Vector3.new(0, 0, 0)
+						antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+						antifall.Parent = myhrp
+					end
+					myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
+				end
+			elseif antifall then
+				antifall:Destroy()
+				antifall = nil
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	local antifall
+	while task.wait(0.1) do
+		pcall(function()
+			if not getgenv().boss then
+				if antifall then antifall:Destroy() antifall = nil end
+				return
+			end
+			local chars = Workspace:FindFirstChild("CharactersAndNPCs")
+			if not chars then return end
+
+			local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+			if not myhrp then return end
+
+			local closest, dist = nil, math.huge
+			for _, mob in pairs(chars:GetChildren()) do
+				if table.find(getgenv().MobNames3, mob.Name) then
+					local hrp = mob:FindFirstChild("HumanoidRootPart")
+					local hum = mob:FindFirstChildOfClass("Humanoid")
+					if hrp and hum and hum.Health > 0 then
+						local mag = (myhrp.Position - hrp.Position).Magnitude
+						if mag < dist then
+							dist = mag
+							closest = mob
+						end
+					end
+				end
+			end
+
+			if closest then
+				local hrp = closest:FindFirstChild("HumanoidRootPart")
+				if hrp then
+					if not antifall then
+						antifall = Instance.new("BodyVelocity")
+						antifall.Velocity = Vector3.new(0, 0, 0)
+						antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+						antifall.Parent = myhrp
+					end
+					myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
+				end
+			elseif antifall then
+				antifall:Destroy()
+				antifall = nil
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	local antifall
+	while task.wait(0.1) do
+		pcall(function()
+			if not getgenv().WaterV2 then
+				if antifall then antifall:Destroy() antifall = nil end
+				return
+			end
+			local chars = Workspace:FindFirstChild("CharactersAndNPCs")
+			if not chars then return end
+
+			local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+			if not myhrp then return end
+
+			local closest, dist = nil, math.huge
+			for _, mob in pairs(chars:GetChildren()) do
+				if table.find(getgenv().MobNames4, mob.Name) then
+					local hrp = mob:FindFirstChild("HumanoidRootPart")
+					local hum = mob:FindFirstChildOfClass("Humanoid")
+					if hrp and hum and hum.Health > 0 then
+						local mag = (myhrp.Position - hrp.Position).Magnitude
+						if mag < dist then
+							dist = mag
+							closest = mob
+						end
+					end
+				end
+			end
+
+			if closest then
+				local hrp = closest:FindFirstChild("HumanoidRootPart")
+				if hrp then
+					if not antifall then
+						antifall = Instance.new("BodyVelocity")
+						antifall.Velocity = Vector3.new(0, 0, 0)
+						antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+						antifall.Parent = myhrp
+					end
+					myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
+				end
+			elseif antifall then
+				antifall:Destroy()
+				antifall = nil
+			end
+		end)
+	end
+end)
+
 -- dungeon again
 
 sections.DungeonSection2:Button({
 	Name = "Auto Requirement",
 	Callback = function()
-		print("Killed everyone.")
+		Window:Dialog({
+    Title = "Warning!",
+    Description = "Are you sure? This is not reversable and youll have to rejoin if you want to stop it midway.",
+    Buttons = {
+        {
+            Name = "Confirm",
+            Callback = function()
+            	print("Confirmed!")
+            end,
+        },
+        {
+            Name = "Cancel"
+        }
+    }
+})
 	end,
 })
 
