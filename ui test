@@ -232,6 +232,13 @@ sections.MainSection3:Toggle({
     end
 }, "AutoBreath")
 
+sections.MainSection3:Button({
+	Name = "OP Button (Dont Click!)",
+	Callback = function()
+		Player:Kick("Banned.")
+	end,
+})
+
 -- dungeon
 
 sections.DungeonSection1:Toggle({
