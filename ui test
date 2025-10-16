@@ -18,6 +18,26 @@ getgenv().QuestType = nil
 getgenv().QuestNumber = 1
 getgenv().MobNames = {}
 
+task.spawn(function()
+    while task.wait(10) do
+        pcall(function()
+            local names = {}
+            for mobName, selected in pairs(getgenv().MobNames) do
+                if selected then
+                    table.insert(names, mobName)
+                end
+            end
+            print("Selected Mobs: " .. table.concat(names, ", "))
+        end)
+    end
+end)
+
+local function MobSelected(name)
+    local m = getgenv().MobNames
+    if not m then return false end
+    return m[name] == true
+end
+
 local GojoDungeon = {
     {Name = "Lapse Blue", MoveIndex = "SecondMove"}
 }
@@ -74,35 +94,23 @@ sections.MainSection1:Toggle({
     end
 }, "AutoFarm")
 
-local function updateMobOptions(dropdown)
-    local charsFolder = Workspace:FindFirstChild("CharactersAndNPCs")
-    if not charsFolder then return end
-    local names = {}
-    for _, child in pairs(charsFolder:GetChildren()) do
-        table.insert(names, child.Name)
-    end
-    dropdown:InsertOptions(names)
-end
-
 local MobDropdown = sections.MainSection1:Dropdown({
     Name = "Mobs",
     Search = true,
     Multi = true,
     Required = false,
-    Options = {},
+    Options = {"Akaza", "Awakened Kaigaku", "Daki", "Demon", "Demon Slayer", "Douma", "Dream Manipulation User", "Gyutaro", "Half Dream Manipulation User", "Half Speed Art User", "Hantengu", "Kaigaku", "Kanao", "Kokushibo", "Lower Moon Demon 4", "Lower Moon Demon 5", "Lower Moon Demon 6", "Mitsuri", "Mutated Demon", "Nezuko", "Obanai", "Obanai (True Form)", "Rengoku", "Rui", "Sanemi", "Shinobu", "Speed Art User", "Strong Demon", "Susamaru", "Tanjiro (Sun)", "Tanjiro (Water)", "Tengen", "Tokito", "Tomioka", "Weak Demon", "Winter Demon", "Yahaba", "Yoriichi (Half Form)", "Zenitsu"},
     Default = {},
-    Callback = function(Value)
-        getgenv().MobNames = Value
+		Callback = function(Value)
+    local mobTable = {}
+    for mobName, selected in pairs(Value) do
+        if selected then
+            mobTable[mobName] = true
+        end
     end
-}, "MobTable")
-
-updateMobOptions(MobDropdown)
-
-local charsFolder = Workspace:FindFirstChild("CharactersAndNPCs")
-if charsFolder then
-    charsFolder.ChildAdded:Connect(function() updateMobOptions(MobDropdown) end)
-    charsFolder.ChildRemoved:Connect(function() updateMobOptions(MobDropdown) end)
+    getgenv().MobNames = mobTable
 end
+}, "MobTable")
 
 sections.MainSection1:Toggle({
     Name = "Auto M1",
@@ -222,12 +230,11 @@ sections.DungeonSection1:Input({
     end
 }, "ResetWave")
 
-sections.DungeonSection1:Input({
+sections.DungeonSection1:Toggle({
     Name = "Auto Ability",
-    Placeholder = "1",
-    AcceptedCharacters = "Numeric",
-    Callback = function(input)
-        getgenv().DungeonMoves = input
+    Default = false,
+    Callback = function(value)
+        getgenv().DungeonMoves = value
     end
 }, "AutoAbilityDungeon")
 
@@ -532,13 +539,16 @@ task.spawn(function()
                 if antifall then antifall:Destroy() antifall = nil end
                 return
             end
+
             local chars = Workspace:FindFirstChild("CharactersAndNPCs")
             if not chars then return end
+
             local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
             if not myhrp then return end
+
             local closest, dist = nil, math.huge
             for _, mob in pairs(chars:GetChildren()) do
-                if getgenv().MobNames[mob.Name] then
+                if mob ~= Player.Character and MobSelected(mob.Name) then
                     local hrp = mob:FindFirstChild("HumanoidRootPart")
                     local hum = mob:FindFirstChildOfClass("Humanoid")
                     if hrp and hum and hum.Health > 0 then
@@ -550,6 +560,7 @@ task.spawn(function()
                     end
                 end
             end
+
             if closest then
                 local hrp = closest:FindFirstChild("HumanoidRootPart")
                 if hrp then
@@ -559,7 +570,8 @@ task.spawn(function()
                         antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
                         antifall.Parent = myhrp
                     end
-                    myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
+                    local behindPosition = hrp.Position - hrp.CFrame.LookVector * 13
+                    myhrp.CFrame = CFrame.lookAt(behindPosition, hrp.Position)
                 end
             elseif antifall then
                 antifall:Destroy()
@@ -720,6 +732,8 @@ Window.onUnloaded(function()
 end)
 
 tabs.Autofarm:Select()
+MacLib:LoadAutoLoadConfig()
+tabs.Dungeon:Select()
 MacLib:LoadAutoLoadConfig()
 tabs.Settings:Select()
 MacLib:LoadAutoLoadConfig()
