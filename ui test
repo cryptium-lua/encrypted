@@ -1,28 +1,20 @@
--- Variables
-
 local Player = game.Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local TeleportService = game:GetService("TeleportService")
 
--- Tables
-
 getgenv().DungeonFarm = false
 getgenv().DungeonReset = false
 getgenv().DungeonWave = 5
 getgenv().DungeonMoves = false
-
 getgenv().AutoQuest = false
 getgenv().InstaKill = false
 getgenv().AutoFarm = false
 getgenv().AutoM1 = false
-
 getgenv().automoves = false
-getgenv().moveset = {} 
-
+getgenv().moveset = {}
 getgenv().QuestType = "Normal"
 getgenv().QuestNumber = 1
-
 getgenv().MobNames = {}
 
 local AutoFarmMoves = getgenv().moveset
@@ -31,55 +23,49 @@ local GojoDungeon = {
     {Name = "Lapse Blue", MoveIndex = "SecondMove"}
 }
 
--- UI
-
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
+local Window = MacLib:Window({
+    Title = "LUA / C97",
+    Subtitle = "WL2 | V2.0",
+    Size = UDim2.fromOffset(868, 650),
+    DragStyle = 2,
+    DisabledWindowControls = {},
+    ShowUserInfo = true,
+    Keybind = Enum.KeyCode.RightControl,
+    AcrylicBlur = false,
+})
 
-	local Window = MacLib:Window({
-		Title = "LUA / C97",
-		Subtitle = "WL2 | V2.0",
-		Size = UDim2.fromOffset(868, 650),
-		DragStyle = 2,
-		DisabledWindowControls = {},
-		ShowUserInfo = true,
-		Keybind = Enum.KeyCode.RightControl,
-		AcrylicBlur = false,
-	})
+local Scale = 0.78
+task.spawn(function()
+    while true do
+        wait(0)
+        pcall(function()
+            Window:SetScale(Scale)
+        end)
+    end
+end)
 
-	local Scale = 0.78
+local tabGroups = {
+    TabGroup1 = Window:TabGroup(),
+    TabGroup2 = Window:TabGroup()
+}
 
-	task.spawn(function()
-	while true do
-	wait(0)
-	pcall(function()
-	Window:SetScale(Scale)
-	end)
-	end
-	end)
+local tabs = {
+    Autofarm = tabGroups.TabGroup1:Tab({ Name = "Farm", Image = nil }),
+    Settings = tabGroups.TabGroup2:Tab({ Name = "Settings", Image = nil })
+}
 
-	local tabGroups = {
-		TabGroup1 = Window:TabGroup(),
-		TabGroup2 = Window:TabGroup()
-	}
-
-	local tabs = {
-		Autofarm = tabGroups.TabGroup1:Tab({ Name = "Farm", Image = nil }),
-		Settings = tabGroups.TabGroup2:Tab({ Name = "Settings", Image = nil })
-	}
-
-	local sections = {
-		MainSection1 = tabs.Main:Section({ Side = "Left" }),
-		SettingsSection1 = tabs.Settings:Section({ Side = "Left" })
-	}
-
--- autofarm
+local sections = {
+    MainSection1 = tabs.Autofarm:Section({ Side = "Left" }),
+    SettingsSection1 = tabs.Settings:Section({ Side = "Left" })
+}
 
 sections.MainSection1:Toggle({
-	Name = "Auto Farm",
-	Default = false,
-	Callback = function(value)
-	getgenv().AutoFarm = value
-end,
+    Name = "Auto Farm",
+    Default = false,
+    Callback = function(value)
+        getgenv().AutoFarm = value
+    end,
 }, "AutoFarm")
 
 local function updateMobOptions(dropdown)
@@ -89,7 +75,7 @@ local function updateMobOptions(dropdown)
     for _, child in pairs(charsFolder:GetChildren()) do
         table.insert(names, child.Name)
     end
-    dropdown:UpdateOptions(names)
+    dropdown:InsertOptions(names)
 end
 
 local MobDropdown = sections.MainSection1:Dropdown({
@@ -117,24 +103,24 @@ if charsFolder then
 end
 
 sections.MainSection1:Toggle({
-	Name = "Auto M1",
-	Default = false,
-	Callback = function(value)
-	getgenv().AutoM1 = value
-end,
+    Name = "Auto M1",
+    Default = false,
+    Callback = function(value)
+        getgenv().AutoM1 = value
+    end,
 }, "AutoM1")
 
 sections.MainSection1:Toggle({
-	Name = "Auto Moves",
-	Default = false,
-	Callback = function(value)
-	getgenv().automoves = value
-	Window:Notify({
-    Title = "lua",
-    Description = "Use a gojo skill for the cd.",
-    Lifetime = 8
-})
-end,
+    Name = "Auto Moves",
+    Default = false,
+    Callback = function(value)
+        getgenv().automoves = value
+        Window:Notify({
+            Title = "lua",
+            Description = "Use a gojo skill for the cd.",
+            Lifetime = 8
+        })
+    end,
 }, "AutoMoves")
 
 local MovesDropdown = sections.MainSection1:Dropdown({
@@ -160,36 +146,32 @@ local MovesDropdown = sections.MainSection1:Dropdown({
     end,
 }, "UseMoves")
 
--- settings
-
-	sections.SettingsSection1:Input({
-		Name = "UI Scale",
-		Placeholder = "1 = 100",
-		AcceptedCharacters = "All",
-		Callback = function(input)
-			Scale = input
-			Window:Notify({
-				Title = Window.Settings.Title,
-				Description = "Successfully set Scale to " .. input
-			})
-		end,
-		onChanged = function(input)
-			print("Scale is now " .. input)
-		end,
-	}, "Input")
-
--- functions
+sections.SettingsSection1:Input({
+    Name = "UI Scale",
+    Placeholder = "1 = 100",
+    AcceptedCharacters = "All",
+    Callback = function(input)
+        Scale = input
+        Window:Notify({
+            Title = Window.Settings.Title,
+            Description = "Successfully set Scale to " .. input
+        })
+    end,
+    onChanged = function(input)
+        print("Scale is now " .. input)
+    end,
+}, "Input")
 
 task.spawn(function()
-	while task.wait(3) do
-		if getgenv().AutoQuest then
-			pcall(function()
-				local questName = (getgenv().QuestType == "Boss" and "Quest Boss Dummy " or "Quest Dummy ") .. tostring(getgenv().QuestNumber)
-				local args = { [1] = questName, [2] = 1, [3] = "2K YEN, 20K XP", [4] = "TANJIRO", [5] = "TANJIRO ATTACK" }
-				ReplicatedStorage.Events.QuestTake:FireServer(unpack(args))
-			end)
-		end
-	end
+    while task.wait(3) do
+        if getgenv().AutoQuest then
+            pcall(function()
+                local questName = (getgenv().QuestType == "Boss" and "Quest Boss Dummy " or "Quest Dummy ") .. tostring(getgenv().QuestNumber)
+                local args = { [1] = questName, [2] = 1, [3] = "2K YEN, 20K XP", [4] = "TANJIRO", [5] = "TANJIRO ATTACK" }
+                ReplicatedStorage.Events.QuestTake:FireServer(unpack(args))
+            end)
+        end
+    end
 end)
 
 task.spawn(function()
@@ -310,111 +292,67 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	while task.wait(0) do
-	if getgenv().AutoBreath then
-		pcall(function()
-			local args = {[1] = "BeginHamonBreathing"}
-			ReplicatedStorage.Events.Breathing:FireServer(unpack(args))
-		end)
-	end
-end)
-
-task.spawn(function()
-	while task.wait(0.2) do
-		if getgenv().InstaKill then
-			pcall(function()
-				local chars = Workspace:FindFirstChild("CharactersAndNPCs")
-				if not chars then return end
-				for _, v in pairs(chars:GetChildren()) do
-					if v ~= Player.Character then
-						local hrp = v:FindFirstChild("HumanoidRootPart")
-						local hum = v:FindFirstChildOfClass("Humanoid")
-						if hrp and hum and isnetworkowner(hrp) and hum.Health > 0 and hum.Health <= (0.89 * hum.MaxHealth) then
-							hum.Health = 0
-						end
-					end
-				end
-			end)
-		end
-	end
-end)
-
-task.spawn(function()
-	local currentMove = 1
-	while task.wait(0) do
-		if getgenv().automoves then
-			pcall(function()
-				local move = AutoFarmMoves[currentMove]
-				local args = {
-					[1] = "Skill",
-					[2] = move.Name,
-					[3] = "Release",
-					[4] = move.MoveIndex,
-					[6] = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and Player.Character.HumanoidRootPart.CFrame or CFrame.new()
-				}
-				ReplicatedStorage.Remotes.Attack:FireServer(unpack(args))
-				currentMove += 1
-				if currentMove > #AutoFarmMoves then currentMove = 1 end
-			end)
-		end
-	end
-end)
-
-task.spawn(function()
-	local currentMove = 1
-	while task.wait(0) do
-		if getgenv().DungeonMoves then
-			pcall(function()
-				local move = GojoDungeon[currentMove]
-				local args = {
-					[1] = "Skill",
-					[2] = move.Name,
-					[3] = "Release",
-					[4] = move.MoveIndex,
-					[6] = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and Player.Character.HumanoidRootPart.CFrame or CFrame.new()
-				}
-				ReplicatedStorage.Remotes.Attack:FireServer(unpack(args))
-				currentMove += 1
-				if currentMove > #GojoDungeon then currentMove = 1 end
-			end)
-		end
-	end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if getgenv().DungeonReset then
-            local success, waveText = pcall(function()
-                return Player.PlayerGui:WaitForChild("HUD"):WaitForChild("Dungeon"):WaitForChild("Wave").Text
+    while task.wait(0) do
+        if getgenv().AutoBreath then
+            pcall(function()
+                local args = {[1] = "BeginHamonBreathing"}
+                ReplicatedStorage.Events.Breathing:FireServer(unpack(args))
             end)
-            if success then
-                local waveNumber = tonumber(waveText:match("%d+"))
-                if waveNumber and waveNumber >= getgenv().DungeonWave then
-                    pcall(function()
-                        getgenv().DungeonFarm = false
-                        getgenv().AutoGojo = false
-                        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
-                            Player.Character.Humanoid.Health = 0
-                            task.wait(8)
-                            TeleportService:Teleport(18337464872, Player)
-                        end
-                    end)
-                end
-            end
         end
     end
 end)
 
-	-- dont touch down here
+task.spawn(function()
+    local currentMove = 1
+    while task.wait(0) do
+        if getgenv().automoves then
+            pcall(function()
+                local moves = getgenv().moveset
+                if #moves == 0 then return end
+                local move = moves[currentMove]
+                local args = {
+                    [1] = "Skill",
+                    [2] = move.Name,
+                    [3] = "Release",
+                    [4] = move.MoveIndex,
+                    [6] = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and Player.Character.HumanoidRootPart.CFrame or CFrame.new()
+                }
+                ReplicatedStorage.Remotes.Attack:FireServer(unpack(args))
+                currentMove = currentMove + 1
+                if currentMove > #moves then currentMove = 1 end
+            end)
+        end
+    end
+end)
 
-	MacLib:SetFolder("Lua-WL2")
-	tabs.Settings:InsertConfigSection("Right")
+task.spawn(function()
+    local currentMove = 1
+    while task.wait(0) do
+        if getgenv().DungeonMoves then
+            pcall(function()
+                local move = GojoDungeon[currentMove]
+                local args = {
+                    [1] = "Skill",
+                    [2] = move.Name,
+                    [3] = "Release",
+                    [4] = move.MoveIndex,
+                    [6] = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and Player.Character.HumanoidRootPart.CFrame or CFrame.new()
+                }
+                ReplicatedStorage.Remotes.Attack:FireServer(unpack(args))
+                currentMove = currentMove + 1
+                if currentMove > #GojoDungeon then currentMove = 1 end
+            end)
+        end
+    end
+end)
 
-	Window.onUnloaded(function()
-		print("Unloaded!")
-	end)
+MacLib:SetFolder("Lua-WL2")
+tabs.Settings:InsertConfigSection("Right")
+Window.onUnloaded(function()
+    print("Unloaded!")
+end)
 
-	tabs.Main:Select()
-	MacLib:LoadAutoLoadConfig()
-	tabs.Settings:Select()
-	MacLib:LoadAutoLoadConfig()
+tabs.Autofarm:Select()
+MacLib:LoadAutoLoadConfig()
+tabs.Settings:Select()
+MacLib:LoadAutoLoadConfig()
