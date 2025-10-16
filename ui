@@ -5409,8 +5409,8 @@ end
 				}
 			end,
 			Load = function(Flag, data)
-				if MacLib.Options[Flag] and data.text and type(data.text) == "string" then
-					MacLib.Options[Flag]:UpdateText(data.text)
+					if MacLib.Options[Flag] and data.text and (type(data.text) == "string" or type(data.text) == "number") then
+			    MacLib.Options[Flag]:UpdateText(tostring(data.text))
 				end
 			end
 		},
