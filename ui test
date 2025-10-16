@@ -14,7 +14,7 @@ getgenv().AutoM1 = false
 getgenv().automoves = false
 getgenv().AutoBreath = false
 getgenv().moveset = {}
-getgenv().QuestType = "Normal"
+getgenv().QuestType = nil
 getgenv().QuestNumber = 1
 getgenv().MobNames = {}
 
@@ -157,7 +157,36 @@ sections.MainSection2:Toggle({
     end,
 }, "InstantKill")
 
-sections.MainSection2:Toggle({
+sections.MainSection3:Toggle({
+    Name = "Auto Quest",
+    Default = false,
+    Callback = function(value)
+        getgenv().AutoQuest = value
+    end,
+}, "AutoQuest")
+
+local MovesDropdown = sections.MainSection3:Dropdown({
+    Name = "Moves",
+    Search = true,
+    Multi = true,
+    Required = false,
+    Options = {"Boss", "Normal"},
+    Default = {},
+    Callback = function(Value)
+    getgenv().QuestType = Value
+end,
+}, "QuestType")
+
+sections.MainSection3:Input({
+    Name = "Quest Number",
+    Placeholder = "1",
+    AcceptedCharacters = "Numeric",
+    Callback = function(input)
+    getgenv().QuestNumber = input
+end,
+}, "QuestNumber")
+
+sections.MainSection3:Toggle({
     Name = "Auto Breath",
     Default = false,
     Callback = function(value)
@@ -361,6 +390,26 @@ task.spawn(function()
 			local args = {[1] = "BeginHamonBreathing"}
 			ReplicatedStorage.Events.Breathing:FireServer(unpack(args))
 		end)
+	end
+end)
+
+task.spawn(function()
+	while task.wait(0) do
+		if getgenv().InstaKill then
+			pcall(function()
+				local chars = Workspace:FindFirstChild("CharactersAndNPCs")
+				if not chars then return end
+				for _, v in pairs(chars:GetChildren()) do
+					if v ~= Player.Character then
+						local hrp = v:FindFirstChild("HumanoidRootPart")
+						local hum = v:FindFirstChildOfClass("Humanoid")
+						if hrp and hum and isnetworkowner(hrp) and hum.Health > 0 and hum.Health <= (0.89 * hum.MaxHealth) then
+							hum.Health = 0
+						end
+					end
+				end
+			end)
+		end
 	end
 end)
 
