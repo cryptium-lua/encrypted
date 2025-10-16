@@ -204,7 +204,7 @@ sections.SettingsSection1:Input({
 }, "Input")
 
 task.spawn(function()
-    while task.wait(3) do
+    while task.wait(1) do
         if getgenv().AutoQuest then
             pcall(function()
                 local questName = (getgenv().QuestType == "Boss" and "Quest Boss Dummy " or "Quest Dummy ") .. tostring(getgenv().QuestNumber)
