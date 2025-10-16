@@ -1,4 +1,4 @@
-local Maclib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
+local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
 local Window = MacLib:Window({
     Title = "Lua / C97",
     Subtitle = "WL2 | V2.0",
@@ -9,7 +9,26 @@ local Window = MacLib:Window({
     Keybind = Enum.KeyCode.RightControl,
     AcrylicBlur = false,
 })
+Window:SetScale(0.78)
 
+local TabGroup1 = Window:TabGroup()
+local SettingsTab = TabGroup1:Tab({
+  Name = "Settings",
+  Image = nil
+})
+
+local SettingsSection = SettingsTab:Section({
+  Side = "Left"
+})
+
+SettingsSection:Input({
+	Name = "UI Scale",
+	Placeholder = "1 = 100%",
+	AcceptedCharacters = "All",
+	Callback = function(input)
+		Window:SetScale(input)
+	end,
+}, "TargetInput")
 
 
 
