@@ -31,13 +31,13 @@ local Window = MacLib:Window({
     DisabledWindowControls = {},
     ShowUserInfo = true,
     Keybind = Enum.KeyCode.RightControl,
-    AcrylicBlur = false,
+    AcrylicBlur = false
 })
 
 local Scale = 0.78
 task.spawn(function()
     while true do
-        wait(0)
+        task.wait()
         pcall(function()
             Window:SetScale(Scale)
         end)
@@ -50,8 +50,8 @@ local tabGroups = {
 }
 
 local tabs = {
-    Autofarm = tabGroups.TabGroup1:Tab({ Name = "Farm", Image = nil }),
-    Settings = tabGroups.TabGroup2:Tab({ Name = "Settings", Image = nil })
+    Autofarm = tabGroups.TabGroup1:Tab({ Name = "Farm" }),
+    Settings = tabGroups.TabGroup2:Tab({ Name = "Settings" })
 }
 
 local sections = {
@@ -66,7 +66,7 @@ sections.MainSection1:Toggle({
     Default = false,
     Callback = function(value)
         getgenv().AutoFarm = value
-    end,
+    end
 }, "AutoFarm")
 
 local function updateMobOptions(dropdown)
@@ -88,19 +88,15 @@ local MobDropdown = sections.MainSection1:Dropdown({
     Default = {},
     Callback = function(Value)
         getgenv().MobNames = Value
-    end,
+    end
 }, "MobTable")
 
 updateMobOptions(MobDropdown)
 
 local charsFolder = Workspace:FindFirstChild("CharactersAndNPCs")
 if charsFolder then
-    charsFolder.ChildAdded:Connect(function()
-        updateMobOptions(MobDropdown)
-    end)
-    charsFolder.ChildRemoved:Connect(function()
-        updateMobOptions(MobDropdown)
-    end)
+    charsFolder.ChildAdded:Connect(function() updateMobOptions(MobDropdown) end)
+    charsFolder.ChildRemoved:Connect(function() updateMobOptions(MobDropdown) end)
 end
 
 sections.MainSection1:Toggle({
@@ -108,7 +104,7 @@ sections.MainSection1:Toggle({
     Default = false,
     Callback = function(value)
         getgenv().AutoM1 = value
-    end,
+    end
 }, "AutoM1")
 
 sections.MainSection2:Toggle({
@@ -121,7 +117,7 @@ sections.MainSection2:Toggle({
             Description = "Use a gojo skill for the cd.",
             Lifetime = 8
         })
-    end,
+    end
 }, "AutoMoves")
 
 local MovesDropdown = sections.MainSection2:Dropdown({
@@ -146,7 +142,7 @@ local MovesDropdown = sections.MainSection2:Dropdown({
             end
         end
         getgenv().moveset = selectedMoves
-    end,
+    end
 }, "UseMoves")
 
 sections.MainSection2:Toggle({
@@ -154,7 +150,7 @@ sections.MainSection2:Toggle({
     Default = false,
     Callback = function(value)
         getgenv().InstaKill = value
-    end,
+    end
 }, "InstantKill")
 
 sections.MainSection3:Toggle({
@@ -162,19 +158,19 @@ sections.MainSection3:Toggle({
     Default = false,
     Callback = function(value)
         getgenv().AutoQuest = value
-    end,
+    end
 }, "AutoQuest")
 
-local MovesDropdown = sections.MainSection3:Dropdown({
-    Name = "Moves",
-    Search = true,
-    Multi = true,
+local QuestDropdown = sections.MainSection3:Dropdown({
+    Name = "Quest Type",
+    Search = false,
+    Multi = false,
     Required = false,
     Options = {"Boss", "Normal"},
     Default = {},
     Callback = function(Value)
-    getgenv().QuestType = Value
-end,
+        getgenv().QuestType = Value
+    end
 }, "QuestType")
 
 sections.MainSection3:Input({
@@ -182,8 +178,8 @@ sections.MainSection3:Input({
     Placeholder = "1",
     AcceptedCharacters = "Numeric",
     Callback = function(input)
-    getgenv().QuestNumber = input
-end,
+        getgenv().QuestNumber = input
+    end
 }, "QuestNumber")
 
 sections.MainSection3:Toggle({
@@ -191,7 +187,7 @@ sections.MainSection3:Toggle({
     Default = false,
     Callback = function(value)
         getgenv().AutoBreath = value
-    end,
+    end
 }, "AutoBreath")
 
 sections.SettingsSection1:Input({
@@ -204,10 +200,7 @@ sections.SettingsSection1:Input({
             Title = Window.Settings.Title,
             Description = "Successfully set Scale to " .. input
         })
-    end,
-    onChanged = function(input)
-        print("Scale is now " .. input)
-    end,
+    end
 }, "Input")
 
 task.spawn(function()
@@ -223,51 +216,48 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local antifall
-	while task.wait(0.1) do
-		pcall(function()
-			if not getgenv().AutoFarm then
-				if antifall then antifall:Destroy() antifall = nil end
-				return
-			end
-			local chars = Workspace:FindFirstChild("CharactersAndNPCs")
-			if not chars then return end
-
-			local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-			if not myhrp then return end
-
-			local closest, dist = nil, math.huge
-			for _, mob in pairs(chars:GetChildren()) do
-				if getgenv().MobNames[mob.Name] then
-					local hrp = mob:FindFirstChild("HumanoidRootPart")
-					local hum = mob:FindFirstChildOfClass("Humanoid")
-					if hrp and hum and hum.Health > 0 then
-						local mag = (myhrp.Position - hrp.Position).Magnitude
-						if mag < dist then
-							dist = mag
-							closest = mob
-						end
-					end
-				end
-			end
-
-			if closest then
-				local hrp = closest:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					if not antifall then
-						antifall = Instance.new("BodyVelocity")
-						antifall.Velocity = Vector3.new(0, 0, 0)
-						antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-						antifall.Parent = myhrp
-					end
-					myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
-				end
-			elseif antifall then
-				antifall:Destroy()
-				antifall = nil
-			end
-		end)
-	end
+    local antifall
+    while task.wait(0.1) do
+        pcall(function()
+            if not getgenv().AutoFarm then
+                if antifall then antifall:Destroy() antifall = nil end
+                return
+            end
+            local chars = Workspace:FindFirstChild("CharactersAndNPCs")
+            if not chars then return end
+            local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+            if not myhrp then return end
+            local closest, dist = nil, math.huge
+            for _, mob in pairs(chars:GetChildren()) do
+                if getgenv().MobNames[mob.Name] then
+                    local hrp = mob:FindFirstChild("HumanoidRootPart")
+                    local hum = mob:FindFirstChildOfClass("Humanoid")
+                    if hrp and hum and hum.Health > 0 then
+                        local mag = (myhrp.Position - hrp.Position).Magnitude
+                        if mag < dist then
+                            dist = mag
+                            closest = mob
+                        end
+                    end
+                end
+            end
+            if closest then
+                local hrp = closest:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    if not antifall then
+                        antifall = Instance.new("BodyVelocity")
+                        antifall.Velocity = Vector3.zero
+                        antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+                        antifall.Parent = myhrp
+                    end
+                    myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
+                end
+            elseif antifall then
+                antifall:Destroy()
+                antifall = nil
+            end
+        end)
+    end
 end)
 
 task.spawn(function()
@@ -390,6 +380,7 @@ task.spawn(function()
 			local args = {[1] = "BeginHamonBreathing"}
 			ReplicatedStorage.Events.Breathing:FireServer(unpack(args))
 		end)
+	end
 	end
 end)
 
