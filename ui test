@@ -231,6 +231,13 @@ sections.DungeonSection1:Input({
     end
 }, "AutoAbilityDungeon")
 
+sections.DungeonSection2:Button({
+	Name = "Auto Requirement",
+	Callback = function()
+		print("Killed everyone.")
+	end,
+})
+
 -- settings
 
 sections.SettingsSection1:Input({
