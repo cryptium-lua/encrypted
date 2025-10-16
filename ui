@@ -2091,92 +2091,181 @@ function MacLib:Window(Settings)
 					return SliderFunctions
 				end
 
-function SectionFunctions:Input(Settings, Flag)
-    local InputFunctions = { Settings = Settings, IgnoreConfig = false, Class = "Input" }
-    local input = Instance.new("Frame")
-    input.Name = "Input"
-    input.AutomaticSize = Enum.AutomaticSize.Y
-    input.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    input.BackgroundTransparency = 1
-    input.Size = UDim2.new(1, 0, 0, 38)
-    input.Parent = section
+				function SectionFunctions:Input(Settings, Flag)
+					local InputFunctions = { Settings = Settings, IgnoreConfig = false, Class = "Input" }
+					local input = Instance.new("Frame")
+					input.Name = "Input"
+					input.AutomaticSize = Enum.AutomaticSize.Y
+					input.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+					input.BackgroundTransparency = 1
+					input.BorderColor3 = Color3.fromRGB(0, 0, 0)
+					input.BorderSizePixel = 0
+					input.Size = UDim2.new(1, 0, 0, 38)
+					input.Parent = section
 
-    local inputName = Instance.new("TextLabel")
-    inputName.Name = "InputName"
-    inputName.FontFace = Font.new(assets.interFont)
-    inputName.Text = InputFunctions.Settings.Name
-    inputName.TextColor3 = Color3.fromRGB(255, 255, 255)
-    inputName.TextSize = 13
-    inputName.TextTransparency = 0.5
-    inputName.TextXAlignment = Enum.TextXAlignment.Left
-    inputName.TextYAlignment = Enum.TextYAlignment.Top
-    inputName.AnchorPoint = Vector2.new(0, 0.5)
-    inputName.AutomaticSize = Enum.AutomaticSize.XY
-    inputName.BackgroundTransparency = 1
-    inputName.Position = UDim2.fromScale(0, 0.5)
-    inputName.Parent = input
+					local inputName = Instance.new("TextLabel")
+					inputName.Name = "InputName"
+					inputName.FontFace = Font.new(assets.interFont)
+					inputName.Text = InputFunctions.Settings.Name
+					inputName.RichText = true
+					inputName.TextColor3 = Color3.fromRGB(255, 255, 255)
+					inputName.TextSize = 13
+					inputName.TextTransparency = 0.5
+					inputName.TextTruncate = Enum.TextTruncate.AtEnd
+					inputName.TextXAlignment = Enum.TextXAlignment.Left
+					inputName.TextYAlignment = Enum.TextYAlignment.Top
+					inputName.AnchorPoint = Vector2.new(0, 0.5)
+					inputName.AutomaticSize = Enum.AutomaticSize.XY
+					inputName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					inputName.BackgroundTransparency = 1
+					inputName.BorderColor3 = Color3.fromRGB(0, 0, 0)
+					inputName.BorderSizePixel = 0
+					inputName.Position = UDim2.fromScale(0, 0.5)
+					inputName.Parent = input
 
-    local inputBox = Instance.new("TextBox")
-    inputBox.Name = "InputBox"
-    inputBox.FontFace = Font.new(assets.interFont)
-    inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    inputBox.TextSize = 12
-    inputBox.AnchorPoint = Vector2.new(1, 0.5)
-    inputBox.AutomaticSize = Enum.AutomaticSize.X
-    inputBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    inputBox.BackgroundTransparency = 0.95
-    inputBox.Position = UDim2.fromScale(1, 0.5)
-    inputBox.Size = UDim2.fromOffset(21, 21)
-    inputBox.TextXAlignment = Enum.TextXAlignment.Right
-    inputBox.Parent = input
+					local inputBox = Instance.new("TextBox")
+					inputBox.Name = "InputBox"
+					inputBox.FontFace = Font.new(assets.interFont)
+					inputBox.Text = "Hello world!"
+					inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+					inputBox.TextSize = 12
+					inputBox.TextTransparency = 0.1
+					inputBox.AnchorPoint = Vector2.new(1, 0.5)
+					inputBox.AutomaticSize = Enum.AutomaticSize.X
+					inputBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					inputBox.BackgroundTransparency = 0.95
+					inputBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+					inputBox.BorderSizePixel = 0
+					inputBox.ClipsDescendants = true
+					inputBox.LayoutOrder = 1
+					inputBox.Position = UDim2.fromScale(1, 0.5)
+					inputBox.Size = UDim2.fromOffset(21, 21)
+					inputBox.TextXAlignment = Enum.TextXAlignment.Right
 
-    local InputBoxUISizeConstraint = Instance.new("UISizeConstraint")
-    InputBoxUISizeConstraint.Parent = inputBox
+					local inputBoxUICorner = Instance.new("UICorner")
+					inputBoxUICorner.Name = "InputBoxUICorner"
+					inputBoxUICorner.CornerRadius = UDim.new(0, 4)
+					inputBoxUICorner.Parent = inputBox
 
-    local AcceptedCharacters = {
-        All = function(value) return value end,
-        Numeric = function(value) return value:gsub("[^%d-]", "") end,
-        Alphabetic = function(value) return value:gsub("[^a-zA-Z ]", "") end,
-        AlphaNumeric = function(value) return value:gsub("[^a-zA-Z0-9]", "") end
-    }
-    local filterFunc = CharacterSubs[InputFunctions.Settings.AcceptedCharacters] or CharacterSubs.All
+					local inputBoxUIStroke = Instance.new("UIStroke")
+					inputBoxUIStroke.Name = "InputBoxUIStroke"
+					inputBoxUIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+					inputBoxUIStroke.Color = Color3.fromRGB(255, 255, 255)
+					inputBoxUIStroke.Transparency = 0.9
+					inputBoxUIStroke.Parent = inputBox
 
-    InputFunctions.Text = InputFunctions.Settings.Default or ""
-    inputBox.Text = InputFunctions.Text
-    inputBox.PlaceholderText = InputFunctions.Settings.Placeholder or ""
+					local inputBoxUIPadding = Instance.new("UIPadding")
+					inputBoxUIPadding.Name = "InputBoxUIPadding"
+					inputBoxUIPadding.PaddingLeft = UDim.new(0, 5)
+					inputBoxUIPadding.PaddingRight = UDim.new(0, 5)
+					inputBoxUIPadding.Parent = inputBox
 
-    InputBox.FocusLost:Connect(function()
-        local filtered = filterFunc(inputBox.Text)
-        inputBox.Text = filtered
-        InputFunctions.Text = filtered
-        if InputFunctions.Settings.Callback then
-            InputFunctions.Settings.Callback(filtered)
-        end
-    end)
+					local inputBoxUISizeConstraint = Instance.new("UISizeConstraint")
+					inputBoxUISizeConstraint.Name = "InputBoxUISizeConstraint"
+					inputBoxUISizeConstraint.Parent = inputBox
 
-    inputBox:GetPropertyChangedSignal("Text"):Connect(function()
-        local filtered = filterFunc(inputBox.Text)
-        inputBox.Text = filtered
-        InputFunctions.Text = filtered
-        if InputFunctions.Settings.onChanged then
-            InputFunctions.Settings.onChanged(filtered)
-        end
-    end)
+					inputBox.Parent = input
 
-    function InputFunctions:UpdateText(Text)
-        local filtered = filterFunc(Text)
-        inputBox.Text = filtered
-        InputFunctions.Text = filtered
-        if InputFunctions.Settings.Callback then
-            InputFunctions.Settings.Callback(filtered)
-        end
-    end
+					local Input = input
+					local InputBox = inputBox
+					local InputName = inputName
+					local Constraint = inputBoxUISizeConstraint
 
-    if Flag then
-        MacLib.Options[Flag] = InputFunctions
-    end
-    return InputFunctions
-end
+					local function applyCharacterLimit(value)
+						if InputFunctions.Settings.CharacterLimit then
+							return value:sub(1, InputFunctions.Settings.CharacterLimit)
+						end
+						return value
+					end
+
+					local CharacterSubs = {
+						All = function(value)
+							return applyCharacterLimit(value)
+						end,
+						Numeric = function(value)
+							local result = value:match("^%-?%d*$") and value or value:gsub("[^%d-]", ""):gsub("(%-)", function(match, pos)
+								return pos == 1 and match or ""
+							end)
+							return applyCharacterLimit(result)
+						end,
+						Alphabetic = function(value)
+							return applyCharacterLimit(value:gsub("[^a-zA-Z ]", ""))
+						end,
+						AlphaNumeric = function(value)
+							return applyCharacterLimit(value:gsub("[^a-zA-Z0-9]", ""))
+						end,
+					}
+
+					local AcceptedCharacters
+
+					if type(InputFunctions.Settings.AcceptedCharacters) == "function" then
+						AcceptedCharacters = InputFunctions.Settings.AcceptedCharacters
+					else
+						AcceptedCharacters = CharacterSubs[InputFunctions.Settings.AcceptedCharacters] or CharacterSubs.All
+					end
+
+					InputBox.AutomaticSize = Enum.AutomaticSize.X
+
+					local function checkSize()
+						local nameWidth = InputName.AbsoluteSize.X
+						local totalWidth = Input.AbsoluteSize.X
+
+						local maxWidth = (totalWidth - nameWidth - 20) / baseUIScale.Scale
+						Constraint.MaxSize = Vector2.new(maxWidth, 9e9)
+					end
+
+					checkSize()
+					InputName:GetPropertyChangedSignal("AbsoluteSize"):Connect(checkSize)
+
+					InputBox.FocusLost:Connect(function()
+						local inputText = InputBox.Text
+						local filteredText = AcceptedCharacters(inputText)
+						InputBox.Text = filteredText
+						task.spawn(function()
+							if InputFunctions.Settings.Callback then
+								InputFunctions.Settings.Callback(filteredText)
+							end
+						end)
+					end)
+					InputBox.Text = InputFunctions.Settings.Default or ""
+					InputBox.PlaceholderText = InputFunctions.Settings.Placeholder or ""
+
+					InputBox:GetPropertyChangedSignal("Text"):Connect(function()
+						InputBox.Text = AcceptedCharacters(InputBox.Text)
+						if InputFunctions.Settings.onChanged then
+							InputFunctions.Settings.onChanged(InputBox.Text)
+						end
+						InputFunctions.Text = InputBox.Text
+					end)
+
+					function InputFunctions:UpdateName(Name)
+						inputName.Text = Name
+					end
+					function InputFunctions:SetVisibility(State)
+						input.Visible = State
+					end
+					function InputFunctions:GetInput()
+						return InputBox.Text
+					end
+					function InputFunctions:UpdatePlaceholder(Placeholder)
+						inputBox.PlaceholderText = Placeholder
+					end
+					function InputFunctions:UpdateText(Text)
+						local filteredText = AcceptedCharacters(Text)
+						InputBox.Text = filteredText
+						InputFunctions.Text = filteredText
+						task.spawn(function()
+							if InputFunctions.Settings.Callback then
+								InputFunctions.Settings.Callback(filteredText)
+							end
+						end)
+					end
+
+					if Flag then
+						MacLib.Options[Flag] = InputFunctions
+					end
+					return InputFunctions
+				end
 
 				function SectionFunctions:Keybind(Settings, Flag)
 					local KeybindFunctions = { Settings = Settings, IgnoreConfig = false, Class = "Keybind" }
@@ -5282,107 +5371,107 @@ end
 		return baseUIScale.Scale
 	end
 
-local ClassParser = {
-	["Toggle"] = {
-		Save = function(Flag, data)
-			return {
-				type = "Toggle", 
-				flag = Flag, 
-				state = data.State or false
-			}
-		end,
-		Load = function(Flag, data)
-			if MacLib.Options[Flag] and data.state then
-				MacLib.Options[Flag]:UpdateState(data.state)
-			end
-		end
-	},
-	["Slider"] = {
-		Save = function(Flag, data)
-			return {
-				type = "Slider", 
-				flag = Flag, 
-				value = (data.Value and tostring(data.Value)) or false
-			}
-		end,
-		Load = function(Flag, data)
-			if MacLib.Options[Flag] and data.value then
-				MacLib.Options[Flag]:UpdateValue(data.value)
-			end
-		end
-	},
-	["Input"] = {
-		Save = function(Flag, data)
-			return {
-				type = "Input", 
-				flag = Flag, 
-				text = data.Text or data.Settings.Default or ""
-			}
-		end,
-		Load = function(Flag, data)
-			if MacLib.Options[Flag] and data.text and type(data.text) == "string" then
-				MacLib.Options[Flag]:UpdateText(data.text)
-			end
-		end
-	},
-	["Keybind"] = {
-		Save = function(Flag, data)
-			return {
-				type = "Keybind", 
-				flag = Flag, 
-				bind = (typeof(data.Bind) == "EnumItem" and data.Bind.Name) or nil
-			}
-		end,
-		Load = function(Flag, data)
-			if MacLib.Options[Flag] and data.bind then
-				MacLib.Options[Flag]:Bind(Enum.KeyCode[data.bind])
-			end
-		end
-	},
-	["Dropdown"] = {
-		Save = function(Flag, data)
-			return {
-				type = "Dropdown", 
-				flag = Flag, 
-				value = data.Value
-			}
-		end,
-		Load = function(Flag, data)
-			if MacLib.Options[Flag] and data.value then
-				MacLib.Options[Flag]:UpdateSelection(data.value)
-			end
-		end
-	},
-	["Colorpicker"] = {
-		Save = function(Flag, data)
-			local function Color3ToHex(color)
-				return string.format("#%02X%02X%02X", math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255))
-			end
-
-			return {
-				type = "Colorpicker", 
-				flag = Flag, 
-				color = Color3ToHex(data.Color) or nil,
-				alpha = data.Alpha
-			}
-		end,
-		Load = function(Flag, data)
-			local function HexToColor3(hex)
-				local r = tonumber(hex:sub(2, 3), 16) / 255
-				local g = tonumber(hex:sub(4, 5), 16) / 255
-				local b = tonumber(hex:sub(6, 7), 16) / 255
-				return Color3.new(r, g, b)
-			end
-
-			if MacLib.Options[Flag] and data.color then
-				MacLib.Options[Flag]:SetColor(HexToColor3(data.color)) 
-				if data.alpha then
-					MacLib.Options[Flag]:SetAlpha(data.alpha)
+	local ClassParser = {
+		["Toggle"] = {
+			Save = function(Flag, data)
+				return {
+					type = "Toggle", 
+					flag = Flag, 
+					state = data.State or false
+				}
+			end,
+			Load = function(Flag, data)
+				if MacLib.Options[Flag] and data.state then
+					MacLib.Options[Flag]:UpdateState(data.state)
 				end
 			end
-		end
+		},
+		["Slider"] = {
+			Save = function(Flag, data)
+				return {
+					type = "Slider", 
+					flag = Flag, 
+					value = (data.Value and tostring(data.Value)) or false
+				}
+			end,
+			Load = function(Flag, data)
+				if MacLib.Options[Flag] and data.value then
+					MacLib.Options[Flag]:UpdateValue(data.value)
+				end
+			end
+		},
+		["Input"] = {
+			Save = function(Flag, data)
+				return {
+					type = "Input", 
+					flag = Flag, 
+					text = data.Text
+				}
+			end,
+			Load = function(Flag, data)
+				if MacLib.Options[Flag] and data.text and type(data.text) == "string" then
+					MacLib.Options[Flag]:UpdateText(data.text)
+				end
+			end
+		},
+		["Keybind"] = {
+			Save = function(Flag, data)
+				return {
+					type = "Keybind", 
+					flag = Flag, 
+					bind = (typeof(data.Bind) == "EnumItem" and data.Bind.Name) or nil
+				}
+			end,
+			Load = function(Flag, data)
+				if MacLib.Options[Flag] and data.bind then
+					MacLib.Options[Flag]:Bind(Enum.KeyCode[data.bind])
+				end
+			end
+		},
+		["Dropdown"] = {
+			Save = function(Flag, data)
+				return {
+					type = "Dropdown", 
+					flag = Flag, 
+					value = data.Value
+				}
+			end,
+			Load = function(Flag, data)
+				if MacLib.Options[Flag] and data.value then
+					MacLib.Options[Flag]:UpdateSelection(data.value)
+				end
+			end
+		},
+		["Colorpicker"] = {
+			Save = function(Flag, data)
+				local function Color3ToHex(color)
+					return string.format("#%02X%02X%02X", math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255))
+				end
+
+				return {
+					type = "Colorpicker", 
+					flag = Flag, 
+					color = Color3ToHex(data.Color) or nil,
+					alpha = data.Alpha
+				}
+			end,
+			Load = function(Flag, data)
+				local function HexToColor3(hex)
+					local r = tonumber(hex:sub(2, 3), 16) / 255
+					local g = tonumber(hex:sub(4, 5), 16) / 255
+					local b = tonumber(hex:sub(6, 7), 16) / 255
+					return Color3.new(r, g, b)
+				end
+
+				if MacLib.Options[Flag] and data.color then
+					MacLib.Options[Flag]:SetColor(HexToColor3(data.color)) 
+					if data.alpha then
+						MacLib.Options[Flag]:SetAlpha(data.alpha)
+					end
+				end
+			end
+		}
 	}
-}
 
 	local function BuildFolderTree()
 		if isStudio or not (isfolder and makefolder) then return "Config system unavailable." end
