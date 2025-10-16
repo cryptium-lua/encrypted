@@ -231,6 +231,31 @@ sections.DungeonSection1:Input({
     end
 }, "AutoAbilityDungeon")
 
+-- requirement stuff
+
+getgenv().setup = false
+getgenv().boss = false
+getgenv().WaterV2 = false
+getgenv().InstaKill2 = true
+getgenv().DungeonMoves2 = false
+
+getgenv().MobNames2 = {"Demon Slayer"}
+getgenv().MobNames3 = {"Tanjiro (Water)"}
+getgenv().MobNames4 = {"Tanjiro (Water)"}
+
+local MoonV2Taken = false
+
+local function TakeQuest(name)
+	local args = {[1] = name}
+	ReplicatedStorage.Events.QuestTake:FireServer(unpack(args))
+end
+
+local GojoDungeon2 = {
+    {Name = "Reversal Red", MoveIndex = "FirstMove"}
+}
+
+-- dungeon again
+
 sections.DungeonSection2:Button({
 	Name = "Auto Requirement",
 	Callback = function()
