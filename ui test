@@ -790,8 +790,9 @@ task.spawn(function()
             end)
 
             if success and waveText then
-                local waveNumber = tonumber(waveText:match("%d+"))
-                if waveNumber and waveNumber >= getgenv().DungeonWave then
+							local waveNumber = tonumber(waveText:match("%d+"))
+								local resetWave = tonumber(getgenv().DungeonWave)
+									if waveNumber and resetWave and waveNumber >= resetWave then
                     pcall(function()
                         if Player.Character and Player.Character:FindFirstChild("Humanoid") then
                             Player.Character.Humanoid.Health = 0
