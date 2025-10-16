@@ -81,13 +81,6 @@ local Window = MacLib:Window({
     AcrylicBlur = false
 })
 
-createButton()
-
-player.CharacterAdded:Connect(function()
-    task.wait(1)
-    createButton()
-end)
-
 local Scale = 0.78
 task.spawn(function()
     while true do
