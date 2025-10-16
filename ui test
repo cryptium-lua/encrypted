@@ -60,8 +60,11 @@ local sections = {
     MainSection2 = tabs.Autofarm:Section({ Side = "Right" }),
     MainSection3 = tabs.Autofarm:Section({ Side = "Left" }),
     DungeonSection1 = tabs.Dungeon:Section({ Side = "Left" }),
+    DungeonSection2 = tabs.Dungeon:Section({ Side = "Right" }),
     SettingsSection1 = tabs.Settings:Section({ Side = "Left" })
 }
+
+-- autofarm
 
 sections.MainSection1:Toggle({
     Name = "Auto Farm",
@@ -192,18 +195,7 @@ sections.MainSection3:Toggle({
     end
 }, "AutoBreath")
 
-sections.SettingsSection1:Input({
-    Name = "UI Scale",
-    Placeholder = "1 = 100",
-    AcceptedCharacters = "All",
-    Callback = function(input)
-        Scale = input
-        Window:Notify({
-            Title = Window.Settings.Title,
-            Description = "Successfully set Scale to " .. input
-        })
-    end
-}, "Input")
+-- dungeon
 
 sections.DungeonSection1:Toggle({
     Name = "Dungeon Farm",
@@ -221,7 +213,7 @@ sections.DungeonSection1:Toggle({
     end
 }, "DungeonReset")
 
-sections.MainSection3:Input({
+sections.DungeonSection1:Input({
     Name = "Reset At",
     Placeholder = "5",
     AcceptedCharacters = "Numeric",
@@ -230,7 +222,7 @@ sections.MainSection3:Input({
     end
 }, "ResetWave")
 
-sections.MainSection3:Input({
+sections.DungeonSection1:Input({
     Name = "Auto Ability",
     Placeholder = "1",
     AcceptedCharacters = "Numeric",
@@ -238,6 +230,21 @@ sections.MainSection3:Input({
         getgenv().DungeonMoves = input
     end
 }, "AutoAbilityDungeon")
+
+-- settings
+
+sections.SettingsSection1:Input({
+    Name = "UI Scale",
+    Placeholder = "1 = 100",
+    AcceptedCharacters = "All",
+    Callback = function(input)
+        Scale = input
+        Window:Notify({
+            Title = Window.Settings.Title,
+            Description = "Successfully set Scale to " .. input
+        })
+    end
+}, "UISCALE")
 
 -- functions
 
