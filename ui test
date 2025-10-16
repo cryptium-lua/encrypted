@@ -1,5 +1,7 @@
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
 
+MacLib:Demo()
+
 local Window = MacLib:Window({
     Title = "Lua / C97",
     Subtitle = "WL2 | V2.0",
