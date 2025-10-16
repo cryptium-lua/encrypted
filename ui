@@ -5881,6 +5881,8 @@ end
 
 return MacLib
 
+		local Players = game.Players
+
 		local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "MyScreenGui"
     screenGui.ResetOnSpawn = false
