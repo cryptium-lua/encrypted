@@ -5,6 +5,26 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local TeleportService = game:GetService("TeleportService")
 
+-- Tables
+
+getgenv().DungeonFarm = false
+getgenv().DungeonReset = false
+getgenv().DungeonWave = 5
+getgenv().DungeonMoves = false
+
+getgenv().AutoQuest = false
+getgenv().InstaKill = false
+getgenv().AutoFarm = false
+getgenv().AutoM1 = false
+
+getgenv().automoves = false
+getgenv().moveset = {} 
+
+getgenv().QuestType = "Normal"
+getgenv().QuestNumber = 1
+
+getgenv().MobNames = {}
+
 local AutoFarmMoves = getgenv().moveset
 
 local GojoDungeon = {
@@ -51,6 +71,96 @@ local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/crypti
 		MainSection1 = tabs.Main:Section({ Side = "Left" }),
 		SettingsSection1 = tabs.Settings:Section({ Side = "Left" })
 	}
+
+-- autofarm
+
+sections.MainSection1:Toggle({
+	Name = "Auto Farm",
+	Default = false,
+	Callback = function(value)
+	getgenv().AutoFarm = value
+end,
+}, "AutoFarm")
+
+local function updateMobOptions(dropdown)
+    local charsFolder = Workspace:FindFirstChild("CharactersAndNPCs")
+    if not charsFolder then return end
+    local names = {}
+    for _, child in pairs(charsFolder:GetChildren()) do
+        table.insert(names, child.Name)
+    end
+    dropdown:UpdateOptions(names)
+end
+
+local MobDropdown = sections.MainSection1:Dropdown({
+    Name = "Mobs",
+    Search = true,
+    Multi = true,
+    Required = false,
+    Options = {},
+    Default = {},
+    Callback = function(Value)
+        getgenv().MobNames = Value
+    end,
+}, "MobTable")
+
+updateMobOptions(MobDropdown)
+
+local charsFolder = Workspace:FindFirstChild("CharactersAndNPCs")
+if charsFolder then
+    charsFolder.ChildAdded:Connect(function()
+        updateMobOptions(MobDropdown)
+    end)
+    charsFolder.ChildRemoved:Connect(function()
+        updateMobOptions(MobDropdown)
+    end)
+end
+
+sections.MainSection1:Toggle({
+	Name = "Auto M1",
+	Default = false,
+	Callback = function(value)
+	getgenv().AutoM1 = value
+end,
+}, "AutoM1")
+
+sections.MainSection1:Toggle({
+	Name = "Auto Moves",
+	Default = false,
+	Callback = function(value)
+	getgenv().automoves = value
+	Window:Notify({
+    Title = "lua",
+    Description = "Use a gojo skill for the cd.",
+    Lifetime = 8
+})
+end,
+}, "AutoMoves")
+
+local MovesDropdown = sections.MainSection1:Dropdown({
+    Name = "Moves",
+    Search = true,
+    Multi = true,
+    Required = false,
+    Options = {"Reversal Red", "Lapse Blue", "Close Combat", "Hollow Purple", ".2 Second Domain"},
+    Default = {},
+    Callback = function(Value)
+        local allMoves = {
+            ["Reversal Red"] = "FirstMove",
+            ["Lapse Blue"] = "SecondMove",
+            ["Close Combat"] = "ThirdMove",
+            ["Hollow Purple"] = "FourthMove",
+            [".2 Second Domain"] = "FifthMove"
+        }
+        local selectedMoves = {}
+        for _, name in ipairs(Value) do
+            table.insert(selectedMoves, {Name = name, MoveIndex = allMoves[name]})
+        end
+        getgenv().moveset = selectedMoves
+    end,
+}, "UseMoves")
+
+-- settings
 
 	sections.SettingsSection1:Input({
 		Name = "UI Scale",
