@@ -837,8 +837,13 @@ local function createButton()
 local visible = true
 
 button.MouseButton1Click:Connect(function()
-    visible = not visible
-    Window:SetState(visible and 0 or 1)
+visible = not visible
+
+if visible then
+Window:SetState(0)
+else
+Window:SetState(1)
+end
 end)
 end
 
