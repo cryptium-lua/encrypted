@@ -19,7 +19,7 @@ local SettingsTab = TabGroup1:Tab({
 })
 
 local SettingsSection = SettingsTab:Section({
-    Side = "Right"
+    Side = "Left"
 })
 
 SettingsSection:Input({
@@ -39,8 +39,6 @@ SettingsSection:Input({
     end,
 })
 
-SettingsTab:InsertConfigSection("Right")
-
 Window:Notify({
     Title = "PC USERS",
     Description = "Right Click to hide UI.",
@@ -48,7 +46,7 @@ Window:Notify({
 })
 
 MacLib:SetFolder("Lua-WL2")
-tabs.Settings:InsertConfigSection("Left")
+SettingsTab:InsertConfigSection("Right")
 
 Window.onUnloaded(function()
 	print("Unloaded!")
