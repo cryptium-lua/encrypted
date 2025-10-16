@@ -13,7 +13,6 @@ local Window = MacLib:Window({
 Window:SetScale(0.78)
 
 local TabGroup1 = Window:TabGroup()
-
 local SettingsTab = TabGroup1:Tab({
     Name = "Settings",
     Image = nil
@@ -46,6 +45,7 @@ local configSection = SettingsTab:Section({
 
 local inputPath = nil
 local selectedConfig = nil
+local autoloadLabel = nil
 
 configSection:Input({
     Name = "Config Name",
@@ -106,6 +106,7 @@ configSection:Button({
             })
             return
         end
+
         local success, returned = MacLib:LoadConfig(selectedConfig)
         if not success then
             Window:Notify({
@@ -114,6 +115,7 @@ configSection:Button({
             })
             return
         end
+
         Window:Notify({
             Title = "Config",
             Description = "Loaded config: " .. selectedConfig
@@ -131,6 +133,7 @@ configSection:Button({
             })
             return
         end
+
         local success, returned = MacLib:SaveConfig(selectedConfig)
         if not success then
             Window:Notify({
@@ -139,6 +142,7 @@ configSection:Button({
             })
             return
         end
+
         Window:Notify({
             Title = "Config",
             Description = "Overwrote config: " .. selectedConfig
@@ -157,6 +161,46 @@ configSection:Button({
         })
     end,
 })
+
+-- AutoLoad Config System
+autoloadLabel = configSection:Label({ Text = "Autoload config: None" })
+
+configSection:Button({
+    Name = "Set as Autoload",
+    Callback = function()
+        if not selectedConfig then
+            Window:Notify({
+                Title = "Config",
+                Description = "No config selected!"
+            })
+            return
+        end
+
+        if not isfolder(MacLib.Folder .. "/settings") then
+            makefolder(MacLib.Folder .. "/settings")
+        end
+
+        writefile(MacLib.Folder .. "/settings/autoload.txt", selectedConfig)
+        autoloadLabel:UpdateName("Autoload config: " .. selectedConfig)
+
+        Window:Notify({
+            Title = "Config",
+            Description = "Set autoload to: " .. selectedConfig
+        })
+    end,
+})
+
+if isfile(MacLib.Folder .. "/settings/autoload.txt") then
+    local name = readfile(MacLib.Folder .. "/settings/autoload.txt")
+    autoloadLabel:UpdateName("Autoload config: " .. name)
+    local success = MacLib:LoadConfig(name)
+    if success then
+        Window:Notify({
+            Title = "Config",
+            Description = "Auto-loaded config: " .. name
+        })
+    end
+end
 
 Window:Notify({
     Title = "PC USERS",
