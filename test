@@ -130,7 +130,7 @@ sections.MainSection1:Input({
 	Callback = function(input)
 		Config.Key = input
 	end
-})
+}, "SavedKey")
 
 sections.MainSection1:Button({
 	Name = "Validate Key",
@@ -169,3 +169,6 @@ end)
 
 tabs.Settings:Select()
 MacLib:LoadAutoLoadConfig()
+
+wait(1)
+validateKey()
