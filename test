@@ -153,7 +153,7 @@ sections.MainSection1:Button({
 	end
 })
 
-sections.SettingsSection1:Input({
+sections.SettingsSection2:Input({
 	Name = "UI Scale",
 	Placeholder = "Decimals",
 	AcceptedCharacters = "All",
@@ -161,3 +161,11 @@ sections.SettingsSection1:Input({
 		Scale = input
 	end
 })
+
+MacLib:SetFolder("WL2Key")
+Window.onUnloaded(function()
+    print("Unloaded!")
+end)
+
+tabs.Settings:Select()
+MacLib:LoadAutoLoadConfig()
