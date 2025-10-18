@@ -32,15 +32,18 @@ task.spawn(function()
 end)
 
 local tabGroups = {
-    TabGroup1 = Window:TabGroup()
+    TabGroup1 = Window:TabGroup(),
+    TabGroup2 = Window:TabGroup()
 }
 
 local tabs = {
-    Key = tabGroups.TabGroup1:Tab({ Name = "Key System" })
+    Key = tabGroups.TabGroup1:Tab({ Name = "Key System" }),
+    Settings = tabGroups.TabGroup2:Tab({ Name = "Settings" })
 }
 
 local sections = {
-    MainSection1 = tabs.Key:Section({ Side = "Left" })
+    MainSection1 = tabs.Key:Section({ Side = "Left" }),
+    SettingsSection2 = tabs.Settings:Section({ Side = "Left" })
 }
 
 local function CopyDiscord()
@@ -147,5 +150,14 @@ sections.MainSection1:Button({
 	Name = "Discord Server",
 	Callback = function()
 		CopyDiscord()
+	end
+})
+
+sections.SettingsSection1:Input({
+	Name = "UI Scale",
+	Placeholder = "Decimals",
+	AcceptedCharacters = "All",
+	Callback = function(input)
+		Scale = input
 	end
 })
