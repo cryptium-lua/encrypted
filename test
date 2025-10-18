@@ -163,6 +163,7 @@ sections.SettingsSection2:Input({
 }, "UiScale")
 
 MacLib:SetFolder("WL2Key")
+tabs.Settings:InsertConfigSection("Right")
 Window.onUnloaded(function()
     print("Unloaded!")
 end)
