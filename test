@@ -1,6 +1,6 @@
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
 local Window = MacLib:Window({
-    Title = "Weak Legacy 2",
+    Title = "C97",
     Subtitle = "Key System | V1.00",
     Size = UDim2.fromOffset(868, 650),
     DragStyle = 2,
@@ -11,80 +11,141 @@ local Window = MacLib:Window({
 })
 
 Config = {
-    api = "", 
-    service = "",
-    provider = ""
-
+    api = "9afb4be9-8f64-4039-8b86-f75dd5318eee",
+    service = "WL2",
+    provider = "WL2",
+	Key = ""
 }
 
 local function main()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/wl2"))()
-print("Script loaded.")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/wl2"))()
+    print("Script loaded.")
 end
 
-local Scale = 0.8
+local Scale = 0.78
 task.spawn(function()
-    while true do
-        task.wait()
+    while task.wait() do
         pcall(function()
             Window:SetScale(Scale)
         end)
     end
 end)
 
+local tabGroups = {
+    TabGroup1 = Window:TabGroup()
+}
 
+local tabs = {
+    Key = tabGroups.TabGroup1:Tab({ Name = "Key System" })
+}
 
+local sections = {
+    MainSection1 = tabs.Key:Section({ Side = "Left" })
+}
 
-
+local function CopyDiscord()
+	local discord = "https://discord.gg/sUqeN5sxjt"
+	setclipboard(discord)
+	Window:Notify({
+		Title = "Key System",
+		Description = "Discord link copied!",
+		Lifetime = 3
+	})
+end
 
 local function openGetKey()
-    local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
-    
-    local API_KEY = Config.api
-    local PROVIDER = Config.provider
-    local SERVICE = Config.service
-    
-    local link = JunkieKeySystem.getLink(API_KEY, PROVIDER, SERVICE)
-    if link then
-        if setclipboard then
-            setclipboard(link)
-            ShowStatusMessage("Verification link copied!", KeySystemData.Colors.Success)
-        else
-            ShowStatusMessage("Link: " .. link, KeySystemData.Colors.Success)
-        end
-    else
-        ShowStatusMessage("Failed to generate link", KeySystemData.Colors.Error)
-    end
+	local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
+	local API_KEY = Config.api
+	local PROVIDER = Config.provider
+	local SERVICE = Config.service
+	local link = JunkieKeySystem.getLink(API_KEY, PROVIDER, SERVICE)
+	if link then
+		if setclipboard then
+			setclipboard(link)
+			Window:Notify({
+				Title = "Key System",
+				Description = "Verification link copied!",
+				Lifetime = 3
+			})
+		else
+			Window:Notify({
+				Title = "Key System",
+				Description = "Link:" .. link,
+				Lifetime = 3
+			})
+		end
+	else
+		Window:Notify({
+			Title = "Key System",
+			Description = "Failed to generate link.",
+			Lifetime = 3
+		})
+	end
 end
 
 local function validateKey()
-    local userKey = KeyInput.Text:gsub("%s+", "")
-    if not userKey or userKey == "" then
-        ShowStatusMessage("Please enter a key.", KeySystemData.Colors.Error)
-        return
-    end
-
-    ShowStatusMessage("Validating key...", Color3.fromRGB(255, 165, 0))
-    
-    local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
-    
-    local API_KEY = Config.api
-    local SERVICE = Config.service
-    
-    local isValid = JunkieKeySystem.verifyKey(API_KEY, userKey, SERVICE)
-    if isValid then
-        ShowStatusMessage("Key valid! Loading executor...", KeySystemData.Colors.Success)
-        
-        SmoothTween(MainFrame, 0.5, {
-            Position = UDim2.new(0.5, 0, -0.5, 0),
-            BackgroundTransparency = 1
-        })
-        
-        task.wait(0.5)
-        ScreenGui:Destroy()
-        
-        main()
-    else
-        ShowStatusMessage("Invalid key. Try again!", KeySystemData.Colors.Error)
-    end
+	local userKey = Config.Key
+	if not userKey or userKey == "" then
+		Window:Notify({
+			Title = "Key System",
+			Description = "Please enter a valid key.",
+			Lifetime = 3
+		})
+		return
+	end
+	Window:Notify({
+		Title = "Key System",
+		Description = "Validating Key...",
+		Lifetime = 3
+	})
+	local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
+	local API_KEY = Config.api
+	local SERVICE = Config.service
+	local isValid = JunkieKeySystem.verifyKey(API_KEY, userKey, SERVICE)
+	if isValid then
+		Window:Notify({
+			Title = "Key System",
+			Description = "Valid Key! Loading...",
+			Lifetime = 3
+		})
+		task.wait(0.5)
+		Window:Unload()
+		main()
+	else
+		Window:Notify({
+			Title = "Key System",
+			Description = "Invalid Key! Try again.",
+			Lifetime = 3
+		})
+	end
 end
+
+sections.MainSection1:Input({
+	Name = "Key",
+	Placeholder = "Enter Key",
+	AcceptedCharacters = "All",
+	Callback = function(input)
+		Config.Key = input
+	end
+})
+
+sections.MainSection1:Button({
+	Name = "Validate Key",
+	Callback = function()
+		validateKey()
+	end
+})
+
+sections.MainSection1:Button({
+	Name = "Get Key",
+	Callback = function()
+		openGetKey()
+	end
+})
+
+sections.MainSection1:Button({
+	Name = "Discord Server",
+	Callback = function()
+		CopyDiscord()
+	end
+})
