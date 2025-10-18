@@ -18,7 +18,7 @@ Config = {
 }
 
 local function main()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/wl2"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/wl2%20haha"))()
     print("Script loaded.")
 end
 
@@ -160,7 +160,7 @@ sections.SettingsSection2:Input({
 	Callback = function(input)
 		Scale = input
 	end
-})
+}, "UiScale")
 
 MacLib:SetFolder("WL2Key")
 Window.onUnloaded(function()
