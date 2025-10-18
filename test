@@ -1,1 +1,90 @@
-as
+local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
+local Window = MacLib:Window({
+    Title = "Weak Legacy 2",
+    Subtitle = "Key System | V1.00",
+    Size = UDim2.fromOffset(868, 650),
+    DragStyle = 2,
+    DisabledWindowControls = {},
+    ShowUserInfo = false,
+    Keybind = Enum.KeyCode.RightControl,
+    AcrylicBlur = false
+})
+
+Config = {
+    api = "", 
+    service = "",
+    provider = ""
+
+}
+
+local function main()
+-- script here
+print("Script loaded.")
+end
+
+local Scale = 0.78
+task.spawn(function()
+    while true do
+        task.wait()
+        pcall(function()
+            Window:SetScale(Scale)
+        end)
+    end
+end)
+
+
+
+
+
+
+local function openGetKey()
+    local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
+    
+    local API_KEY = Config.api
+    local PROVIDER = Config.provider
+    local SERVICE = Config.service
+    
+    local link = JunkieKeySystem.getLink(API_KEY, PROVIDER, SERVICE)
+    if link then
+        if setclipboard then
+            setclipboard(link)
+            ShowStatusMessage("Verification link copied!", KeySystemData.Colors.Success)
+        else
+            ShowStatusMessage("Link: " .. link, KeySystemData.Colors.Success)
+        end
+    else
+        ShowStatusMessage("Failed to generate link", KeySystemData.Colors.Error)
+    end
+end
+
+local function validateKey()
+    local userKey = KeyInput.Text:gsub("%s+", "")
+    if not userKey or userKey == "" then
+        ShowStatusMessage("Please enter a key.", KeySystemData.Colors.Error)
+        return
+    end
+
+    ShowStatusMessage("Validating key...", Color3.fromRGB(255, 165, 0))
+    
+    local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
+    
+    local API_KEY = Config.api
+    local SERVICE = Config.service
+    
+    local isValid = JunkieKeySystem.verifyKey(API_KEY, userKey, SERVICE)
+    if isValid then
+        ShowStatusMessage("Key valid! Loading executor...", KeySystemData.Colors.Success)
+        
+        SmoothTween(MainFrame, 0.5, {
+            Position = UDim2.new(0.5, 0, -0.5, 0),
+            BackgroundTransparency = 1
+        })
+        
+        task.wait(0.5)
+        ScreenGui:Destroy()
+        
+        main()
+    else
+        ShowStatusMessage("Invalid key. Try again!", KeySystemData.Colors.Error)
+    end
+end
