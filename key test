@@ -1,0 +1,66 @@
+local CollectionService = game:GetService("CollectionService")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local G2L = {}
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "KeySystemUI"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent = Player:WaitForChild("PlayerGui")
+CollectionService:AddTag(ScreenGui, "main")
+G2L.ScreenGui = ScreenGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0.47, 0, 0.64, 0)
+Frame.Position = UDim2.new(0.28, 0, 0.12, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
+Frame.Active = true
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+G2L.Frame = Frame
+
+Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 10)
+
+local Title = Instance.new("TextLabel")
+Title.Text = "🔐 Junkie Development Key System"
+Title.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold)
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.TextSize = 18
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(1, 0, 0.12, 0)
+Title.Position = UDim2.new(0, 0, 0.1, 0)
+Title.Parent = Frame
+
+local KeyBox = Instance.new("TextBox")
+KeyBox.PlaceholderText = "Enter your key..."
+KeyBox.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json")
+KeyBox.TextColor3 = Color3.new(1, 1, 1)
+KeyBox.TextSize = 14
+KeyBox.Size = UDim2.new(0.8, 0, 0.165, 0)
+KeyBox.Position = UDim2.new(0.1, 0, 0.35, 0)
+KeyBox.BackgroundColor3 = Color3.fromRGB(41, 41, 41)
+KeyBox.Parent = Frame
+Instance.new("UICorner", KeyBox).CornerRadius = UDim.new(0, 6)
+G2L.KeyBox = KeyBox
+
+local function createButton(text, position)
+	local button = Instance.new("TextButton")
+	button.Text = text
+	button.Size = UDim2.new(0.8, 0, 0.165, 0)
+	button.Position = position
+	button.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold)
+	button.TextSize = 16
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.BackgroundColor3 = Color3.fromRGB(51, 101, 255)
+	button.Parent = Frame
+	Instance.new("UICorner", button).CornerRadius = UDim.new(0, 6)
+	return button
+end
+
+local VerifyButton = createButton("✔️ Verify Key", UDim2.new(0.1, 0, 0.55, 0))
+local GetKeyButton = createButton("🔑 Get Key", UDim2.new(0.1, 0, 0.75, 0))
+
+G2L.VerifyButton = VerifyButton
+G2L.GetKeyButton = GetKeyButton
+
+return G2L.ScreenGui, require
