@@ -1,5 +1,3 @@
-getgenv().Key = ""
-
 Config = {
     api = "9afb4be9-8f64-4039-8b86-f75dd5318eee",
     service = "WL2",
@@ -15,6 +13,13 @@ local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local G2L = {}
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "KeySystemUI"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent = game:GetService("CoreGui")
+CollectionService:AddTag(ScreenGui, "main")
+G2L.ScreenGui = ScreenGui
 
 local function openGetKey()
 	local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
@@ -49,19 +54,12 @@ print("Validating Key...")
 	if isValid then
 		print("Valid Key! Loading...")
 		task.wait(0.5)
-		Window:Unload()
+		ScreenGui:Destroy()
 		main()
 	else
 		print("Invalid Key!")
 	end
 end
-
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "KeySystemUI"
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = Player:WaitForChild("PlayerGui")
-CollectionService:AddTag(ScreenGui, "main")
-G2L.ScreenGui = ScreenGui
 
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0.47, 0, 0.64, 0)
@@ -102,12 +100,6 @@ KeyBox.FocusLost:Connect(function()
 	getgenv().Key = KeyBox.Text
 end)
 
-game:GetService("RunService").RenderStepped:Connect(function()
-	if KeyBox.Text ~= getgenv().Key then
-		KeyBox.Text = getgenv().Key
-	end
-end)
-
 local function createButton(text, position, callback)
 	local button = Instance.new("TextButton")
 	button.Text = text
@@ -124,7 +116,7 @@ local function createButton(text, position, callback)
 end
 
 local VerifyButton = createButton("✔️ Verify Key", UDim2.new(0.1, 0, 0.55, 0), function()
-	ValidateKey()
+	validateKey()
 end)
 
 local GetKeyButton = createButton("🔑 Get Key", UDim2.new(0.1, 0, 0.75, 0), function()
@@ -133,5 +125,7 @@ end)
 
 G2L.VerifyButton = VerifyButton
 G2L.GetKeyButton = GetKeyButton
+
+validateKey()
 
 return G2L.ScreenGui, require
