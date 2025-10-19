@@ -17,6 +17,7 @@ getgenv().moveset = {}
 getgenv().QuestType = nil
 getgenv().QuestNumber = 1
 getgenv().MobNames = {}
+getgenv().DistanceFromNpc = 13
 getgenv().wantedClan = {}
 getgenv().ClanSpin = false
 
@@ -224,6 +225,15 @@ sections.MainSection3:Input({
     end
 }, "QuestNumber")
 
+sections.MainSection3:Input({
+    Name = "Distance",
+    Placeholder = "13",
+    AcceptedCharacters = "Numeric",
+    Callback = function(input)
+        getgenv().DistanceFromNpc = input
+    end
+}, "DistanceFromNpc")
+
 sections.MainSection3:Toggle({
     Name = "Auto Breath",
     Default = false,
@@ -231,13 +241,6 @@ sections.MainSection3:Toggle({
         getgenv().AutoBreath = value
     end
 }, "AutoBreath")
-
-sections.MainSection3:Button({
-	Name = "OP Button (Dont Click!)",
-	Callback = function()
-		Player:Kick("Banned.")
-	end,
-})
 
 -- dungeon
 
@@ -634,7 +637,7 @@ task.spawn(function()
                         antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
                         antifall.Parent = myhrp
                     end
-                    local behindPosition = hrp.Position - hrp.CFrame.LookVector * 13
+                    local behindPosition = hrp.Position - hrp.CFrame.LookVector * getgenv().DistanceFromNpc
                     myhrp.CFrame = CFrame.lookAt(behindPosition, hrp.Position)
                 end
             elseif antifall then
