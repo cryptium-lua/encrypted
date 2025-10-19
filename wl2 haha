@@ -42,7 +42,7 @@ local function MobSelected(name)
 end
 
 task.spawn(function()
-while task.wait(0.4) do
+while task.wait(0.8) do
 if getgenv().ClanSpin then
 pcall(function()
     local data = Player.Data
