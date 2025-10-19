@@ -42,28 +42,24 @@ local function MobSelected(name)
 end
 
 task.spawn(function()
-while task.wait(0.8) do
-if getgenv().ClanSpin then
-pcall(function()
-    local data = Player.Data
-    local currentClan = data.Clan.Value
+    while task.wait(0.5) do
+        if getgenv().ClanSpin then
+            pcall(function()
+                local data = Player:WaitForChild("Data")
+                local currentClan = data.Clan.Value
 
-    for _, wanted in ipairs(getgenv().wantedClan) do
-        if currentClan == wanted then
-            getgenv().ClanSpin = false
-            return
+                for wanted, selected in pairs(getgenv().wantedClan or {}) do
+                    if selected and currentClan == wanted then
+                        getgenv().ClanSpin = false
+                        print("Stopped on: " .. currentClan)
+                        return
+                    end
+                end
+
+                game:GetService("ReplicatedStorage").SharedFramework.Network.Remotes.Character_RE:FireServer("Spin_Race")
+            end)
         end
     end
-    
-
-local args = {
-    [1] = "Spin_Race"
-}
-
-game:GetService("ReplicatedStorage").SharedFramework.Network.Remotes.Character_RE:FireServer(unpack(args))
-end)
-end
-end
 end)
 
 local GojoDungeon = {
