@@ -150,6 +150,15 @@ sections.MainSection1:Toggle({
     end
 }, "AutoM1")
 
+sections.MainSection1:Input({
+    Name = "Distance",
+    Placeholder = "13",
+    AcceptedCharacters = "Numeric",
+    Callback = function(input)
+        getgenv().DistanceFromNpc = input
+    end
+}, "DistanceFromNpc")
+
 sections.MainSection2:Toggle({
     Name = "Auto Moves",
     Default = false,
@@ -224,15 +233,6 @@ sections.MainSection3:Input({
         getgenv().QuestNumber = input
     end
 }, "QuestNumber")
-
-sections.MainSection3:Input({
-    Name = "Distance",
-    Placeholder = "13",
-    AcceptedCharacters = "Numeric",
-    Callback = function(input)
-        getgenv().DistanceFromNpc = input
-    end
-}, "DistanceFromNpc")
 
 sections.MainSection3:Toggle({
     Name = "Auto Breath",
