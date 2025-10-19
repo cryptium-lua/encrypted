@@ -1,3 +1,5 @@
+-- dont forget to add getgenv().Key = ""
+
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
 local Window = MacLib:Window({
     Title = "C97",
@@ -13,8 +15,7 @@ local Window = MacLib:Window({
 Config = {
     api = "9afb4be9-8f64-4039-8b86-f75dd5318eee",
     service = "WL2",
-    provider = "WL2",
-	Key = ""
+    provider = "WL2"
 }
 
 local function main()
@@ -87,7 +88,7 @@ local function openGetKey()
 end
 
 local function validateKey()
-	local userKey = Config.Key
+	local userKey = getgenv().Key
 	if not userKey or userKey == "" then
 		Window:Notify({
 			Title = "Key System",
@@ -128,7 +129,7 @@ sections.MainSection1:Input({
 	Placeholder = "Enter Key",
 	AcceptedCharacters = "All",
 	Callback = function(input)
-		Config.Key = input
+		getgenv().Key = input
 	end
 }, "SavedKey")
 
