@@ -1,5 +1,3 @@
-
-
 -- made by samet <3
 -- example at bottom
 
@@ -2030,14 +2028,6 @@ local Library do
 
                 Items["MainFrame"].Instance.Position = UDim2New(0, CenterPosition.X, 0, CenterPosition.Y)
             end
-
-	function Window:SetScale(Scale)
-		baseUIScale.Scale = Scale
-	end
-	function WindowFunctions:GetScale()
-		return baseUIScale.Scale
-	end
-
 
             function Window:SetOpen(Bool)
                 if Debounce then 
