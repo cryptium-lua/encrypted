@@ -5715,12 +5715,14 @@ function MacLib:Demo()
 		Title = "Maclib Demo",
 		Subtitle = "This is a subtitle.",
 		Size = UDim2.fromOffset(868, 650),
-		DragStyle = 1,
+		DragStyle = 2,
 		DisabledWindowControls = {},
 		ShowUserInfo = true,
 		Keybind = Enum.KeyCode.RightControl,
 		AcrylicBlur = true,
 	})
+
+Window:SetScale(0.6)
 
 	local globalSettings = {
 		UIBlurToggle = Window:GlobalSetting({
