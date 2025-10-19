@@ -1,3 +1,5 @@
+getgenv().Key = ""
+
 Config = {
     api = "9afb4be9-8f64-4039-8b86-f75dd5318eee",
     service = "WL2",
@@ -13,6 +15,46 @@ local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local G2L = {}
+
+local function openGetKey()
+	local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
+	local API_KEY = Config.api
+	local PROVIDER = Config.provider
+	local SERVICE = Config.service
+	local link = JunkieKeySystem.getLink(API_KEY, PROVIDER, SERVICE)
+	if link then
+		if setclipboard then
+			setclipboard(link)
+				wait(0.5)
+			Player:Kick("Link copied to clipboard.")
+		else
+print("Link generated.")
+		end
+	else
+print("Failed to generate link.")
+	end
+end
+
+local function validateKey()
+	local userKey = getgenv().Key
+	if not userKey or userKey == "" then
+print("Please enter a valid key.")
+		return
+	end
+print("Validating Key...")
+	local JunkieKeySystem = loadstring(game:HttpGet("https://junkie-development.de/sdk/JunkieKeySystem.lua"))()
+	local API_KEY = Config.api
+	local SERVICE = Config.service
+	local isValid = JunkieKeySystem.verifyKey(API_KEY, userKey, SERVICE)
+	if isValid then
+		print("Valid Key! Loading...")
+		task.wait(0.5)
+		Window:Unload()
+		main()
+	else
+		print("Invalid Key!")
+	end
+end
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "KeySystemUI"
@@ -56,6 +98,16 @@ KeyBox.Parent = Frame
 Instance.new("UICorner", KeyBox).CornerRadius = UDim.new(0, 6)
 G2L.KeyBox = KeyBox
 
+KeyBox.FocusLost:Connect(function()
+	getgenv().Key = KeyBox.Text
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+	if KeyBox.Text ~= getgenv().Key then
+		KeyBox.Text = getgenv().Key
+	end
+end)
+
 local function createButton(text, position, callback)
 	local button = Instance.new("TextButton")
 	button.Text = text
@@ -72,11 +124,11 @@ local function createButton(text, position, callback)
 end
 
 local VerifyButton = createButton("✔️ Verify Key", UDim2.new(0.1, 0, 0.55, 0), function()
-	print("Verify clicked! Key:", KeyBox.Text)
+	ValidateKey()
 end)
 
 local GetKeyButton = createButton("🔑 Get Key", UDim2.new(0.1, 0, 0.75, 0), function()
-	print("Get Key clicked!")
+	openGetKey()
 end)
 
 G2L.VerifyButton = VerifyButton
