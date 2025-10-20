@@ -4102,7 +4102,7 @@ end
 
 										local ScaleLabel = SettingsSection:Label("Ui Scale Below")
 
-										local scaley = 0.78
+										local scaley
 								    SettingsSection:Textbox({Flag = "UIScale", Placeholder = "", Default = "0.78", Finished = false, Numeric = true, Callback = function(Value)
 								        scaley = Value
 								    end})
