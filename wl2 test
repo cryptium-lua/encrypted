@@ -6,7 +6,7 @@ local Window = Library:Window({ Name = "Weak Legacy 2" })
 Window:Category("penis")
 
 local TestPage = Window:Page({ Name = "Page", Icon = "" })
-Window:Page({ Name = "Page", Icon = "" }) -- if you really want a second anonymous page
+Window:Page({ Name = "Page", Icon = "" })
 
 local TestSubPage = TestPage:SubPage({ Name = "Testing" })
 TestPage:SubPage({ Name = "Test1" })
@@ -15,7 +15,6 @@ TestPage:SubPage({ Name = "Test2" })
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
--- example sections / controls
 for Index = 1, 2 do
     local AimbotSection = TestSubPage:Section({ Name = "Test", Icon = "", Side = Index })
 
@@ -58,7 +57,6 @@ for Index = 1, 2 do
         end
     })
 
-    -- chain Label then Colorpicker (assuming library supports fluent API like this)
     AimbotSection:Label("Label"):Colorpicker({
         Flag = "Colorpicker",
         Default = Color3.fromRGB(255, 255, 255),
@@ -88,5 +86,4 @@ for Index = 1, 2 do
     })
 end
 
--- notification (image id as 3rd arg)
-Library:Notification("Notification with icon lol noob", 5, "126152115075698")
+Library:Notification("test test", 5, "126152115075698")
