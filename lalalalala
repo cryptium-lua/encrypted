@@ -1871,7 +1871,7 @@ Items["Background"] = Instances:Create("ImageLabel", {
                     BackgroundTransparency = 0,
                     Position = UDim2New(0, 0, 0, 75),
                     BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(0, 200, 1, -24),
+                    Size = UDim2New(1, 0, 0.8, 0),
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(25, 24, 21)
                 })
