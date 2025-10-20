@@ -1784,10 +1784,7 @@ end
             local StartTime = tick()
             Data = Data or { }
 
-            local Window = {
-                Name = Data.Name or Data.name or "Window",
-                SubTitle = Data.SubTitle or Data.subtitle or "Test",
-                
+            local Window = {        
                 Pages = { },
                 Items = { },
                 IsOpen = false
@@ -1867,39 +1864,6 @@ Items["Background"] = Instances:Create("ImageLabel", {
                     Size = UDim2New(1, -10, 1, -10),
                     BorderSizePixel = 0,
                     TextSize = 22,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })
-                
-                Items["RealTitle"] = Instances:Create("TextLabel", {
-                    Parent = Items["Title"].Instance,
-                    Name = "\0",
-                    FontFace = Library.Font,
-                    TextColor3 = FromRGB(255, 255, 255),
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Text = Window.Name,
-                    Size = UDim2New(0, 0, 0, 15),
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(0, 65, 0, 14),
-                    BorderSizePixel = 0,
-                    AutomaticSize = Enum.AutomaticSize.X,
-                    TextSize = 14,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })  
-                
-                Items["Game"] = Instances:Create("TextLabel", {
-                    Parent = Items["Title"].Instance,
-                    Name = "\0",
-                    FontFace = Library.Font,
-                    TextColor3 = FromRGB(255, 255, 255),
-                    TextTransparency = 0.5,
-                    Text = Window.SubTitle,
-                    Size = UDim2New(0, 0, 0, 15),
-                    BorderSizePixel = 0,
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(0, 65, 0, 30),
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    AutomaticSize = Enum.AutomaticSize.X,
-                    TextSize = 14,
                     BackgroundColor3 = FromRGB(255, 255, 255)
                 })
                 
