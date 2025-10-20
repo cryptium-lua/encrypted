@@ -1,19 +1,5 @@
--- set the folder name before loading the library so the library can use it
 getgenv().FolderName = "ModdedLibrary"
 
--- load library (pcall to avoid hard errors if the url is down)
-local ok, Library = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lalalalala"))()
-end)
-
-if not ok or not Library then
-    warn("Failed to load UI library.")
-    return
-end
-
-getgenv().Library = Library
-
--- create window
 local Window = Library:Window({ Name = "Weak Legacy 2" })
 
 -- categories / pages
