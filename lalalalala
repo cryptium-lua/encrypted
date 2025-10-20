@@ -1,6 +1,3 @@
--- made by samet <3
--- example at bottom
-
 if getgenv().Library then
     getgenv().Library:Unload()
 end
@@ -731,16 +728,13 @@ Library.RefreshConfigsList = function(self, Element)
     local CurrentList = {}
     local List = {}
 
-    -- Get all files in the configs folder
     for _, file in ipairs(listfiles(Library.Folders.Configs)) do
-        -- Extract only the filename without extension
         local name = file:match("([^/\\]+)%.json$")
         if name then
             table.insert(List, name)
         end
     end
 
-    -- Check if the list has changed
     local IsNew = #List ~= #CurrentList
     if not IsNew then
         for i = 1, #List do
@@ -3486,19 +3480,16 @@ end
 function Label:SetText(Text)
     Text = tostring(Text or "")
 
-    -- safe guard in case Items or Items["Label"] isn't ready
     local ok, err = pcall(function()
         if Items and Items["Text"] and Items["Text"].Instance and typeof(Items["Text"].Instance) == "Instance" then
             Items["Text"].Instance.Text = Text
         else
-            -- fallback: store on the Label table so other code can read it
             Label.Text = Text
         end
     end)
 
     if not ok then
         warn("Label:SetText failed:", err)
-        -- still store text so we don't lose it
         Label.Text = Text
     end
 end
@@ -3808,7 +3799,6 @@ end
                 Items["Input"].Instance.Text = AssetID.Value
                 Library.Flags[AssetID.Flag] = AssetID.Value
 
-                -- Update preview image
                 if AssetID.Value and AssetID.Value ~= "" then
                     Items["Preview"].Instance.Image = "rbxassetid://" .. AssetID.Value
                 else
@@ -3872,14 +3862,13 @@ local createUIButton = function()
 	button.ScaleType = Enum.ScaleType.Fit
 	button.Parent = mainGui
 
-	-- Create the background frame behind the button
 	local framee = Instance.new('Frame')
 	framee.AnchorPoint = Vector2.new(0.5, 0.5)
 	framee.Position = button.Position
 	framee.Size = button.Size
 	framee.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	framee.BorderSizePixel = 0
-	framee.ZIndex = button.ZIndex - 1 -- put behind the button
+	framee.ZIndex = button.ZIndex - 1
 	framee.Parent = mainGui
 
 	local gradient = Instance.new('UIGradient', framee)
@@ -3902,7 +3891,6 @@ local createUIButton = function()
 		ColorSequenceKeypoint.new(1, Color3.new(214/255, 159/255, 64/255))
 	}
 
-	-- Dragging logic
 	local UserInputService = game:GetService("UserInputService")
 	local RunService = game:GetService("RunService")
 	local frame = button
@@ -3914,7 +3902,7 @@ local createUIButton = function()
 		local startOffsetY = startPos.Y.Scale * parentHeight + startPos.Y.Offset
 		local newPosY = math.clamp(startOffsetY + delta.Y, 0, parentHeight - frame.AbsoluteSize.Y)
 		frame.Position = UDim2.new(1, 0, 0, newPosY)
-		framee.Position = frame.Position -- move background too
+		framee.Position = frame.Position
 	end
 
 	frame.InputBegan:Connect(function(input)
@@ -3976,7 +3964,6 @@ do -- Configs
         end
     })
 
--- assume AutoLoadFile is your global/current autoload name
 local AutoLoadLabel = ConfigsSection:Label("Auto Load: " .. (AutoLoadConfigName or "None"))
 
 task.spawn(function()
@@ -3988,7 +3975,6 @@ task.spawn(function()
 	end
 end)
 
-    -- Load the saved auto-load config if exists
     if isfile(AutoLoadFile) then
         local saved = readfile(AutoLoadFile)
         if saved and saved ~= "" then
@@ -4067,20 +4053,18 @@ end)
         end
     })
 
-    -- Auto Load Button
     ConfigsSection:Button({
         Name = "Set Auto Load", 
         Callback = function()
             if ConfigSelected then
                 AutoLoadConfigName = ConfigSelected
-                writefile(AutoLoadFile, AutoLoadConfigName) -- Save to file
+                writefile(AutoLoadFile, AutoLoadConfigName)
                 AutoLoadLabel:SetText("Auto Load: " .. AutoLoadConfigName)
                 warn("Auto Load Config set to:", AutoLoadConfigName)
             end
         end
     })
 
-    -- Auto Load Function
     local function AutoLoadConfig()
         if AutoLoadConfigName and AutoLoadConfigName ~= "" then
             local filePath = Library.Folders.Configs .. "/" .. AutoLoadConfigName .. ".json"
@@ -4095,7 +4079,6 @@ end)
 
     Library:RefreshConfigsList(ConfigsList)
 
-    -- Call auto-load on script start
     task.defer(AutoLoadConfig)
 end
 
