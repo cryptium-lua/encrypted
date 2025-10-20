@@ -3856,20 +3856,32 @@ local createUIButton = function()
 		game:GetService("CoreGui"):FindFirstChild("MainUIButton"):Destroy()
 	end
 
-	local mainGui = Instance.new('ScreenGui', game:GetService('CoreGui'))
+	local mainGui = Instance.new('ScreenGui')
 	mainGui.Name = "MainUIButton"
+	mainGui.Parent = game:GetService('CoreGui')
 
-	local button = Instance.new('TextButton', mainGui)
+	local button = Instance.new('ImageButton')
 	button.AnchorPoint = Vector2.new(1, 0.5)
 	button.Position = UDim2.new(1, 0, 0.5, 0)
 	button.Size = UDim2.new(0.08, 0, 0.087, 0)
 	button.SizeConstraint = Enum.SizeConstraint.RelativeYY
 	button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	button.TextColor3 = Color3.fromRGB(255, 255, 255)
-	button.Text = ''
-	button.ZIndex = 9998
+	button.BackgroundTransparency = 1
+	button.Image = "rbxassetid://126152115075698"
+	button.ScaleType = Enum.ScaleType.Fit
+	button.Parent = mainGui
 
-	local gradient = Instance.new('UIGradient', button)
+	-- Create the background frame behind the button
+	local framee = Instance.new('Frame')
+	framee.AnchorPoint = Vector2.new(0.5, 0.5)
+	framee.Position = button.Position
+	framee.Size = button.Size
+	framee.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	framee.BorderSizePixel = 0
+	framee.ZIndex = button.ZIndex - 1 -- put behind the button
+	framee.Parent = mainGui
+
+	local gradient = Instance.new('UIGradient', framee)
 	gradient.Color = ColorSequence.new({
 		ColorSequenceKeypoint.new(0, Color3.new(10/255, 22/255, 22/255)),
 		ColorSequenceKeypoint.new(1, Color3.new(15/255, 68/255, 64/255))
@@ -3889,19 +3901,9 @@ local createUIButton = function()
 		ColorSequenceKeypoint.new(1, Color3.new(214/255, 159/255, 64/255))
 	}
 
-	local label = Instance.new('TextLabel', button)
-	label.AnchorPoint = Vector2.new(0.5, 0.5)
-	label.Position = UDim2.new(0.5, 0, 0.5, 0)
-	label.Size = UDim2.new(0.882, 0, 0.823, 0)
-	label.TextColor3 = Color3.fromRGB(214, 159, 64)
-	label.BackgroundTransparency = 1
-	label.Text = 'TOGGLE'
-	label.TextScaled = true
-	label.ZIndex = 9999
-
+	-- Dragging logic
 	local UserInputService = game:GetService("UserInputService")
 	local RunService = game:GetService("RunService")
-
 	local frame = button
 	local dragging, dragInput, dragStart, startPos
 
@@ -3911,6 +3913,7 @@ local createUIButton = function()
 		local startOffsetY = startPos.Y.Scale * parentHeight + startPos.Y.Offset
 		local newPosY = math.clamp(startOffsetY + delta.Y, 0, parentHeight - frame.AbsoluteSize.Y)
 		frame.Position = UDim2.new(1, 0, 0, newPosY)
+		framee.Position = frame.Position -- move background too
 	end
 
 	frame.InputBegan:Connect(function(input)
@@ -3938,12 +3941,12 @@ local createUIButton = function()
 		end
 	end)
 
-button.MouseButton1Click:Connect(function()
-	local main = GetMainFrame()
-	if main then
-		main.Visible = not main.Visible
-	end
-end)
+	button.MouseButton1Click:Connect(function()
+		local main = GetMainFrame()
+		if main then
+			main.Visible = not main.Visible
+		end
+	end)
 
 end
 	task.delay(0.05, createUIButton)
