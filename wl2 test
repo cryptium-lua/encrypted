@@ -1,52 +1,106 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lalalalala"))()
+-- set the folder name before loading the library so the library can use it
 getgenv().FolderName = "ModdedLibrary"
 
-local Window = Library:Window({Name = "Weak Legacy 2"})
+-- load library (pcall to avoid hard errors if the url is down)
+local ok, Library = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lalalalala"))()
+end)
 
+if not ok or not Library then
+    warn("Failed to load UI library.")
+    return
+end
+
+getgenv().Library = Library
+
+-- create window
+local Window = Library:Window({ Name = "Weak Legacy 2" })
+
+-- categories / pages
 Window:Category("penis")
-local TestPage = Window:Page({Name = "Page", Icon = ""})
-Window:Page({Name = "Page", Icon = ""})
 
-local TestSubPage = TestPage:SubPage({Name = "Testing"})
-TestPage:SubPage({Name = "Test1"})
-TestPage:SubPage({Name = "Test2"})
+local TestPage = Window:Page({ Name = "Page", Icon = "" })
+Window:Page({ Name = "Page", Icon = "" }) -- if you really want a second anonymous page
+
+local TestSubPage = TestPage:SubPage({ Name = "Testing" })
+TestPage:SubPage({ Name = "Test1" })
+TestPage:SubPage({ Name = "Test2" })
 
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
-for Index = 1, 2 do 
-    local AimbotSection = TestSubPage:Section({Name = "Test", Icon = "", Side = Index})
+-- example sections / controls
+for Index = 1, 2 do
+    local AimbotSection = TestSubPage:Section({ Name = "Test", Icon = "", Side = Index })
 
-    AimbotSection:Toggle({Name = "Toggle", Flag = "Toggle", Callback = function(Value)
-        print(Value)
-    end})
+    AimbotSection:Toggle({
+        Name = "Toggle",
+        Flag = "Toggle",
+        Callback = function(Value)
+            print("Toggle:", Value)
+        end
+    })
 
-    AimbotSection:Button({Name = "Button", Callback = function()
-        print("Button")
-    end})
+    AimbotSection:Button({
+        Name = "Button",
+        Callback = function()
+            print("Button pressed")
+        end
+    })
 
-    AimbotSection:Slider({Name = "Slider", Flag = "Slider", Min = 0, Max = 100, Default = 50, Suffix = "%", Decimals = 1, Callback = function(Value)
-        print(Value)
-    end})
+    AimbotSection:Slider({
+        Name = "Slider",
+        Flag = "Slider",
+        Min = 0,
+        Max = 100,
+        Default = 50,
+        Suffix = "%",
+        Decimals = 1,
+        Callback = function(Value)
+            print("Slider:", Value)
+        end
+    })
 
-    AimbotSection:Dropdown({Name = "Dropdown", Flag = "Dropdown", Items = {"Optionn 1", "Optionn 2", "Optionn 3", "Optionn 4"}, Default = "Optionnnn 2", Multi = false, Callback = function(Value)
-        print(Value)
-    end})
+    AimbotSection:Dropdown({
+        Name = "Dropdown",
+        Flag = "Dropdown",
+        Items = { "Optionn 1", "Optionn 2", "Optionn 3", "Optionn 4" },
+        Default = "Optionn 2",
+        Multi = false,
+        Callback = function(Value)
+            print("Dropdown:", Value)
+        end
+    })
 
-    AimbotSection:Label("Label"):Colorpicker({Flag = "Colorpicker", Default = Color3.fromRGB(255, 255, 255), Callback = function(Value)
-        print(Value)
-    end})
+    -- chain Label then Colorpicker (assuming library supports fluent API like this)
+    AimbotSection:Label("Label"):Colorpicker({
+        Flag = "Colorpicker",
+        Default = Color3.fromRGB(255, 255, 255),
+        Callback = function(Value)
+            print("Color:", Value)
+        end
+    })
 
-    AimbotSection:Label("Label"):Keybind({Flag = "Keybind", Default = Enum.KeyCode.E, Mode = "Toggle", Callback = function(Value)
-        print(Value)
-    end})
+    AimbotSection:Label("Label"):Keybind({
+        Flag = "Keybind",
+        Default = Enum.KeyCode.E,
+        Mode = "Toggle",
+        Callback = function(Value)
+            print("Keybind changed:", Value)
+        end
+    })
 
-    AimbotSection:Textbox({Flag = "Textbox", Placeholder = "Placeholder", Default = "Text", Finished = false, Numeric = false, Callback = function(Value)
-        print(Value)
-    end})
+    AimbotSection:Textbox({
+        Flag = "Textbox",
+        Placeholder = "Placeholder",
+        Default = "Text",
+        Finished = false,
+        Numeric = false,
+        Callback = function(Value)
+            print("Textbox:", Value)
+        end
+    })
 end
 
+-- notification (image id as 3rd arg)
 Library:Notification("Notification with icon lol noob", 5, "126152115075698")
-
-
-
