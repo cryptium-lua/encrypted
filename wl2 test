@@ -14,7 +14,6 @@ local TestSubPage = TestPage:SubPage({ Name = "Testing" })
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
-for Index = 1, 2 do
     local TestSection = TestSubPage:Section({ Name = "Test", Icon = "", Side = Index })
 
     TestSection:Toggle({
@@ -83,6 +82,3 @@ for Index = 1, 2 do
             print("Textbox:", Value)
         end
     })
-end
-
-Library:Notification("test test", 5, "")
