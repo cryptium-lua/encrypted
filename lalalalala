@@ -1788,7 +1788,7 @@ local Library do
 
             local Window = {
                 Name = Data.Name or Data.name or "Window",
-                SubTitle = Data.SubTitle or Data.subtitle or "for PUBG",
+                SubTitle = Data.SubTitle or Data.subtitle or "C97",
                 ExpiresIn = Data.ExpiresIn or Data.expiresin or "23d",
                 
                 Pages = { },
@@ -1846,32 +1846,25 @@ Items["uiScale"] = Instances:Create("UIScale", {
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 }):AddToTheme({Color = "Border"})
                 
-                Items["Background"] = Instances:Create("Frame", {
-                    Parent = Items["Title"].Instance,
-                    Name = "\0",
-                    AnchorPoint = Vector2New(0, 0.5),
-                    Position = UDim2New(0, 12, 0.5, 0),
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(0, 40, 0, 40),
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(207, 207, 207)
-                })
-                
-                
-                Instances:Create("UIStroke", {
-                    Parent = Items["Background"].Instance,
-                    Name = "\0",
-                    Color = FromRGB(30, 33, 33),
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                }):AddToTheme({Color = "Border"})
-                
+Items["Background"] = Instances:Create("ImageLabel", {
+    Parent = Items["Title"].Instance,
+    Name = "\0",
+    AnchorPoint = Vector2.new(0, 0.5),
+    Position = UDim2.new(0, 12, 0.5, 0),
+    Size = UDim2.new(0, 40, 0, 40),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Image = "rbxassetid://126152115075698",
+    ScaleType = Enum.ScaleType.Fit
+})
+        
                 Items["Text"] = Instances:Create("TextLabel", {
                     Parent = Items["Background"].Instance,
                     Name = "\0",
                     FontFace = Library.Font,
                     TextColor3 = FromRGB(0, 0, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
-                    Text = FirstLetterOfName,
+                    Text = "",
                     AnchorPoint = Vector2New(0.5, 0.5),
                     BackgroundTransparency = 1,
                     Position = UDim2New(0.5, 0, 0.5, 0),
@@ -2036,7 +2029,7 @@ Items["uiScale"] = Instances:Create("UIScale", {
 
 function SetScale(scale)
 
-Items["uiScale"].Scale = scale
+Items["uiScale"].Instance.Scale = scale
 
 end
 
@@ -2099,7 +2092,7 @@ end
                 Window = self,
 
                 Name = Data.Name or Data.name or "Page",
-                Icon = Data.Icon or Data.icon or "136879043989014",
+                Icon = Data.Icon or Data.icon or "126152115075698",
 
                 Items = { },
                 SubPages = { },
@@ -3982,22 +3975,21 @@ end
     end
 end
 
-local Window = Library:Window({Name = "DaHood Script"})
+local Window = Library:Window({Name = "Weak Legacy 2"})
 
 Window:Category("penis")
-local CombatPage = Window:Page({Name = "Page", Icon = "136879043989014"})
-Window:Page({Name = "Page", Icon = "136879043989014"})
-Window:Page({Name = "Page", Icon = "136879043989014"})
+local TestPage = Window:Page({Name = "Page", Icon = ""})
+Window:Page({Name = "Page", Icon = ""})
 
-local CombatSubPage = CombatPage:SubPage({Name = "Combat"})
-CombatPage:SubPage({Name = "Weapon"})
-CombatPage:SubPage({Name = "FoV"})
+local TestSubPage = TestPage:SubPage({Name = "Testing"})
+TestPage:SubPage({Name = "Test1"})
+TestPage:SubPage({Name = "Test2"})
 
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
 for Index = 1, 2 do 
-    local AimbotSection = CombatSubPage:Section({Name = "Aimbot", Icon = "136879043989014", Side = Index})
+    local AimbotSection = TestSubPage:Section({Name = "Test", Icon = "", Side = Index})
 
     AimbotSection:Toggle({Name = "Toggle", Flag = "Toggle", Callback = function(Value)
         print(Value)
@@ -4026,16 +4018,11 @@ for Index = 1, 2 do
     AimbotSection:Textbox({Flag = "Textbox", Placeholder = "Placeholder", Default = "Text", Finished = false, Numeric = false, Callback = function(Value)
         print(Value)
     end})
-
-    AimbotSection:AssetID({Name = "Custom Icon", Flag = "AssetID", Placeholder = "Enter Asset ID", Default = "", Callback = function(Value)
-        print("Asset ID:", Value)
-    end})
 end
 
 SetScale(0.68)
 
-Library:Notification("Notification without icon", 5, nil)
-Library:Notification("Notification with icon lol noob", 5, "94627324690861")
+Library:Notification("Notification with icon lol noob", 5, "126152115075698")
 
 getgenv().Library = Library
 return Library
