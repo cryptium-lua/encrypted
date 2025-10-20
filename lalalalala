@@ -1793,7 +1793,7 @@ end
             local Items = { } do
                 Items["MainFrame"] = Instances:Create("Frame", {
                     Parent = Library.Holder.Instance,
-                    Name = "\0",
+                    Name = "MainUIFrame",
                     AnchorPoint = Vector2New(0.5, 0.5),
                     Position = UDim2New(0.5, 0, 0.5, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
@@ -1905,14 +1905,16 @@ Items["uiScale"] = Instances:Create("UIScale", {
 										Size = UDim2.new(0, 200, 1, -24),
 										Position = UDim2.new(0, 12, 0, 12),
 										BorderColor3 = Color3.fromRGB(25, 24, 21),
-										Name = "\0"
+										Name = "\0",
+                    ZIndex = 0
                 })
                 
                 Instances:Create("UIStroke", {
                     Parent = Items["Title"].Instance,
                     Name = "\0",
                     Color = FromRGB(30, 33, 33),
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+                    ZIndex = 0
                 }):AddToTheme({Color = "Border"})
                 
 Items["Background"] = Instances:Create("ImageLabel", {
@@ -1924,7 +1926,8 @@ Items["Background"] = Instances:Create("ImageLabel", {
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     Image = getgenv().UILogo,
-    ScaleType = Enum.ScaleType.Fit
+    ScaleType = Enum.ScaleType.Fit,
+    ZIndex = 0
 })
         
                 Items["Text"] = Instances:Create("TextLabel", {
@@ -1940,7 +1943,8 @@ Items["Background"] = Instances:Create("ImageLabel", {
                     Size = UDim2New(1, -10, 1, -10),
                     BorderSizePixel = 0,
                     TextSize = 22,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
+                    BackgroundColor3 = FromRGB(255, 255, 255),
+                    ZIndex = 0
                 })
 
                 Library:Thread(function()
