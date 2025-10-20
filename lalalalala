@@ -526,7 +526,7 @@ local Library do
     end
 
     Library.Holder = Instances:Create("ScreenGui", {
-        Parent = CoreGui,
+        Parent = gethui(),
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         DisplayOrder = 2,
@@ -534,7 +534,7 @@ local Library do
     })
 
     Library.UnusedHolder = Instances:Create("ScreenGui", {
-        Parent = CoreGui,
+        Parent = gethui(),
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         Enabled = false,
@@ -3843,7 +3843,7 @@ end
     end
 
 local function GetMainFrame()
-	for _, gui in pairs(game.CoreGui:GetDescendants()) do
+	for _, gui in pairs(gethui():GetDescendants()) do
 		if gui.Name == "MainUIFrame" and gui:IsA("Frame") then
 			return gui
 		end
@@ -3852,13 +3852,13 @@ local function GetMainFrame()
 end
 
 local createUIButton = function()
-	if game:GetService("CoreGui"):FindFirstChild("MainUIButton") then
-		game:GetService("CoreGui"):FindFirstChild("MainUIButton"):Destroy()
+	if gethui():FindFirstChild("MainUIButton") then
+		gethui():FindFirstChild("MainUIButton"):Destroy()
 	end
 
 	local mainGui = Instance.new('ScreenGui')
 	mainGui.Name = "MainUIButton"
-	mainGui.Parent = game:GetService('CoreGui')
+	mainGui.Parent = gethui()
 
 	local button = Instance.new('ImageButton')
 	button.AnchorPoint = Vector2.new(1, 0.5)
@@ -4172,7 +4172,7 @@ end
         end
     end
 end
-
+function Demo()
 local Window = Library:Window({Name = "Weak Legacy 2"})
 
 Window:Category("penis")
@@ -4221,6 +4221,7 @@ end
 SetScale(0.6)
 
 Library:Notification("Notification with icon lol noob", 5, "126152115075698")
+end
 
 getgenv().Library = Library
 return Library
