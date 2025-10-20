@@ -516,11 +516,11 @@ local Library do
             return Font.new(getcustomasset(`{Library.Folders.Fonts}/{Name}.font`), Enum.FontWeight.Regular, Enum.FontStyle.Normal)
         end
 
-        Library.Font = CustomFont:New("ProggyClean", "Regular", "Normal", {
-            Id = "ProggyClean.ttf",
-            Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
-        })
-    end
+-- Library.Font = CustomFont:New("ProggyClean", "Regular", "Normal", {
+--     Id = "ProggyClean.ttf",
+--     Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
+-- })
+
 
     Library.Holder = Instances:Create("ScreenGui", {
         Parent = game:GetService("CoreGui",
