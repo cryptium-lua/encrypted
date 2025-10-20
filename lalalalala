@@ -1791,7 +1791,6 @@ end
             }
 
             local Items = { } do
-                local FirstLetterOfName = StringSub(Window.Name, 1, 1)
                 Items["MainFrame"] = Instances:Create("Frame", {
                     Parent = Library.Holder.Instance,
                     Name = "\0",
