@@ -2026,7 +2026,7 @@ Items["Background"] = Instances:Create("ImageLabel", {
 
 function SetScale(scale)
     local scaleNumber = tonumber(scale)
-    if scaleNumber then
+    if scaleNumber and scaleNumber >= 0.4 and scaleNumber <= 2 then
         Items["uiScale"].Instance.Scale = scaleNumber
     end
 end
@@ -4107,14 +4107,14 @@ end
 								        scaley = Value
 								    end})
 
-									SetScale(scaley)
-										
-                SettingsSection:Button({
-                    Name = "Set Scale",
-                    Callback = function()
-                        SetScale(scaley)
-                    end
-                })
+									task.spawn(function()
+										while task.wait(0) do
+											pcall(function()
+													SetScale(scaley)
+											end)
+										end
+									end)
+
                 
                 SettingsSection:Label("Menu Keybind"):Keybind({
                     Name = "Menu Keybind",
