@@ -4020,7 +4020,7 @@ for Index = 1, 2 do
     end})
 end
 
-SetScale(0.68)
+SetScale(0.6)
 
 Library:Notification("Notification with icon lol noob", 5, "126152115075698")
 
