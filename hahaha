@@ -1,3 +1,14 @@
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+
+designed using localmaze gui creator
+]=]
+
 local CollectionService = game:GetService("CollectionService");
 local G2L = {};
 
@@ -293,6 +304,14 @@ G2L["MainPages_20"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["MainPages_20"]["Name"] = [[MainPages]];
 G2L["MainPages_20"]["BackgroundTransparency"] = 1;
 
+-- *** MISSING MAIN CONTENT FRAME ADDED HERE FOR TAB FUNCTIONALITY ***
+G2L["MainSection"] = Instance.new("Frame", G2L["MainPages_20"]);
+G2L["MainSection"]["Name"] = "MainSection";
+G2L["MainSection"]["Size"] = UDim2.new(1, 0, 1, 0);
+G2L["MainSection"]["BackgroundTransparency"] = 1;
+G2L["MainSection"]["Visible"] = true; -- Will be set by the logic below
+
+----------------------------------------------------------------------
 
 G2L["SettingsSection_21"] = Instance.new("Frame", G2L["MainPages_20"]);
 G2L["SettingsSection_21"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
@@ -498,7 +517,6 @@ G2L["_38"]["Position"] = UDim2.new(0, 0, 0, 51);
 G2L["_38"]["BorderColor3"] = Color3.fromRGB(43, 50, 46);
 G2L["_38"]["Name"] = [[]];
 G2L["_38"]["BackgroundTransparency"] = 1;
-
 
 G2L["_39"] = Instance.new("Frame", G2L["_38"]);
 G2L["_39"]["BorderSizePixel"] = 0;
@@ -4911,3 +4929,105 @@ G2L["_21d"]["BorderSizePixel"] = 0;
 G2L["_21d"]["TextSize"] = 9;
 G2L["_21d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
 G2L["_21d"]["FontFace"] = Font.new([[rbxasset://bad4c7d0510ed5d9c287b848f1a9b26c/Monaco.json
+
+-- Services
+local UserInputService = game:GetService("UserInputService")
+local ScreenGui = G2L["ScreenGui_1"]
+local MainFrame = G2L["Main_2"]
+local CloseButton = G2L["_3"]
+local MainTabButton = G2L["MainTab_f"]
+local SettingsTabButton = G2L["SettingsTab_14"]
+local MainSection = G2L["MainSection"] -- The newly added content frame
+local SettingsSection = G2L["SettingsSection_21"]
+
+-- 1. DRAG FUNCTIONALITY 
+-- Allows the user to click and drag the main frame
+local function makeDraggable(frame)
+    local dragging = false
+    local dragStart = Vector2.new()
+    local startPos = UDim2.new()
+
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            input.Handled = true
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            if dragging then
+                local delta = input.Position - dragStart
+                local newX = startPos.X.Offset + delta.X
+                local newY = startPos.Y.Offset + delta.Y
+                frame.Position = UDim2.new(startPos.X.Scale, newX, startPos.Y.Scale, newY)
+            end
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+end
+
+-- Make the main window draggable (using the main frame as the drag handle)
+if MainFrame then
+    makeDraggable(MainFrame)
+end
+
+-- 2. CLOSE BUTTON FUNCTIONALITY
+-- Disables the entire ScreenGui when the close button is clicked
+if CloseButton then
+    CloseButton.MouseButton1Click:Connect(function()
+        ScreenGui.Enabled = false
+    end)
+end
+
+-- 3. TAB SWITCHING LOGIC
+local Tabs = {
+    [MainTabButton] = {
+        Content = MainSection,
+        Indicator = G2L["SelectedFrame_10"],
+        InactiveBGTrans = 0 -- Main tab is transparent when inactive (default state)
+    },
+    [SettingsTabButton] = {
+        Content = SettingsSection,
+        Indicator = G2L["_18"],
+        InactiveBGTrans = 0.6 -- Settings tab has a background transparency of 0.6 when inactive
+    }
+}
+
+local function switchTab(activeTabButton)
+    for button, tabInfo in pairs(Tabs) do
+        local isActive = (button == activeTabButton)
+
+        -- Toggle content visibility
+        tabInfo.Content.Visible = isActive
+
+        -- Toggle tab button background and indicator transparency
+        if button == MainTabButton then
+            -- Main Tab has BackgroundTransparency=0 always, just toggle the indicator
+            tabInfo.Indicator.BackgroundTransparency = (isActive and 0) or 1
+        else
+            -- Settings Tab uses BackgroundTransparency to indicate activity
+            button.BackgroundTransparency = (isActive and 0) or tabInfo.InactiveBGTrans
+            tabInfo.Indicator.BackgroundTransparency = (isActive and 0) or 1
+        end
+    end
+end
+
+-- Set initial state and connect click events
+-- Start on the Main tab
+switchTab(MainTabButton) 
+
+MainTabButton.MouseButton1Click:Connect(function()
+    switchTab(MainTabButton)
+end)
+
+SettingsTabButton.MouseButton1Click:Connect(function()
+    switchTab(SettingsTabButton)
+end)
