@@ -3,7 +3,7 @@ getgenv().UILogo = "rbxassetid://126152115075698"
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lalalalala"))()
 
-local Window = Library:Window({ })
+local Window = Library:Window()
 
 Window:Category("Catagory")
 
