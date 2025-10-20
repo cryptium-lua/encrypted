@@ -1804,7 +1804,7 @@ end
                     BorderColor3 = FromRGB(0, 0, 0),
                     Size = UDim2New(0, 798, 0, 599),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(16, 18, 18)
+                    BackgroundColor3 = FromRGB(18, 17, 15)
                 })  Items["MainFrame"]:AddToTheme({BackgroundColor3 = "Background"})
 
                 Items["MainFrame"]:MakeDraggable()
