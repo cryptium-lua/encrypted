@@ -526,7 +526,7 @@ local Library do
     end
 
     Library.Holder = Instances:Create("ScreenGui", {
-        Parent = gethui(),
+        Parent = CoreGui,
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         DisplayOrder = 2,
@@ -534,7 +534,7 @@ local Library do
     })
 
     Library.UnusedHolder = Instances:Create("ScreenGui", {
-        Parent = gethui(),
+        Parent = CoreGui,
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         Enabled = false,
@@ -1800,7 +1800,7 @@ local Library do
                 local FirstLetterOfName = StringSub(Window.Name, 1, 1)
                 Items["MainFrame"] = Instances:Create("Frame", {
                     Parent = Library.Holder.Instance,
-                    Name = "\0",
+                    Name = "MainUIFrame",
                     AnchorPoint = Vector2New(0.5, 0.5),
                     Position = UDim2New(0.5, 0, 0.5, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
@@ -1811,8 +1811,13 @@ local Library do
 
                 Items["MainFrame"]:MakeDraggable()
                 Items["MainFrame"]:MakeResizeable(Vector2New(Items["MainFrame"].Instance.AbsoluteSize.X, Items["MainFrame"].Instance.AbsoluteSize.Y), Vector2New(9999, 9999))
-                
-                
+                          
+Items["uiScale"] = Instances:Create("UIScale", {
+    Name = "UiScaleey",
+    Parent = Items["MainFrame"].Instance
+})
+
+
                 Items["Side"] = Instances:Create("Frame", {
                     Parent = Items["MainFrame"].Instance,
                     Name = "\0",
@@ -2028,6 +2033,12 @@ local Library do
 
                 Items["MainFrame"].Instance.Position = UDim2New(0, CenterPosition.X, 0, CenterPosition.Y)
             end
+
+function SetScale(scale)
+
+Items["uiScale"].Scale = scale
+
+end
 
             function Window:SetOpen(Bool)
                 if Debounce then 
@@ -4020,6 +4031,8 @@ for Index = 1, 2 do
         print("Asset ID:", Value)
     end})
 end
+
+SetScale(0.68)
 
 Library:Notification("Notification without icon", 5, nil)
 Library:Notification("Notification with icon lol noob", 5, "94627324690861")
