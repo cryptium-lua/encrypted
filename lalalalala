@@ -1814,7 +1814,6 @@ end
                 })  Items["MainFrame"]:AddToTheme({BackgroundColor3 = "Background"})
 
                 Items["MainFrame"]:MakeDraggable()
-                Items["MainFrame"]:MakeResizeable(Vector2New(Items["MainFrame"].Instance.AbsoluteSize.X, Items["MainFrame"].Instance.AbsoluteSize.Y), Vector2New(9999, 9999))
                           
 Items["uiScale"] = Instances:Create("UIScale", {
     Name = "UiScaleey",
@@ -3488,8 +3487,8 @@ function Label:SetText(Text)
 
     -- safe guard in case Items or Items["Label"] isn't ready
     local ok, err = pcall(function()
-        if Items and Items["Label"] and Items["Label"].Instance and typeof(Items["Label"].Instance) == "Instance" then
-            Items["Label"].Instance.Text = Text
+        if Items and Items["Text"] and Items["Text"].Instance and typeof(Items["Text"].Instance) == "Instance" then
+            Items["Text"].Instance.Text = Text
         else
             -- fallback: store on the Label table so other code can read it
             Label.Text = Text
