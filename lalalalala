@@ -4187,54 +4187,5 @@ end
         end
     end
 end
-function Library:Demo()
-local Window = Library:Window({Name = "Weak Legacy 2"})
-
-Window:Category("penis")
-local TestPage = Window:Page({Name = "Page", Icon = ""})
-Window:Page({Name = "Page", Icon = ""})
-
-local TestSubPage = TestPage:SubPage({Name = "Testing"})
-TestPage:SubPage({Name = "Test1"})
-TestPage:SubPage({Name = "Test2"})
-
-Window:Category("Settings")
-local SettingsPage = Library:CreateSettingsPage(Window)
-
-for Index = 1, 2 do 
-    local AimbotSection = TestSubPage:Section({Name = "Test", Icon = "", Side = Index})
-
-    AimbotSection:Toggle({Name = "Toggle", Flag = "Toggle", Callback = function(Value)
-        print(Value)
-    end})
-
-    AimbotSection:Button({Name = "Button", Callback = function()
-        print("Button")
-    end})
-
-    AimbotSection:Slider({Name = "Slider", Flag = "Slider", Min = 0, Max = 100, Default = 50, Suffix = "%", Decimals = 1, Callback = function(Value)
-        print(Value)
-    end})
-
-    AimbotSection:Dropdown({Name = "Dropdown", Flag = "Dropdown", Items = {"Optionn 1", "Optionn 2", "Optionn 3", "Optionn 4"}, Default = "Optionnnn 2", Multi = false, Callback = function(Value)
-        print(Value)
-    end})
-
-    AimbotSection:Label("Label"):Colorpicker({Flag = "Colorpicker", Default = Color3.fromRGB(255, 255, 255), Callback = function(Value)
-        print(Value)
-    end})
-
-    AimbotSection:Label("Label"):Keybind({Flag = "Keybind", Default = Enum.KeyCode.E, Mode = "Toggle", Callback = function(Value)
-        print(Value)
-    end})
-
-    AimbotSection:Textbox({Flag = "Textbox", Placeholder = "Placeholder", Default = "Text", Finished = false, Numeric = false, Callback = function(Value)
-        print(Value)
-    end})
-end
-
-Library:Notification("Notification with icon lol noob", 5, "126152115075698")
-end
-
 getgenv().Library = Library
 return Library
