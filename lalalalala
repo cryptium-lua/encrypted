@@ -1817,7 +1817,7 @@ Items["uiScale"] = Instances:Create("UIScale", {
 
                 Items["Side"] = Instances:Create("Frame", {
                     Parent = Items["MainFrame"].Instance,
-                    Name = "\0",
+                    Name = "CheckSide",
                     BackgroundTransparency = 1,
                     BorderColor3 = FromRGB(0, 0, 0),
                     Size = UDim2New(0, 215, 1, 0),
@@ -1906,7 +1906,7 @@ Items["Background"] = Instances:Create("ImageLabel", {
                 
                 Items["Pages"] = Instances:Create("Frame", {
                     Parent = Items["Side"].Instance,
-                    Name = "\0",
+                    Name = "CheckPages",
                     BackgroundTransparency = 1,
                     Position = UDim2New(0, 0, 0, 75),
                     BorderColor3 = FromRGB(0, 0, 0),
