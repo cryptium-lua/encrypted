@@ -3842,6 +3842,15 @@ end
         end
     end
 
+local function GetMainFrame()
+	for _, gui in pairs(game.CoreGui:GetDescendants()) do
+		if gui.Name == "MainUIFrame" and gui:IsA("Frame") then
+			return gui
+		end
+	end
+	return nil
+end
+
 local createUIButton = function()
 	if game:GetService("CoreGui"):FindFirstChild("MainUIButton") then
 		game:GetService("CoreGui"):FindFirstChild("MainUIButton"):Destroy()
@@ -3929,9 +3938,13 @@ local createUIButton = function()
 		end
 	end)
 
-	button.MouseButton1Click:Connect(function()
-		Items["MainFrame"].Instance.Visibilty = not windowState
-	end)
+button.MouseButton1Click:Connect(function()
+	local main = GetMainFrame()
+	if main then
+		main.Visible = not main.Visible
+	end
+end)
+
 end
 	task.delay(0.05, createUIButton)
 
