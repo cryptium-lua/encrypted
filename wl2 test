@@ -1,8 +1,8 @@
 getgenv().FolderName = "ModdedLibrary"
+local Library = 
 
 local Window = Library:Window({ Name = "Weak Legacy 2" })
 
--- categories / pages
 Window:Category("penis")
 
 local TestPage = Window:Page({ Name = "Page", Icon = "" })
