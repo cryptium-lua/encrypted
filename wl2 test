@@ -5,13 +5,10 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/crypt
 
 local Window = Library:Window()
 
-Window:Category("Catagory")
-
 local TestPage = Window:Page({ Name = "Page", Icon = "" })
 
 local TestSubPage = TestPage:SubPage({ Name = "Testing" })
 
-Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
     local TestSection = TestSubPage:Section({ Name = "Test", Icon = "", Side = Index })
