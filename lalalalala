@@ -1899,10 +1899,10 @@ Items["uiScale"] = Instances:Create("UIScale", {
                 })                
 
                 Items["Title"] = Instances:Create("Frame", {
-                    Parent = Items["MainFrame"].Instance,
+                    Parent = Items["Side"].Instance,
 										BorderSizePixel = 2,
 										BackgroundColor3 = Color3.fromRGB(25, 24, 21),
-										Size = UDim2.new(0, 200, 1, -24),
+										Size = UDim2.new(0, 0, 0, 0),
 										Position = UDim2.new(0, 12, 0, 12),
 										BorderColor3 = Color3.fromRGB(25, 24, 21),
 										Name = "\0",
