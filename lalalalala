@@ -4078,22 +4078,6 @@ end)
     task.defer(AutoLoadConfig)
 end
 
-
-
-            do -- Theming
-                local ThemingSection = ThemingSubPage:Section({Name = "Theming", Icon = "131595494666590", Side = 1})
-                for Index, Value in Library.Theme do 
-                    ThemingSection:Label(Index):Colorpicker({
-                        Flag = Index.."Theme",
-                        Default = Value,
-                        Callback = function(Value)
-                            Library.Theme[Index] = Value
-                            Library:ChangeTheme(Index, Value)
-                        end
-                    })
-                end
-            end
-
             do -- Settings
                 local SettingsSection = SettingsSubPage:Section({Name = "Settings", Icon = "72732892493295", Side = 1})     
                 
