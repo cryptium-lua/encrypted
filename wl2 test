@@ -1,16 +1,13 @@
 getgenv().FolderName = "ModdedLibrary"
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lalalalala"))()
 
-local Window = Library:Window({ Name = "Weak Legacy 2", SubTitle = "C97", ExpiresIn = "N/A" })
+local Window = Library:Window({ Name = "Game Name", SubTitle = "Hub Name", ExpiresIn = "N/A" })
 
-Window:Category("penis")
+Window:Category("Catagory")
 
 local TestPage = Window:Page({ Name = "Page", Icon = "" })
-Window:Page({ Name = "Page", Icon = "" })
 
 local TestSubPage = TestPage:SubPage({ Name = "Testing" })
-TestPage:SubPage({ Name = "Test1" })
-TestPage:SubPage({ Name = "Test2" })
 
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
