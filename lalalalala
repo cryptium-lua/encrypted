@@ -65,11 +65,13 @@ local Library do
 
         FadeSpeed = 0.2,
 
+				getgenv().FolderName = "ModdedLibrary"
+
         Folders = {
-            Directory = "esdeeeeee",
-            Configs = "esdeeeeee/Configs",
-            Assets = "esdeeeeee/Assets",
-            Fonts = "esdeeeeee/Fonts",
+            Directory = getgenv().FolderName,
+            Configs = getgenv().FolderName .. "/Configs",
+            Assets = getgenv().FolderName .. "/Assets",
+            Fonts = getgenv().FolderName .. "/Fonts",
         },
 
         -- Ignore below
@@ -4123,6 +4125,19 @@ end
                         Library:Unload()
                     end
                 })
+
+										local scaley = 0.78
+								    SettingsSection:Textbox({Flag = "UIScale", Placeholder = "", Default = "", Finished = false, Numeric = true, Callback = function(Value)
+								        scaley = Value
+								    end})
+										
+										task.spawn(function()
+													while task.wait(0) do
+														pcall(function()
+															SetScale(scaley)
+													end
+												end
+										end)
                 
                 SettingsSection:Label("Menu Keybind"):Keybind({
                     Name = "Menu Keybind",
@@ -4172,7 +4187,7 @@ end
         end
     end
 end
-function Demo()
+function Library:Demo()
 local Window = Library:Window({Name = "Weak Legacy 2"})
 
 Window:Category("penis")
@@ -4217,8 +4232,6 @@ for Index = 1, 2 do
         print(Value)
     end})
 end
-
-SetScale(0.6)
 
 Library:Notification("Notification with icon lol noob", 5, "126152115075698")
 end
