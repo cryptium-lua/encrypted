@@ -1,4 +1,5 @@
 getgenv().FolderName = "ModdedLibrary"
+getgenv().UILogo = ""
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lalalalala"))()
 
 local Window = Library:Window({ Name = "Game Name", SubTitle = "Hub Name", ExpiresIn = "N/A" })
