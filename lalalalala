@@ -1802,7 +1802,7 @@ end
                     AnchorPoint = Vector2New(0.5, 0.5),
                     Position = UDim2New(0.5, 0, 0.5, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(0, 798, 0, 599),
+                    Size = UDim2New(0, 751, 0, 539),
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(18, 17, 15)
                 })  Items["MainFrame"]:AddToTheme({BackgroundColor3 = "Background"})
