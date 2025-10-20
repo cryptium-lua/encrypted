@@ -1786,7 +1786,7 @@ end
 
             local Window = {
                 Name = Data.Name or Data.name or "Window",
-                SubTitle = Data.SubTitle or Data.subtitle or "C97",
+                SubTitle = Data.SubTitle or Data.subtitle or "Test",
                 ExpiresIn = Data.ExpiresIn or Data.expiresin or "23d",
                 
                 Pages = { },
