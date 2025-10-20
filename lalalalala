@@ -1787,7 +1787,6 @@ end
             local Window = {
                 Name = Data.Name or Data.name or "Window",
                 SubTitle = Data.SubTitle or Data.subtitle or "Test",
-                ExpiresIn = Data.ExpiresIn or Data.expiresin or "23d",
                 
                 Pages = { },
                 Items = { },
@@ -1798,7 +1797,7 @@ end
                 local FirstLetterOfName = StringSub(Window.Name, 1, 1)
                 Items["MainFrame"] = Instances:Create("Frame", {
                     Parent = Library.Holder.Instance,
-                    Name = "MainUIFrame",
+                    Name = "\0",
                     AnchorPoint = Vector2New(0.5, 0.5),
                     Position = UDim2New(0.5, 0, 0.5, 0),
                     BorderColor3 = FromRGB(0, 0, 0),
@@ -1810,14 +1809,14 @@ end
                 Items["MainFrame"]:MakeDraggable()
                           
 Items["uiScale"] = Instances:Create("UIScale", {
-    Name = "UiScaleey",
+    Name = "\0",
     Parent = Items["MainFrame"].Instance
 })
 
 
                 Items["Side"] = Instances:Create("Frame", {
                     Parent = Items["MainFrame"].Instance,
-                    Name = "CheckSide",
+                    Name = "\0",
                     BackgroundTransparency = 1,
                     BorderColor3 = FromRGB(0, 0, 0),
                     Size = UDim2New(0, 215, 1, 0),
@@ -1906,13 +1905,13 @@ Items["Background"] = Instances:Create("ImageLabel", {
                 
                 Items["Pages"] = Instances:Create("Frame", {
                     Parent = Items["Side"].Instance,
-                    Name = "CheckPages",
-                    BackgroundTransparency = 1,
+                    Name = "\0",
+                    BackgroundTransparency = 0,
                     Position = UDim2New(0, 0, 0, 75),
                     BorderColor3 = FromRGB(0, 0, 0),
                     Size = UDim2New(1, 0, 1, -80),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
+                    BackgroundColor3 = FromRGB(21, 24, 24)
                 })
                 
                 Instances:Create("UIListLayout", {
@@ -1954,6 +1953,7 @@ Items["Background"] = Instances:Create("ImageLabel", {
                     BorderColor3 = FromRGB(0, 0, 0),
                     Size = UDim2New(1, -12, 0, 45),
                     BorderSizePixel = 0,
+										BackgroundTransparency = 1,
                     BackgroundColor3 = FromRGB(21, 24, 24)
                 })  Items["Bottom_"]:AddToTheme({BackgroundColor3 = "Inline"})
                 
@@ -1964,23 +1964,6 @@ Items["Background"] = Instances:Create("ImageLabel", {
                     Color = FromRGB(30, 33, 33),
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border
                 }):AddToTheme({Color = "Border"})
-                
-                Items["SubExpires"] = Instances:Create("TextLabel", {
-                    Parent = Items["Bottom_"].Instance,
-                    Name = "\0",
-                    FontFace = Library.Font,
-                    TextColor3 = FromRGB(255, 255, 255),
-                    TextTransparency = 0.5,
-                    Text = "Sub expires in "..Window.ExpiresIn,
-                    Size = UDim2New(0, 0, 0, 15),
-                    BorderSizePixel = 0,
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(0, 10, 0, 8),
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    AutomaticSize = Enum.AutomaticSize.X,
-                    TextSize = 12,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })
                 
                 Items["SessionDuration"] = Instances:Create("TextLabel", {
                     Parent = Items["Bottom_"].Instance,
