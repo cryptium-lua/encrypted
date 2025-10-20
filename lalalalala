@@ -50,6 +50,8 @@ local Library do
 
     local InstanceNew = Instance.new
 
+		getgenv().FolderName = "FolderName"
+
     Library = {
         Theme =  { },
 
@@ -66,10 +68,10 @@ local Library do
         FadeSpeed = 0.2,
 
         Folders = {
-            Directory = "esdeeeeee",
-            Configs = "esdeeeeee/Configs",
-            Assets = "esdeeeeee/Assets",
-            Fonts = "esdeeeeee/Fonts",
+            Directory = getgenv().FolderName,
+            Configs = getgenv().FolderName .. "/Configs",
+            Assets = getgenv().FolderName .. "/Assets",
+            Fonts = getgenv().FolderName .. "/Fonts",
         },
 
         -- Ignore below
@@ -2031,9 +2033,10 @@ Items["Background"] = Instances:Create("ImageLabel", {
             end
 
 function SetScale(scale)
-
-Items["uiScale"].Instance.Scale = scale
-
+    local scaleNumber = tonumber(scale)
+    if scaleNumber then
+        Items["uiScale"].Instance.Scale = scaleNumber
+    end
 end
 
             function Window:SetOpen(Bool)
@@ -4124,18 +4127,21 @@ end
                     end
                 })
 
+										local ScaleLabel = SettingsSection:Label("Ui Scale Below")
+
 										local scaley = 0.78
-								    SettingsSection:Textbox({Flag = "UIScale", Placeholder = "", Default = "", Finished = false, Numeric = true, Callback = function(Value)
+								    SettingsSection:Textbox({Flag = "UIScale", Placeholder = "", Default = "0.78", Finished = false, Numeric = true, Callback = function(Value)
 								        scaley = Value
 								    end})
+
+									SetScale(scaley)
 										
-										task.spawn(function()
-													while task.wait(0) do
-														pcall(function()
-															SetScale(scaley)
-													end)
-												end
-										end)
+                SettingsSection:Button({
+                    Name = "Set Scale",
+                    Callback = function()
+                        SetScale(scaley)
+                    end
+                })
                 
                 SettingsSection:Label("Menu Keybind"):Keybind({
                     Name = "Menu Keybind",
@@ -4185,100 +4191,5 @@ end
         end
     end
 end
-
-getgenv().FolderName = "ModdedLibrary"
-
-local Window = Library:Window({ Name = "Weak Legacy 2" })
-
--- categories / pages
-Window:Category("penis")
-
-local TestPage = Window:Page({ Name = "Page", Icon = "" })
-Window:Page({ Name = "Page", Icon = "" }) -- if you really want a second anonymous page
-
-local TestSubPage = TestPage:SubPage({ Name = "Testing" })
-TestPage:SubPage({ Name = "Test1" })
-TestPage:SubPage({ Name = "Test2" })
-
-Window:Category("Settings")
-local SettingsPage = Library:CreateSettingsPage(Window)
-
--- example sections / controls
-for Index = 1, 2 do
-    local AimbotSection = TestSubPage:Section({ Name = "Test", Icon = "", Side = Index })
-
-    AimbotSection:Toggle({
-        Name = "Toggle",
-        Flag = "Toggle",
-        Callback = function(Value)
-            print("Toggle:", Value)
-        end
-    })
-
-    AimbotSection:Button({
-        Name = "Button",
-        Callback = function()
-            print("Button pressed")
-        end
-    })
-
-    AimbotSection:Slider({
-        Name = "Slider",
-        Flag = "Slider",
-        Min = 0,
-        Max = 100,
-        Default = 50,
-        Suffix = "%",
-        Decimals = 1,
-        Callback = function(Value)
-            print("Slider:", Value)
-        end
-    })
-
-    AimbotSection:Dropdown({
-        Name = "Dropdown",
-        Flag = "Dropdown",
-        Items = { "Optionn 1", "Optionn 2", "Optionn 3", "Optionn 4" },
-        Default = "Optionn 2",
-        Multi = false,
-        Callback = function(Value)
-            print("Dropdown:", Value)
-        end
-    })
-
-    -- chain Label then Colorpicker (assuming library supports fluent API like this)
-    AimbotSection:Label("Label"):Colorpicker({
-        Flag = "Colorpicker",
-        Default = Color3.fromRGB(255, 255, 255),
-        Callback = function(Value)
-            print("Color:", Value)
-        end
-    })
-
-    AimbotSection:Label("Label"):Keybind({
-        Flag = "Keybind",
-        Default = Enum.KeyCode.E,
-        Mode = "Toggle",
-        Callback = function(Value)
-            print("Keybind changed:", Value)
-        end
-    })
-
-    AimbotSection:Textbox({
-        Flag = "Textbox",
-        Placeholder = "Placeholder",
-        Default = "Text",
-        Finished = false,
-        Numeric = false,
-        Callback = function(Value)
-            print("Textbox:", Value)
-        end
-    })
-end
-
--- notification (image id as 3rd arg)
-Library:Notification("Notification with icon lol noob", 5, "126152115075698")
-
-
 getgenv().Library = Library
 return Library
