@@ -727,31 +727,35 @@ local Library do
         end
     end
 
-    Library.RefreshConfigsList = function(self, Element)
-        local CurrentList = { }
-        local List = { }
+Library.RefreshConfigsList = function(self, Element)
+    local CurrentList = {}
+    local List = {}
 
-        local ConfigFolderName = StringGSub(Library.Folders.Configs, Library.Folders.Directory .. "/", "")
-
-        for Index, Value in listfiles(Library.Folders.Configs) do
-            local FileName = StringGSub(Value, Library.Folders.Directory .. "\\" .. ConfigFolderName .. "\\", "")
-            List[Index] = FileName
-        end
-
-        local IsNew = #List ~= CurrentList
-
-        if not IsNew then
-            for Index = 1, #List do
-                if List[Index] ~= CurrentList[Index] then
-                    IsNew = true
-                    break
-                end
-            end
-        else
-            CurrentList = List
-            Element:Refresh(CurrentList)
+    -- Get all files in the configs folder
+    for _, file in ipairs(listfiles(Library.Folders.Configs)) do
+        -- Extract only the filename without extension
+        local name = file:match("([^/\\]+)%.json$")
+        if name then
+            table.insert(List, name)
         end
     end
+
+    -- Check if the list has changed
+    local IsNew = #List ~= #CurrentList
+    if not IsNew then
+        for i = 1, #List do
+            if List[i] ~= CurrentList[i] then
+                IsNew = true
+                break
+            end
+        end
+    end
+
+    if IsNew then
+        CurrentList = List
+        Element:Refresh(CurrentList)
+    end
+end
 
     Library.ChangeItemTheme = function(self, Item, Properties)
         Item = Item.Instance or Item
@@ -3479,10 +3483,26 @@ end
                 })      
             end
 
-            function Label:SetText(Text)
-               Text = tostring(Text)
-               Items["Label"].Instance.Text = Text 
-            end
+function Label:SetText(Text)
+    Text = tostring(Text or "")
+
+    -- safe guard in case Items or Items["Label"] isn't ready
+    local ok, err = pcall(function()
+        if Items and Items["Label"] and Items["Label"].Instance and typeof(Items["Label"].Instance) == "Instance" then
+            Items["Label"].Instance.Text = Text
+        else
+            -- fallback: store on the Label table so other code can read it
+            Label.Text = Text
+        end
+    end)
+
+    if not ok then
+        warn("Label:SetText failed:", err)
+        -- still store text so we don't lose it
+        Label.Text = Text
+    end
+end
+
 
             function Label:SetVisibility(Bool)
                 Items["Label"].Instance.Visible = Bool
@@ -3829,78 +3849,148 @@ end
             local ThemingSubPage = SettingsPage:SubPage({Name = "Theming"})
             local SettingsSubPage = SettingsPage:SubPage({Name = "Settings"})
 
-            do -- Configs
-                local ConfigsSection = ConfigsSubPage:Section({Name = "Configs", Side = 1, Icon = "97491613646216"})
+do -- Configs
+    local ConfigsSection = ConfigsSubPage:Section({Name = "Configs", Side = 1, Icon = "97491613646216"})
 
-                local ConfigName = ""
-                local ConfigSelected
+    local ConfigName = ""
+    local ConfigSelected
+    local AutoLoadConfigName = ""
+    local AutoLoadFile = Library.Folders.Configs .. "/autoconfig.txt"
 
-                local ConfigsList = ConfigsSection:Dropdown({
-                    Name = "Configs", 
-                    Flag = "ConfigsList", 
-                    Items = { }, 
-                    Multi = false,
-                    Callback = function(Value)
-                        ConfigSelected = Value
-                    end
-                })
+    local ConfigsList = ConfigsSection:Dropdown({
+        Name = "Configs", 
+        Flag = "ConfigsList", 
+        Items = { }, 
+        Multi = false,
+        Callback = function(Value)
+            ConfigSelected = Value
+        end
+    })
 
-                ConfigsSection:Textbox({ 
-                    Default = "", 
-                    Flag = "ConfigName", 
-                    Placeholder = "Config name", 
-                    Callback = function(Value)
-                        ConfigName = Value
-                    end
-                })
+-- assume AutoLoadFile is your global/current autoload name
+local AutoLoadLabel = ConfigsSection:Label("Auto Load: " .. (AutoLoadConfigName or "None"))
 
-                ConfigsSection:Button({
-                    Name = "Create",
-                    Callback = function()
-                    if ConfigName and ConfigName ~= "" then
-                        if not isfile(Library.Folders.Configs .. "/" .. ConfigName .. ".json") then
-                            writefile(Library.Folders.Configs .. "/" .. ConfigName .. ".json", Library:GetConfig())
-                            Library:RefreshConfigsList(ConfigsList)
-                        else
-                            return
-                        end
-                    end
-                end})
+task.spawn(function()
+	while task.wait(0.5) do
+		local text = "Auto Load: " .. (AutoLoadConfigName or "None")
+		if AutoLoadLabel.Text ~= text then
+			AutoLoadLabel:SetText(text)
+		end
+	end
+end)
 
-                ConfigsSection:Button({
-                    Name = "Delete", 
-                    Callback = function()
-                    if ConfigSelected then
-                        Library:DeleteConfig(ConfigSelected)
-                        Library:RefreshConfigsList(ConfigsList)
-                    end
-                end})
+    -- Load the saved auto-load config if exists
+    if isfile(AutoLoadFile) then
+        local saved = readfile(AutoLoadFile)
+        if saved and saved ~= "" then
+            AutoLoadConfigName = saved
+            AutoLoadLabel:SetText("Auto Load: " .. AutoLoadConfigName)
+        end
+    end
 
-                ConfigsSection:Button({
-                    Name = "Load", 
-                    Callback = function()
-                    if ConfigSelected then
-                        Library:LoadConfig(readfile(Library.Folders.Configs .. "/" .. ConfigSelected))
-                    end
-                end})
+    ConfigsSection:Textbox({ 
+        Default = "", 
+        Flag = "ConfigName", 
+        Placeholder = "Config name", 
+        Callback = function(Value)
+            ConfigName = Value
+        end
+    })
 
-                ConfigsSection:Button({
-                    Name = "Save", 
-                    Callback = function()
-                    if ConfigName and ConfigName ~= "" then
-                        writefile(Library.Folders.Configs .. "/" .. ConfigName .. ".json", Library:GetConfig())
-                        Library:RefreshConfigsList(ConfigsList)
-                    end
-                end})
-
-                ConfigsSection:Button({
-                    Name = "Refresh", 
-                    Callback = function()
+    ConfigsSection:Button({
+        Name = "Create",
+        Callback = function()
+            if ConfigName and ConfigName ~= "" then
+                local filePath = Library.Folders.Configs .. "/" .. ConfigName .. ".json"
+                if not isfile(filePath) then
+                    writefile(filePath, Library:GetConfig())
                     Library:RefreshConfigsList(ConfigsList)
-                end})
-
-                Library:RefreshConfigsList(ConfigsList)               
+                else
+                    warn("Config already exists:", ConfigName)
+                end
             end
+        end
+    })
+
+    ConfigsSection:Button({
+        Name = "Delete", 
+        Callback = function()
+            if ConfigSelected then
+                local filePath = Library.Folders.Configs .. "/" .. ConfigSelected .. ".json"
+                if isfile(filePath) then
+                    delfile(filePath)
+                    Library:RefreshConfigsList(ConfigsList)
+                else
+                    warn("Config file not found:", ConfigSelected)
+                end
+            end
+        end
+    })
+
+    ConfigsSection:Button({
+        Name = "Load", 
+        Callback = function()
+            if ConfigSelected then
+                local filePath = Library.Folders.Configs .. "/" .. ConfigSelected .. ".json"
+                if isfile(filePath) then
+                    Library:LoadConfig(readfile(filePath))
+                else
+                    warn("Config file not found:", ConfigSelected)
+                end
+            end
+        end
+    })
+
+    ConfigsSection:Button({
+        Name = "Save", 
+        Callback = function()
+            if ConfigName and ConfigName ~= "" then
+                writefile(Library.Folders.Configs .. "/" .. ConfigName .. ".json", Library:GetConfig())
+                Library:RefreshConfigsList(ConfigsList)
+            end
+        end
+    })
+
+    ConfigsSection:Button({
+        Name = "Refresh", 
+        Callback = function()
+            Library:RefreshConfigsList(ConfigsList)
+        end
+    })
+
+    -- Auto Load Button
+    ConfigsSection:Button({
+        Name = "Set Auto Load", 
+        Callback = function()
+            if ConfigSelected then
+                AutoLoadConfigName = ConfigSelected
+                writefile(AutoLoadFile, AutoLoadConfigName) -- Save to file
+                AutoLoadLabel:SetText("Auto Load: " .. AutoLoadConfigName)
+                warn("Auto Load Config set to:", AutoLoadConfigName)
+            end
+        end
+    })
+
+    -- Auto Load Function
+    local function AutoLoadConfig()
+        if AutoLoadConfigName and AutoLoadConfigName ~= "" then
+            local filePath = Library.Folders.Configs .. "/" .. AutoLoadConfigName .. ".json"
+            if isfile(filePath) then
+                Library:LoadConfig(readfile(filePath))
+                print("Auto Loaded Config:", AutoLoadConfigName)
+            else
+                warn("Auto load config not found:", AutoLoadConfigName)
+            end
+        end
+    end
+
+    Library:RefreshConfigsList(ConfigsList)
+
+    -- Call auto-load on script start
+    task.defer(AutoLoadConfig)
+end
+
+
 
             do -- Theming
                 local ThemingSection = ThemingSubPage:Section({Name = "Theming", Icon = "131595494666590", Side = 1})
