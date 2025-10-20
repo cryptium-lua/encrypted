@@ -1675,7 +1675,7 @@ end
                     BorderColor3 = FromRGB(0, 0, 0),
                     BorderSizePixel = 0,
                     AutomaticSize = Enum.AutomaticSize.X,
-                    BackgroundColor3 = FromRGB(16, 18, 18)
+                    BackgroundColor3 = FromRGB(18, 17, 15)
                 })  Items["Notification"]:AddToTheme({BackgroundColor3 = "Background"})
                 
                 
@@ -1851,7 +1851,7 @@ Items["uiScale"] = Instances:Create("UIScale", {
                     BorderColor3 = FromRGB(0, 0, 0),
                     Size = UDim2New(1, -226, 1, -12),
                     BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(21, 24, 24)
+                    BackgroundColor3 = FromRGB(18, 17, 15)
                 })  Items["Content"]:AddToTheme({BackgroundColor3 = "Inline"})
                 
                 
