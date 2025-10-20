@@ -527,7 +527,7 @@ local Library do
     end
 
     Library.Holder = Instances:Create("ScreenGui", {
-        Parent = gethui(),
+        Parent = Players.LocalPlayer.PlayerGui,
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         DisplayOrder = 2,
@@ -535,7 +535,7 @@ local Library do
     })
 
     Library.UnusedHolder = Instances:Create("ScreenGui", {
-        Parent = gethui(),
+        Parent = Player.LocalPlayer.PlayerGui,
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         Enabled = false,
@@ -3838,7 +3838,7 @@ end
     end
 
 local function GetMainFrame()
-	for _, gui in pairs(gethui():GetDescendants()) do
+	for _, gui in pairs(Players.LocalPlayer.PlayerGui:GetDescendants()) do
 		if gui.Name == "MainUIFrame" and gui:IsA("Frame") then
 			return gui
 		end
