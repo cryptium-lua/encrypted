@@ -1,7 +1,7 @@
 getgenv().FolderName = "ModdedLibrary"
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lalalalala"))()
 
-local Window = Library:Window({ Name = "Weak Legacy 2" })
+local Window = Library:Window({ Name = "Weak Legacy 2", SubTitle = "C97", ExpiresIn = "N/A" })
 
 Window:Category("penis")
 
