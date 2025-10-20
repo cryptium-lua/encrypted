@@ -1,5 +1,5 @@
 if getgenv().Library then
-    getgenv().Library:Destroy()
+    getgenv().Library:Unload()
 end
 
 local Library do 
