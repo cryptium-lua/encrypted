@@ -50,8 +50,6 @@ local Library do
 
     local InstanceNew = Instance.new
 
-		getgenv().FolderName = "FolderName"
-
     Library = {
         Theme =  { },
 
