@@ -1,12 +1,7 @@
-local CollectionService = game:GetService("CollectionService");
-local G2L = {};
+local ScreenGui = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-G2L["ScreenGui_1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
-G2L["ScreenGui_1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
-
-CollectionService:AddTag(G2L["ScreenGui_1"], [[main]]);
-
-G2L["Side_2"] = Instance.new("Frame", G2L["ScreenGui_1"]);
+local Side = Instance.new("Frame", G2L["ScreenGui_1"]);
 G2L["Side_2"]["BorderSizePixel"] = 2;
 G2L["Side_2"]["BackgroundColor3"] = Color3.fromRGB(25, 24, 21);
 G2L["Side_2"]["Size"] = UDim2.new(0.26667, 0, 0.89157, 0);
