@@ -1,179 +1,166 @@
-local ScreenGui = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+local PlayerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
-local Side = Instance.new("Frame")
+local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Name = "\0"
+
+local Side = Instance.new("Frame", ScreenGui)
 Side.BorderSizePixel = 2
 Side.BackgroundColor3 = Color3.fromRGB(25, 24, 21)
 Side.Size = UDim2.new(0.26667, 0, 0.89157, 0)
 Side.Position = UDim2.new(0, 176, 0, -16)
 Side.BorderColor3 = Color3.fromRGB(25, 24, 21)
 Side.Name = "\0"
-Side.Parent = ScreenGui
 
-G2L["Logo_3"] = Instance.new("ImageLabel", G2L["Side_2"]);
-G2L["Logo_3"]["BorderSizePixel"] = 0;
-G2L["Logo_3"]["ScaleType"] = Enum.ScaleType.Fit;
-G2L["Logo_3"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
--- G2L["Logo_3"]["ImageContent"] = ;
-G2L["Logo_3"]["AnchorPoint"] = Vector2.new(0.5, 0);
-G2L["Logo_3"]["Image"] = [[rbxassetid://78008336424629]];
-G2L["Logo_3"]["Size"] = UDim2.new(0.75, 0, 0.50676, 0);
-G2L["Logo_3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["Logo_3"]["BackgroundTransparency"] = 1;
-G2L["Logo_3"]["Name"] = [[Logo]];
-G2L["Logo_3"]["Position"] = UDim2.new(0.5, 0, 0, -25);
+local UIStroke = Instance.new("UIStroke", Side)
+UIStroke.LineJoinMode = Enum.LineJoinMode.Miter
+UIStroke.Color = Color3.fromRGB(13, 13, 13)
 
+local Logo = Instance.new("ImageLabel", Side)
+Logo.BorderSizePixel = 0
+Logo.ScaleType = Enum.ScaleType.Fit
+Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Logo.AnchorPoint = Vector2.new(0.5, 0)
+Logo.Image = "rbxassetid://78008336424629"
+Logo.Size = UDim2.new(0.75, 0, 0.50676, 0)
+Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Logo.BackgroundTransparency = 1
+Logo.Name = "\0"
+Logo.Position = UDim2.new(0.5, 0, 0, -25)
 
-G2L["Tabs_4"] = Instance.new("Frame", G2L["Side_2"]);
-G2L["Tabs_4"]["BorderSizePixel"] = 0;
-G2L["Tabs_4"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["Tabs_4"]["Size"] = UDim2.new(1, 0, 0.54392, 0);
-G2L["Tabs_4"]["Position"] = UDim2.new(0, 0, 0, 100);
-G2L["Tabs_4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["Tabs_4"]["Name"] = [[Tabs]];
-G2L["Tabs_4"]["BackgroundTransparency"] = 1;
+local Tabs = Instance.new("Frame", Side)
+Tabs.BorderSizePixel = 0
+Tabs.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Tabs.Size = UDim2.new(1, 0, 0.54392, 0)
+Tabs.Position = UDim2.new(0, 0, 0, 100)
+Tabs.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Tabs.Name = "\0"
+Tabs.BackgroundTransparency = 1
 
+local ListLayout = Instance.new("UIListLayout", Tabs)
+ListLayout.Padding = UDim.new(0, 8)
+ListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-G2L["SelectedTab_5"] = Instance.new("TextButton", G2L["Tabs_4"]);
-G2L["SelectedTab_5"]["BorderSizePixel"] = 2;
-G2L["SelectedTab_5"]["TextSize"] = 14;
-G2L["SelectedTab_5"]["AutoButtonColor"] = false;
-G2L["SelectedTab_5"]["TextColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["SelectedTab_5"]["BackgroundColor3"] = Color3.fromRGB(31, 29, 26);
-G2L["SelectedTab_5"]["FontFace"] = Font.new([[rbxasset://bad4c7d0510ed5d9c287b848f1a9b26c/Monaco.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-G2L["SelectedTab_5"]["Size"] = UDim2.new(0.92, 0, 0.15528, 0);
-G2L["SelectedTab_5"]["BorderColor3"] = Color3.fromRGB(13, 13, 13);
-G2L["SelectedTab_5"]["Text"] = [[]];
-G2L["SelectedTab_5"]["Name"] = [[SelectedTab]];
+local Padding = Instance.new("UIPadding", Tabs)
+Padding.PaddingRight = UDim.new(0, 8)
+Padding.PaddingLeft = UDim.new(0, 8)
 
+local SelectedTab = Instance.new("TextButton", Tabs)
+SelectedTab.BorderSizePixel = 2
+SelectedTab.TextSize = 14
+SelectedTab.AutoButtonColor = false
+SelectedTab.TextColor3 = Color3.fromRGB(0, 0, 0)
+SelectedTab.BackgroundColor3 = Color3.fromRGB(31, 29, 26)
+SelectedTab.FontFace = Font.new("rbxasset://fonts/families/Monaco.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+SelectedTab.Size = UDim2.new(0.92, 0, 0.15528, 0)
+SelectedTab.BorderColor3 = Color3.fromRGB(13, 13, 13)
+SelectedTab.Text = ""
+SelectedTab.Name = "\0"
 
-G2L["Name_6"] = Instance.new("TextLabel", G2L["SelectedTab_5"]);
-G2L["Name_6"]["BorderSizePixel"] = 0;
-G2L["Name_6"]["TextSize"] = 9;
-G2L["Name_6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["Name_6"]["FontFace"] = Font.new([[rbxasset://bad4c7d0510ed5d9c287b848f1a9b26c/Monaco.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-G2L["Name_6"]["TextColor3"] = Color3.fromRGB(236, 236, 236);
-G2L["Name_6"]["BackgroundTransparency"] = 1;
-G2L["Name_6"]["AnchorPoint"] = Vector2.new(0, 0.5);
-G2L["Name_6"]["Size"] = UDim2.new(0.11224, 0, 0.6, 0);
-G2L["Name_6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["Name_6"]["Text"] = [[Main]];
-G2L["Name_6"]["AutomaticSize"] = Enum.AutomaticSize.X;
-G2L["Name_6"]["Name"] = [[Name]];
-G2L["Name_6"]["Position"] = UDim2.new(0, 13, 0.5, 0);
+local Stroke = Instance.new("UIStroke", SelectedTab)
+Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+Stroke.LineJoinMode = Enum.LineJoinMode.Miter
+Stroke.Color = Color3.fromRGB(25, 24, 21)
 
+local GradientThing = Instance.new("Frame", SelectedTab)
+GradientThing.BorderSizePixel = 0
+GradientThing.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+GradientThing.Size = UDim2.new(0.11815, 0, 1, 0)
+GradientThing.BorderColor3 = Color3.fromRGB(0, 0, 0)
+GradientThing.Name = "\0"
 
-G2L["UIStroke_7"] = Instance.new("UIStroke", G2L["Name_6"]);
-G2L["UIStroke_7"]["Transparency"] = 0.6;
-G2L["UIStroke_7"]["LineJoinMode"] = Enum.LineJoinMode.Miter;
+local Gradient = Instance.new("UIGradient", GradientThing)
+Gradient.Transparency = NumberSequence.new{
+    NumberSequenceKeypoint.new(0.000, 0),
+    NumberSequenceKeypoint.new(0.193, 0.86875),
+    NumberSequenceKeypoint.new(0.504, 0.96875),
+    NumberSequenceKeypoint.new(1.000, 1)
+}
 
+local Name = Instance.new("TextLabel", SelectedTab)
+Name.BorderSizePixel = 0
+Name.TextSize = 9
+Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Name.FontFace = Font.new("rbxasset://fonts/families/Monaco.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+Name.TextColor3 = Color3.fromRGB(236, 236, 236)
+Name.BackgroundTransparency = 1
+Name.AnchorPoint = Vector2.new(0, 0.5)
+Name.Size = UDim2.new(0.11224, 0, 0.6, 0)
+Name.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Name.Text = "Main"
+Name.AutomaticSize = Enum.AutomaticSize.X
+Name.Name = "\0"
+Name.Position = UDim2.new(0, 13, 0.5, 0)
 
-G2L["SelectedBar_8"] = Instance.new("Frame", G2L["SelectedTab_5"]);
-G2L["SelectedBar_8"]["BorderSizePixel"] = 0;
-G2L["SelectedBar_8"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["SelectedBar_8"]["Size"] = UDim2.new(0.00591, 0, 1, 0);
-G2L["SelectedBar_8"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["SelectedBar_8"]["Name"] = [[SelectedBar]];
+local UIStroke_2 = Instance.new("UIStroke", Name)
+UIStroke_2.Transparency = 0.6
+UIStroke_2.LineJoinMode = Enum.LineJoinMode.Miter
 
+local SelectedBar = Instance.new("Frame", SelectedTab)
+SelectedBar.BorderSizePixel = 0
+SelectedBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SelectedBar.Size = UDim2.new(0.00591, 0, 1, 0)
+SelectedBar.BorderColor3 = Color3.fromRGB(0, 0, 0)
+SelectedBar.Name = "\0"
 
-G2L["Stroke_9"] = Instance.new("UIStroke", G2L["SelectedTab_5"]);
-G2L["Stroke_9"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["Stroke_9"]["LineJoinMode"] = Enum.LineJoinMode.Miter;
-G2L["Stroke_9"]["Name"] = [[Stroke]];
-G2L["Stroke_9"]["Color"] = Color3.fromRGB(25, 24, 21);
+local SettingsTab = Instance.new("TextButton", Tabs)
+SettingsTab.BorderSizePixel = 2
+SettingsTab.TextSize = 14
+SettingsTab.AutoButtonColor = false
+SettingsTab.TextColor3 = Color3.fromRGB(0, 0, 0)
+SettingsTab.BackgroundColor3 = Color3.fromRGB(31, 29, 26)
+SettingsTab.FontFace = Font.new("rbxasset://fonts/families/Monaco.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+SettingsTab.BackgroundTransparency = 0.6
+SettingsTab.Size = UDim2.new(0.92, 0, 0.15528, 0)
+SettingsTab.BorderColor3 = Color3.fromRGB(13, 13, 13)
+SettingsTab.Text = ""
+SettingsTab.Name = "\0"
 
+local Stroke_2 = Instance.new("UIStroke", SettingsTab)
+Stroke_2.Transparency = 0.6
+Stroke_2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+Stroke_2.LineJoinMode = Enum.LineJoinMode.Miter
+Stroke_2.Color = Color3.fromRGB(25, 24, 21)
 
-G2L["GradiantThing_a"] = Instance.new("Frame", G2L["SelectedTab_5"]);
-G2L["GradiantThing_a"]["BorderSizePixel"] = 0;
-G2L["GradiantThing_a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["GradiantThing_a"]["Size"] = UDim2.new(0.11815, 0, 1, 0);
-G2L["GradiantThing_a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["GradiantThing_a"]["Name"] = [[GradiantThing]];
+local GradientThing_2 = Instance.new("Frame", SettingsTab)
+GradientThing_2.BorderSizePixel = 0
+GradientThing_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+GradientThing_2.Size = UDim2.new(0.11815, 0, 1, 0)
+GradientThing_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+GradientThing_2.Name = "\0"
+GradientThing_2.BackgroundTransparency = 1
 
+local Gradient_2 = Instance.new("UIGradient", GradientThing_2)
+Gradient_2.Transparency = NumberSequence.new{
+    NumberSequenceKeypoint.new(0.000, 0),
+    NumberSequenceKeypoint.new(0.193, 0.86875),
+    NumberSequenceKeypoint.new(0.504, 0.96875),
+    NumberSequenceKeypoint.new(1.000, 1)
+}
 
-G2L["Gradiant_b"] = Instance.new("UIGradient", G2L["GradiantThing_a"]);
-G2L["Gradiant_b"]["Transparency"] = NumberSequence.new{NumberSequenceKeypoint.new(0.000, 0),NumberSequenceKeypoint.new(0.193, 0.86875),NumberSequenceKeypoint.new(0.504, 0.96875),NumberSequenceKeypoint.new(1.000, 1)};
-G2L["Gradiant_b"]["Name"] = [[Gradiant]];
+local Name_2 = Instance.new("TextLabel", SettingsTab)
+Name_2.BorderSizePixel = 0
+Name_2.TextSize = 9
+Name_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Name_2.FontFace = Font.new("rbxasset://fonts/families/Monaco.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+Name_2.TextColor3 = Color3.fromRGB(236, 236, 236)
+Name_2.BackgroundTransparency = 1
+Name_2.AnchorPoint = Vector2.new(0, 0.5)
+Name_2.Size = UDim2.new(0.23433, 0, 0.6, 0)
+Name_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Name_2.Text = "Settings"
+Name_2.AutomaticSize = Enum.AutomaticSize.X
+Name_2.Name = "\0"
+Name_2.Position = UDim2.new(0, 8, 0.5, 0)
 
+local UIStroke_3 = Instance.new("UIStroke", Name_2)
+UIStroke_3.Transparency = 0.6
+UIStroke_3.LineJoinMode = Enum.LineJoinMode.Miter
 
-G2L["SettingsTah_c"] = Instance.new("TextButton", G2L["Tabs_4"]);
-G2L["SettingsTah_c"]["BorderSizePixel"] = 2;
-G2L["SettingsTah_c"]["TextSize"] = 14;
-G2L["SettingsTah_c"]["AutoButtonColor"] = false;
-G2L["SettingsTah_c"]["TextColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["SettingsTah_c"]["BackgroundColor3"] = Color3.fromRGB(31, 29, 26);
-G2L["SettingsTah_c"]["FontFace"] = Font.new([[rbxasset://bad4c7d0510ed5d9c287b848f1a9b26c/Monaco.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-G2L["SettingsTah_c"]["BackgroundTransparency"] = 0.6;
-G2L["SettingsTah_c"]["Size"] = UDim2.new(0.92, 0, 0.15528, 0);
-G2L["SettingsTah_c"]["BorderColor3"] = Color3.fromRGB(13, 13, 13);
-G2L["SettingsTah_c"]["Text"] = [[]];
-G2L["SettingsTah_c"]["Name"] = [[SettingsTah]];
-
-
-G2L["Stroke_d"] = Instance.new("UIStroke", G2L["SettingsTah_c"]);
-G2L["Stroke_d"]["Transparency"] = 0.6;
-G2L["Stroke_d"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
-G2L["Stroke_d"]["LineJoinMode"] = Enum.LineJoinMode.Miter;
-G2L["Stroke_d"]["Name"] = [[Stroke]];
-G2L["Stroke_d"]["Color"] = Color3.fromRGB(25, 24, 21);
-
-
-G2L["GradiantThing_e"] = Instance.new("Frame", G2L["SettingsTah_c"]);
-G2L["GradiantThing_e"]["BorderSizePixel"] = 0;
-G2L["GradiantThing_e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["GradiantThing_e"]["Size"] = UDim2.new(0.11815, 0, 1, 0);
-G2L["GradiantThing_e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["GradiantThing_e"]["Name"] = [[GradiantThing]];
-G2L["GradiantThing_e"]["BackgroundTransparency"] = 1;
-
-
-G2L["Gradiant_f"] = Instance.new("UIGradient", G2L["GradiantThing_e"]);
-G2L["Gradiant_f"]["Transparency"] = NumberSequence.new{NumberSequenceKeypoint.new(0.000, 0),NumberSequenceKeypoint.new(0.193, 0.86875),NumberSequenceKeypoint.new(0.504, 0.96875),NumberSequenceKeypoint.new(1.000, 1)};
-G2L["Gradiant_f"]["Name"] = [[Gradiant]];
-
-
-G2L["Name_10"] = Instance.new("TextLabel", G2L["SettingsTah_c"]);
-G2L["Name_10"]["BorderSizePixel"] = 0;
-G2L["Name_10"]["TextSize"] = 9;
-G2L["Name_10"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["Name_10"]["FontFace"] = Font.new([[rbxasset://bad4c7d0510ed5d9c287b848f1a9b26c/Monaco.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-G2L["Name_10"]["TextColor3"] = Color3.fromRGB(236, 236, 236);
-G2L["Name_10"]["BackgroundTransparency"] = 1;
-G2L["Name_10"]["AnchorPoint"] = Vector2.new(0, 0.5);
-G2L["Name_10"]["Size"] = UDim2.new(0.23433, 0, 0.6, 0);
-G2L["Name_10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["Name_10"]["Text"] = [[Settings]];
-G2L["Name_10"]["AutomaticSize"] = Enum.AutomaticSize.X;
-G2L["Name_10"]["Name"] = [[Name]];
-G2L["Name_10"]["Position"] = UDim2.new(0, 8, 0.5, 0);
-
-
-G2L["UIStroke_11"] = Instance.new("UIStroke", G2L["Name_10"]);
-G2L["UIStroke_11"]["Transparency"] = 0.6;
-G2L["UIStroke_11"]["LineJoinMode"] = Enum.LineJoinMode.Miter;
-
-
-G2L["SelectedBar_12"] = Instance.new("Frame", G2L["SettingsTah_c"]);
-G2L["SelectedBar_12"]["BorderSizePixel"] = 0;
-G2L["SelectedBar_12"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["SelectedBar_12"]["Size"] = UDim2.new(0.00591, 0, 1, 0);
-G2L["SelectedBar_12"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-G2L["SelectedBar_12"]["Name"] = [[SelectedBar]];
-G2L["SelectedBar_12"]["BackgroundTransparency"] = 1;
-
-
-G2L["ListLayout_13"] = Instance.new("UIListLayout", G2L["Tabs_4"]);
-G2L["ListLayout_13"]["Padding"] = UDim.new(0, 8);
-G2L["ListLayout_13"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
-G2L["ListLayout_13"]["Name"] = [[ListLayout]];
-
-
-G2L["Padding_14"] = Instance.new("UIPadding", G2L["Tabs_4"]);
-G2L["Padding_14"]["PaddingRight"] = UDim.new(0, 8);
-G2L["Padding_14"]["Name"] = [[Padding]];
-G2L["Padding_14"]["PaddingLeft"] = UDim.new(0, 8);
-
-
-G2L["UIStroke_15"] = Instance.new("UIStroke", G2L["Side_2"]);
-G2L["UIStroke_15"]["LineJoinMode"] = Enum.LineJoinMode.Miter;
-G2L["UIStroke_15"]["Color"] = Color3.fromRGB(13, 13, 13);
+local SelectedBar_2 = Instance.new("Frame", SettingsTab)
+SelectedBar_2.BorderSizePixel = 0
+SelectedBar_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SelectedBar_2.Size = UDim2.new(0.00591, 0, 1, 0)
+SelectedBar_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+SelectedBar_2.Name = "\0"
+SelectedBar_2.BackgroundTransparency = 1
