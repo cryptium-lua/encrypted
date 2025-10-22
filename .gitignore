@@ -1,41 +1,25 @@
-# Compiled Lua sources
-luac.out
+local gui = Instance.new("ScreenGui")
+gui.Name = "patrickGui"
+gui.Parent = game.CoreGui
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+local MainFrame = Instance.new("ImageLabel")
+MainFrame.Size = UDim2.new(0, 751, 0, 539)
+MainFrame.Position = UDim2.new(0, 227, 0, 118)
+MainFrame.BackgroundColor3 = Color3.fromRGB(17,16,14)
+MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.BackgroundTransparency = 0 
+MainFrame.Image = "0"
+MainFrame.Draggable = true
+MainFrame.Parent = gui
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
+local MainFrameScale = Instance.new("UIScale")
+MainFrameScale.Parent = MainFrame
+MainFrameScale.Scale = 0.7
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
+local MainUIStroke = Instance.new("UIStroke")
+MainUIStroke.Parent = MainFrame
+MainUIStroke.Color = Color3.fromRGB(24,23,20)
+MainUIStroke.Thickness = 1
+MainUIStroke.Transparency = 0
