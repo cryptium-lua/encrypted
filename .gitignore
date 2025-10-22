@@ -3,6 +3,9 @@ gui.Name = "patrickGui"
 gui.Parent = game.CoreGui
 
 local MainFrame = Instance.new("ImageLabel")
+local MainFrameScale = Instance.new("UIScale")
+local MainUIStroke = Instance.new("UIStroke")
+
 MainFrame.Size = UDim2.new(0, 751, 0, 539)
 MainFrame.Position = UDim2.new(0, 227, 0, 118)
 MainFrame.BackgroundColor3 = Color3.fromRGB(17,16,14)
@@ -14,11 +17,9 @@ MainFrame.Image = "0"
 MainFrame.Draggable = true
 MainFrame.Parent = gui
 
-local MainFrameScale = Instance.new("UIScale")
 MainFrameScale.Parent = MainFrame
 MainFrameScale.Scale = 0.7
 
-local MainUIStroke = Instance.new("UIStroke")
 MainUIStroke.Parent = MainFrame
 MainUIStroke.Color = Color3.fromRGB(24,23,20)
 MainUIStroke.Thickness = 1
