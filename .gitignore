@@ -44,7 +44,6 @@ local SideUIStroke = Instance.new("UIStroke")
 local Logo = Instance.new("ImageLabel")
 local Tabs = Instance.new("Frame")
 local TabLayout = Instance.new("UIListLayout")
-local UIPad = Instance.new("UIPadding")
 
 MainFrame.Size = UDim2.new(0, 751, 0, 539)
 MainFrame.Position = UDim2.new(0, 227, 0, 118)
@@ -58,7 +57,7 @@ MainFrame.Draggable = true
 MainFrame.Parent = gui
 
 MainFrameScale.Parent = MainFrame
-MainFrameScale.Scale = 0.7
+MainFrameScale.Scale = 0.75
 
 MainUIStroke.Parent = MainFrame
 MainUIStroke.Color = Color3.fromRGB(24,23,20)
@@ -102,35 +101,39 @@ TabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 TabLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 TabLayout.Parent = Tabs
 
-UIPad.Parent = Tabs
-UIPad.PaddingBottom = UDim.new(0, 0)
-UIPad.PaddingLeft = UDim.new(0, 8)
-UIPad.PaddingRight = UDim.new(0, 0)
-UIPad.PaddingTop = UDim.new(0, 8)
+local function CreateTabButton(text)
+    local TabButton = Instance.new("TextButton")
+    local TabUIStroke = Instance.new("UIStroke")
+    local label = Instance.new("TextLabel")
 
-local TabButton = Instance.new("TextButton")
-local TabUIStroke = Instance.new("UIStroke")
+    TabButton.Size = UDim2.new(0.95, 0, 0, 25)
+    TabButton.Text = ""
+    TabButton.BorderSizePixel = 0
+    TabButton.BorderColor3 = Color3.fromRGB(24,23,20)
+    TabButton.BackgroundTransparency = 0
+    TabButton.BackgroundColor3 = Color3.fromRGB(30, 28, 25)
+    TabButton.Parent = Tabs
 
-TabButton.Size = UDim2.new(1, 0, 0, 25)
-TabButton.Text = ""
-TabButton.BorderSizePixel = 2
-TabButton.BorderColor3 = Color3.fromRGB(12,12,12)
-TabButton.BackgroundTransparency = 0
-TabButton.BackgroundColor3 = Color3.fromRGB(30, 28, 25)
-TabButton.Parent = Tabs
+    TabUIStroke.Parent = TabButton
+    TabUIStroke.Color = Color3.fromRGB(12,12,12)
+    TabUIStroke.Thickness = 1
+    TabUIStroke.Transparency = 0.6
 
-TabUIStroke.Parent = TabButton
-TabUIStroke.Color = Color3.fromRGB(24,23,20)
-TabUIStroke.Thickness = 1
-TabUIStroke.Transparency = 0.6
+    label.Size = UDim2.new(0.75, 0, 1, 0)
+    label.Position = UDim2.new(0, 15, 0, 0)
+    label.Text = text
+    label.TextColor3 = Color3.fromRGB(235,235,235)
+    label.BorderSizePixel = 0
+    label.BackgroundTransparency = 1
+    label.TextSize = 14
+    label.FontFace = Custom.Font
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = TabButton
 
-local label = Instance.new("TextLabel")
-label.Size = UDim2.new(0.2, 0, 1, 0)
-label.Position = UDim2.new(0, 15, 0, 0)
-label.Text = "Main"
-label.TextColor3 = Color3.fromRGB(235,235,235)
-label.BorderSizePixel = 0
-label.BackgroundTransparency = 1
-label.TextScaled = true
-label.FontFace = Custom.Font
-label.Parent = TabButton
+    return TabButton
+end
+
+CreateTabButton("Test1")
+CreateTabButton("Test2")
+CreateTabButton("Test3")
+CreateTabButton("Test4")
