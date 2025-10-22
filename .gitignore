@@ -2,9 +2,25 @@ local gui = Instance.new("ScreenGui")
 gui.Name = "patrickGui"
 gui.Parent = game.CoreGui
 
+local fontPath = "fonts/monaco.ttf"
+
+if not isfolder("fonts") then
+    makefolder("fonts")
+end
+
+if not isfile(fontPath) then
+    writefile(fontPath, game:HttpGet("https://www.dropbox.com/scl/fi/m9efe675xqyhqx6v6okwv/Monaco.ttf?rlkey=ytsq4wa4zsuneafl7ou5j7dh7&st=mhs62y70&dl=1"))
+end
+
 local MainFrame = Instance.new("ImageLabel")
 local MainFrameScale = Instance.new("UIScale")
 local MainUIStroke = Instance.new("UIStroke")
+local Side = Instance.new("Frame")
+local SideUIStroke = Instance.new("UIStroke")
+local Logo = Instance.new("ImageLabel")
+local Tabs = Instance.new("Frame")
+local TabLayout = Instance.new("UIListLayout")
+local UIPad = Instance.new("UIPadding")
 
 MainFrame.Size = UDim2.new(0, 751, 0, 539)
 MainFrame.Position = UDim2.new(0, 227, 0, 118)
@@ -12,8 +28,8 @@ MainFrame.BackgroundColor3 = Color3.fromRGB(17,16,14)
 MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
-MainFrame.BackgroundTransparency = 0 
-MainFrame.Image = "0"
+MainFrame.BackgroundTransparency = 0
+MainFrame.Image = ""
 MainFrame.Draggable = true
 MainFrame.Parent = gui
 
@@ -24,3 +40,73 @@ MainUIStroke.Parent = MainFrame
 MainUIStroke.Color = Color3.fromRGB(24,23,20)
 MainUIStroke.Thickness = 1
 MainUIStroke.Transparency = 0
+
+Side.Parent = MainFrame
+Side.Size = UDim2.new(0, 200, 1, -24)
+Side.Position = UDim2.new(0, 12, 0, 12)
+Side.BackgroundColor3 = Color3.fromRGB(24,23,20)
+Side.BorderColor3 = Color3.fromRGB(24,23,20)
+Side.BorderSizePixel = 2
+Side.BackgroundTransparency = 0
+
+SideUIStroke.Parent = Side
+SideUIStroke.Color = Color3.fromRGB(12,12,12)
+SideUIStroke.Thickness = 1
+SideUIStroke.Transparency = 0
+
+Logo.Size = UDim2.new(0, 150, 0, 150)
+Logo.Position = UDim2.new(0.5, 0, 0, -25)
+Logo.AnchorPoint = Vector2.new(0.5, 0)
+Logo.BorderSizePixel = 0
+Logo.BackgroundTransparency = 1
+Logo.Image = "rbxassetid://78008336424629"
+Logo.ScaleType = Enum.ScaleType.Fit
+Logo.ImageColor3 = Color3.fromRGB(255,255,255)
+Logo.ImageTransparency = 0
+Logo.Parent = Side
+
+Tabs.Parent = Side
+Tabs.Size = UDim2.new(1, 0, 1, -135)
+Tabs.Position = UDim2.new(0, 0, 0, 100)
+Tabs.BorderSizePixel = 0
+Tabs.BackgroundTransparency = 1
+
+TabLayout.Padding = UDim.new(0, 8)
+TabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+TabLayout.FillDirection = Enum.FillDirection.Vertical
+TabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+TabLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+TabLayout.Parent = Tabs
+
+UIPad.Parent = Tabs
+UIPad.PaddingBottom = UDim.new(0, 0)
+UIPad.PaddingLeft = UDim.new(0, 8)
+UIPad.PaddingRight = UDim.new(0, 0)
+UIPad.PaddingTop = UDim.new(0, 8)
+
+local TabButton = Instance.new("TextButton")
+local TabUIStroke = Instance.new("UIStroke")
+
+TabButton.Size = UDim2.new(1, 0, 0, 25)
+TabButton.Text = ""
+TabButton.BorderSizePixel = 2
+TabButton.BorderColor3 = Color3.fromRGB(12,12,12)
+TabButton.BackgroundTransparency = 0
+TabButton.BackgroundColor3 = Color3.fromRGB(30, 28, 25)
+TabButton.Parent = Tabs
+
+TabUIStroke.Parent = TabButton
+TabUIStroke.Color = Color3.fromRGB(24,23,20)
+TabUIStroke.Thickness = 1
+TabUIStroke.Transparency = 0.6
+
+local label = Instance.new("TextLabel")
+label.Size = UDim2.new(0.2, 0, 1, 0)
+label.Position = UDim2.new(0, 15, 0, 0)
+label.Text = "Main"
+label.TextColor3 = Color3.fromRGB(235,235,235)
+label.BorderSizePixel = 0
+label.BackgroundTransparency = 1
+label.TextScaled = true
+label.FontFace = Font.new(getcustomasset(fontPath))
+label.Parent = TabButton
