@@ -2,15 +2,39 @@ local gui = Instance.new("ScreenGui")
 gui.Name = "patrickGui"
 gui.Parent = game.CoreGui
 
-local fontPath = "fonts/monaco.ttf"
-
 if not isfolder("fonts") then
     makefolder("fonts")
 end
 
-if not isfile(fontPath) then
-    writefile(fontPath, game:HttpGet("https://www.dropbox.com/scl/fi/m9efe675xqyhqx6v6okwv/Monaco.ttf?rlkey=ytsq4wa4zsuneafl7ou5j7dh7&st=mhs62y70&dl=1"))
+local HttpService = game:GetService("HttpService")
+
+local CustomFont = {}
+function CustomFont:New(Name, Weight, Style, Data)
+    if not isfile(Data.Id) then 
+        writefile(Data.Id, game:HttpGet(Data.Url))
+    end
+
+    local fontData = {
+        name = Name,
+        faces = {
+            {
+                name = Name,
+                weight = Weight,
+                style = Style,
+                assetId = getcustomasset(Data.Id)
+            }
+        }
+    }
+
+    writefile("fonts/" .. Name .. ".font", HttpService:JSONEncode(fontData))
+    return Font.new(getcustomasset("fonts/" .. Name .. ".font"), Enum.FontWeight.Regular, Enum.FontStyle.Normal)
 end
+
+local Custom = {}
+Custom.Font = CustomFont:New("ProggyClean", "Regular", "Normal", {
+    Id = "fonts/ProggyClean.ttf",
+    Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
+})
 
 local MainFrame = Instance.new("ImageLabel")
 local MainFrameScale = Instance.new("UIScale")
@@ -108,5 +132,5 @@ label.TextColor3 = Color3.fromRGB(235,235,235)
 label.BorderSizePixel = 0
 label.BackgroundTransparency = 1
 label.TextScaled = true
-label.FontFace = Font.new(getcustomasset(fontPath))
+label.FontFace = Custom.Font
 label.Parent = TabButton
