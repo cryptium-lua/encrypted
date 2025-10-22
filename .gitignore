@@ -40,6 +40,7 @@ local MainFrame = Instance.new("ImageLabel")
 local MainFrameScale = Instance.new("UIScale")
 local MainUIStroke = Instance.new("UIStroke")
 local Side = Instance.new("Frame")
+local ContentPages = Instance.new("Frame")
 local SideUIStroke = Instance.new("UIStroke")
 local Logo = Instance.new("ImageLabel")
 local Tabs = Instance.new("Frame")
@@ -77,6 +78,12 @@ SideUIStroke.Color = Color3.fromRGB(12,12,12)
 SideUIStroke.Thickness = 1
 SideUIStroke.Transparency = 0
 
+ContentPages.Parent = MainFrame
+ContentPages.Size = UDim2.new(1, -238, 1, -24)
+ContentPages.Position = UDim2.new(0, 226, 0, 12)
+ContentPages.BorderSizePixel = 0
+ContentPages.BackgroundTransparency = 1
+
 Logo.Size = UDim2.new(0, 150, 0, 150)
 Logo.Position = UDim2.new(0.5, 0, 0, -25)
 Logo.AnchorPoint = Vector2.new(0.5, 0)
@@ -101,7 +108,9 @@ TabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 TabLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 TabLayout.Parent = Tabs
 
-local function CreateTabButton(text)
+local Window = {}
+
+function Window:CreateTab(name)
     local TabButton = Instance.new("TextButton")
     local TabUIStroke = Instance.new("UIStroke")
     local label = Instance.new("TextLabel")
@@ -121,7 +130,7 @@ local function CreateTabButton(text)
 
     label.Size = UDim2.new(0.75, 0, 1, 0)
     label.Position = UDim2.new(0, 15, 0, 0)
-    label.Text = text
+    label.Text = name
     label.TextColor3 = Color3.fromRGB(235,235,235)
     label.BorderSizePixel = 0
     label.BackgroundTransparency = 1
@@ -130,13 +139,64 @@ local function CreateTabButton(text)
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.Parent = TabButton
 
-    return TabButton
+    local Tab = {}
+
+    function Tab:CreateContent()
+        local Content = Instance.new("Frame")
+        Content.Parent = ContentPages
+        Content.Size = UDim2.new(1, 0, 1, 0)
+        Content.Position = UDim2.new(0, 0, 0, 0)
+        Content.BorderSizePixel = 0
+        Content.BackgroundTransparency = 1
+        Content.Visible = false
+
+        local ContentObj = {}
+
+        function ContentObj:CreateSection(name)
+            local Section = Instance.new("Frame")
+            local Padding = Instance.new("UIListLayout")
+            local SecStroke = Instance.new("UIStroke")
+
+            Section.Parent = Content
+            Section.Size = UDim2.new(1, 0, 0, 35)
+            Section.Position = UDim2.new(0, 0, 0, 0)
+            Section.BorderSizePixel = 2
+            Section.BorderColor3 = Color3.fromRGB(24,23,20)
+            Section.BackgroundTransparency = 0
+            Section.BackgroundColor3 = Color3.fromRGB(24,23,20)
+            Section.Visible = true
+
+            Padding.Padding = UDim.new(0, 8)
+            Padding.SortOrder = Enum.SortOrder.LayoutOrder
+            Padding.FillDirection = Enum.FillDirection.Horizontal
+            Padding.HorizontalAlignment = Enum.HorizontalAlignment.Left
+            Padding.VerticalAlignment = Enum.VerticalAlignment.Center
+            Padding.Parent = Section
+
+            SecStroke.Parent = Section
+            SecStroke.Color = Color3.fromRGB(12,12,12)
+            SecStroke.Thickness = 1
+            SecStroke.Transparency = 0
+
+            local SectionButton = Instance.new("TextButton")
+            SectionButton.Size = UDim2.new(0.95, 0, 0, 25)
+            SectionButton.Text = name
+            SectionButton.BorderSizePixel = 2
+            SectionButton.BorderColor3 = Color3.fromRGB(12,12,12)
+            SectionButton.BackgroundTransparency = 0
+            SectionButton.BackgroundColor3 = Color3.fromRGB(30, 28, 25)
+            SectionButton.Visible = true
+            SectionButton.Parent = Section
+
+            return SectionButton
+        end
+
+        return ContentObj
+    end
+
+    return Tab
 end
 
-CreateTabButton("Test1")
-CreateTabButton("Test2")
-CreateTabButton("Test3")
-CreateTabButton("Test4")
-
--- this below
-
+local tab1 = Window:CreateTab("Test1")
+local Content1 = tab1:CreateContent()
+local section1 = Content1:CreateSection("Section1")
