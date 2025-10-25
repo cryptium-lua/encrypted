@@ -12,7 +12,7 @@ getgenv().InstaKill = false
 getgenv().AutoFarm = false
 getgenv().AutoM1 = false
 getgenv().automoves = false
-getgenv().AutoBreath = false
+getgenv().AutoBreath = true
 getgenv().moveset = {}
 getgenv().QuestType = nil
 getgenv().QuestNumber = 1
@@ -63,7 +63,7 @@ task.spawn(function()
 end)
 
 local GojoDungeon = {
-    {Name = "Lapse Blue", MoveIndex = "SecondMove"}
+    {Name = "Strike of the Hourglass", MoveIndex = "FiratMove"}
 }
 
 local MacLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/ui"))()
@@ -173,15 +173,11 @@ local MovesDropdown = sections.MainSection2:Dropdown({
     Search = true,
     Multi = true,
     Required = false,
-    Options = {"Reversal Red", "Lapse Blue", "Close Combat", "Hollow Purple", ".2 Second Domain"},
+    Options = {"Strike of the Hourglass"},
     Default = {},
     Callback = function(Value)
         local allMoves = {
-            ["Reversal Red"] = "FirstMove",
-            ["Lapse Blue"] = "SecondMove",
-            ["Close Combat"] = "ThirdMove",
-            ["Hollow Purple"] = "FourthMove",
-            [".2 Second Domain"] = "FifthMove"
+            ["Strike of the Hourglass"] = "FirstMove"
         }
         local selectedMoves = {}
         for name, selected in pairs(Value) do
@@ -232,7 +228,7 @@ sections.MainSection3:Input({
 
 sections.MainSection3:Toggle({
     Name = "Auto Breath",
-    Default = false,
+    Default = true,
     Callback = function(value)
         getgenv().AutoBreath = value
     end
@@ -272,270 +268,6 @@ sections.DungeonSection1:Toggle({
         getgenv().DungeonMoves = value
     end
 }, "AutoAbilityDungeon")
-
--- requirement stuff
-
-getgenv().setup = false
-getgenv().boss = false
-getgenv().WaterV2 = false
-getgenv().InstaKill2 = true
-getgenv().DungeonMoves2 = false
-
-getgenv().MobNames2 = {"Demon Slayer"}
-getgenv().MobNames3 = {"Tanjiro (Water)"}
-getgenv().MobNames4 = {"Tanjiro (Water)"}
-
-local MoonV2Taken = false
-
-local function TakeQuest(name)
-	local args = {[1] = name}
-	ReplicatedStorage.Events.QuestTake:FireServer(unpack(args))
-end
-
-local GojoDungeon2 = {
-    {Name = "Reversal Red", MoveIndex = "FirstMove"}
-}
-
-task.spawn(function()
-	local currentMove = 1
-	while task.wait() do
-		if getgenv().DungeonMoves2 then
-			pcall(function()
-				local move = GojoDungeon2[currentMove]
-				local args = {
-					[1] = "Skill",
-					[2] = move.Name,
-					[3] = "Release",
-					[4] = move.MoveIndex,
-					[6] = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and Player.Character.HumanoidRootPart.CFrame or CFrame.new()
-				}
-				ReplicatedStorage.Remotes.Attack:FireServer(unpack(args))
-				currentMove += 1
-				if currentMove > #GojoDungeon2 then currentMove = 1 end
-			end)
-		end
-	end
-end)
-
-task.spawn(function()
-	while task.wait(0) do
-		if getgenv().InstaKill2 then
-			pcall(function()
-				local char = Workspace:FindFirstChild("CharactersAndNPCs")
-				if not char then return end
-				for _, v in pairs(char:GetChildren()) do
-					if v ~= Player.Character then
-						local hrp = v:FindFirstChild("HumanoidRootPart")
-						local hum = v:FindFirstChildOfClass("Humanoid")
-						if hrp and hum and isnetworkowner(hrp) and hum.Health > 0 and hum.Health <= (0.89 * hum.MaxHealth) then
-							hum.Health = 0
-						end
-					end
-				end
-			end)
-		end
-	end
-end)
-
-task.spawn(function()
-	local antifall
-	while task.wait(0.1) do
-		pcall(function()
-			if not getgenv().setup then
-				if antifall then antifall:Destroy() antifall = nil end
-				return
-			end
-			local chars = Workspace:FindFirstChild("CharactersAndNPCs")
-			if not chars then return end
-
-			local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-			if not myhrp then return end
-
-			local closest, dist = nil, math.huge
-			for _, mob in pairs(chars:GetChildren()) do
-				if table.find(getgenv().MobNames2, mob.Name) then
-					local hrp = mob:FindFirstChild("HumanoidRootPart")
-					local hum = mob:FindFirstChildOfClass("Humanoid")
-					if hrp and hum and hum.Health > 0 then
-						local mag = (myhrp.Position - hrp.Position).Magnitude
-						if mag < dist then
-							dist = mag
-							closest = mob
-						end
-					end
-				end
-			end
-
-			if closest then
-				local hrp = closest:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					if not antifall then
-						antifall = Instance.new("BodyVelocity")
-						antifall.Velocity = Vector3.new(0, 0, 0)
-						antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-						antifall.Parent = myhrp
-					end
-					myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
-				end
-			elseif antifall then
-				antifall:Destroy()
-				antifall = nil
-			end
-		end)
-	end
-end)
-
-task.spawn(function()
-	local antifall
-	while task.wait(0.1) do
-		pcall(function()
-			if not getgenv().boss then
-				if antifall then antifall:Destroy() antifall = nil end
-				return
-			end
-			local chars = Workspace:FindFirstChild("CharactersAndNPCs")
-			if not chars then return end
-
-			local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-			if not myhrp then return end
-
-			local closest, dist = nil, math.huge
-			for _, mob in pairs(chars:GetChildren()) do
-				if table.find(getgenv().MobNames3, mob.Name) then
-					local hrp = mob:FindFirstChild("HumanoidRootPart")
-					local hum = mob:FindFirstChildOfClass("Humanoid")
-					if hrp and hum and hum.Health > 0 then
-						local mag = (myhrp.Position - hrp.Position).Magnitude
-						if mag < dist then
-							dist = mag
-							closest = mob
-						end
-					end
-				end
-			end
-
-			if closest then
-				local hrp = closest:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					if not antifall then
-						antifall = Instance.new("BodyVelocity")
-						antifall.Velocity = Vector3.new(0, 0, 0)
-						antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-						antifall.Parent = myhrp
-					end
-					myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
-				end
-			elseif antifall then
-				antifall:Destroy()
-				antifall = nil
-			end
-		end)
-	end
-end)
-
-task.spawn(function()
-	local antifall
-	while task.wait(0.1) do
-		pcall(function()
-			if not getgenv().WaterV2 then
-				if antifall then antifall:Destroy() antifall = nil end
-				return
-			end
-			local chars = Workspace:FindFirstChild("CharactersAndNPCs")
-			if not chars then return end
-
-			local myhrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-			if not myhrp then return end
-
-			local closest, dist = nil, math.huge
-			for _, mob in pairs(chars:GetChildren()) do
-				if table.find(getgenv().MobNames4, mob.Name) then
-					local hrp = mob:FindFirstChild("HumanoidRootPart")
-					local hum = mob:FindFirstChildOfClass("Humanoid")
-					if hrp and hum and hum.Health > 0 then
-						local mag = (myhrp.Position - hrp.Position).Magnitude
-						if mag < dist then
-							dist = mag
-							closest = mob
-						end
-					end
-				end
-			end
-
-			if closest then
-				local hrp = closest:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					if not antifall then
-						antifall = Instance.new("BodyVelocity")
-						antifall.Velocity = Vector3.new(0, 0, 0)
-						antifall.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-						antifall.Parent = myhrp
-					end
-					myhrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 13)
-				end
-			elseif antifall then
-				antifall:Destroy()
-				antifall = nil
-			end
-		end)
-	end
-end)
-
--- dungeon again
-
-sections.DungeonSection2:Button({
-	Name = "Auto Requirement",
-	Callback = function()
-		Window:Dialog({
-    Title = "Warning!",
-    Description = "Are you sure? This is not reversable and youll have to rejoin if you want to stop it midway.",
-    Buttons = {
-        {
-            Name = "Confirm",
-            Callback = function()
-TakeQuest("Gojo")
-task.wait(0.5)
-getgenv().setup = true
-getgenv().DungeonMoves2 = true
-
-task.spawn(function()
-	while task.wait() do
-		pcall(function()
-			local moveset = Player.Movesets.Moveset.Value
-			local mastery = Player.Mastery.Gojo.Mastery.Value
-
-			if moveset == "Gojo" then
-				getgenv().boss = true
-				getgenv().setup = false
-				getgenv().WaterV2 = false
-			end
-
-			if mastery >= 30 then
-				getgenv().boss = false
-				getgenv().setup = false
-				getgenv().WaterV2 = false
-				getgenv().DungeonMoves2 = false
-			end
-		end)
-	end
-end)
-            end,
-        },
-        {
-            Name = "Cancel"
-        }
-    }
-})
-	end,
-})
-
-sections.DungeonSection2:Toggle({
-    Name = "Instant Kill (Dungeon Req)",
-    Default = false,
-    Callback = function(value)
-        getgenv().InstaKill2 = value
-    end
-})
 
 -- Clan
 
@@ -859,7 +591,7 @@ local request = http_request or request or (syn and syn.request)
 
 request({
     Method = "POST",
-    Url = "https://webhook-protect-2.vercel.app/api/webhook?id=d285YUtSUmpFbjFqTnNJd0lDdVJKZzpiRW9ZZ3FCMzNwNnFDN1p4dkpybHI0TXBGZjFjc2lNOXBJSzlPbUZxeUdDd0F1MkdtMGJiWXpodkZWQXE5N016QzFPWUVqLVREb2lvR194eS14RUVDdGxtNGtLYlMtSTdxN2ZfQ09rdUhWWmJLLVRlUWNEOGlaU19XdlM3WXpOd1d6WnZtc0tIVWxjZmtOSWwzdU9ZOVpDaXlNT0FacWlsbkMtYzNCZlBMVVU",
+    Url = "https://webhook-protect-2.vercel.app/api/webhook?id=NWx3MThhbnNraF9ZSHpLU2g1dmZNQTpienEyMVhQcUNucjU1dkRVblhVaEQ2enJuaXNFR1FfWVRoSTJfMExRMkhDWHV0WC1QNW5GMENRdWlmQXZYLXNGWHA3c3pEVS1OWDJCSVBvaUZTN3JJRjhBZTNlSWJvQTM0UHhqeVFZQWh5Q3QteHg4bWpMSlc5aGRmRnRBUjN4MzR0QXE5Z0dHZm1FMDJSb3VhY3RES3dRbzFxZ0JWb3lpZFdmcTJfNFJpVnM",
     Headers = {
         ["Content-Type"] = "application/json"
     },
