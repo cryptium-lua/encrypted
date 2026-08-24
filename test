@@ -12,60 +12,184 @@ local TestSubPage = MainPage:SubPage({ Name = "main stuff?" })
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
-		local Players = game:GetService("Players")
-		local player = Players.LocalPlayer
-		local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 
-    local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = Index })
+local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = Index })
+local TestSection2 = TestSubPage:Section({ Name = "TouchInterest BOX", Icon = "", Side = Index })
 
-		getgenv().TIhbe = false
-		getgenv().MagDistance = 0
+getgenv().TIhbe = false
+getgenv().MagDistance = 0
+getgenv().TIgkhbe = false
 
-		local hitbox
+getgenv().BXhbe = false
+getgenv().BoxHitbox = 0
+getgenv().BoxTransparency = 0
 
-		local function setupCharacter(character)
-	    hitbox = character:WaitForChild("Hitbox")
-	end
+getgenv().FootballList = {}
+getgenv().DiveList = {}
 
-		if player.Character then
-		  setupCharacter(player.Character)
-	end
+local hitbox
+
+local function setupCharacter(character)
+    hitbox = character:WaitForChild("Hitbox")
+    
+    character.ChildAdded:Connect(function(child)
+        if child.Name == "DiveHitbox" and child:IsA("BasePart") then
+            for _, existingDive in ipairs(getgenv().DiveList) do
+                if existingDive == child then
+                    return
+                end
+            end
+            table.insert(getgenv().DiveList, child)
+        end
+    end)
+    
+    character.ChildRemoved:Connect(function(child)
+        if child.Name == "DiveHitbox" then
+            for i, existingDive in ipairs(getgenv().DiveList) do
+                if existingDive == child then
+                    table.remove(getgenv().DiveList, i)
+                    return
+                end
+            end
+        end
+    end)
+    
+    for _, child in ipairs(character:GetChildren()) do
+        if child.Name == "DiveHitbox" and child:IsA("BasePart") then
+            table.insert(getgenv().DiveList, child)
+        end
+    end
+end
+
+if player.Character then
+    setupCharacter(player.Character)
+end
 
 player.CharacterAdded:Connect(setupCharacter)
 
-    TestSection:Toggle({
-        Name = "Activate",
-        Flag = "Toggle",
-        Callback = function(Value)
-            getgenv().TIhbe = Value
+local function addFootball(football)
+    if football:FindFirstChild("Hitbox") then
+        for _, existingFootball in ipairs(getgenv().FootballList) do
+            if existingFootball == football then
+                return
+            end
         end
-    })
+        table.insert(getgenv().FootballList, football)
+    end
+end
 
-    TestSection:Textbox({
-        Flag = "Textbox",
-        Placeholder = "0",
-        Default = "0",
-        Finished = false,
-        Numeric = true,
-        Callback = function(Value)
-					getgenv().MagDistance = tonumber(Value)
+local function removeFootball(football)
+    for i, existingFootball in ipairs(getgenv().FootballList) do
+        if existingFootball == football then
+            table.remove(getgenv().FootballList, i)
+            return
         end
-    })
+    end
+end
 
--- Touch Interest Hbe
+for _, descendant in ipairs(workspace:GetDescendants()) do
+    if descendant.Name == "Football" then
+        addFootball(descendant)
+    end
+end
+
+workspace.DescendantAdded:Connect(function(descendant)
+    if descendant.Name == "Football" then
+        addFootball(descendant)
+    end
+end)
+
+workspace.DescendantRemoving:Connect(function(descendant)
+    if descendant.Name == "Football" then
+        removeFootball(descendant)
+    end
+end)
+
+-- Section 1
+
+TestSection:Toggle({
+    Name = "HBE",
+    Flag = "Toggle",
+    Callback = function(Value)
+        getgenv().TIhbe = Value
+    end
+})
+
+TestSection:Toggle({
+    Name = "GKHBE",
+    Flag = "Toggle",
+    Callback = function(Value)
+        getgenv().TIgkhbe = Value
+    end
+})
+
+TestSection:Textbox({
+    Flag = "Textbox",
+    Placeholder = "0",
+    Default = "0",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().MagDistance = tonumber(Value)
+    end
+})
+
+-- Section 2
+
+TestSection:Toggle({
+    Name = "HBE",
+    Flag = "Toggle",
+    Callback = function(Value)
+        getgenv().BXhbe = Value
+    end
+})
+
+TestSection2:Textbox({
+    Flag = "Textbox",
+    Placeholder = "2.5",
+    Default = "2.5",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().BoxHitbox = tonumber(Value)
+    end
+})
+
+-- Touch Interest HBE
 task.spawn(function()
     RunService.Heartbeat:Connect(function()
         if not getgenv().TIhbe then return end
         if not hitbox or not hitbox.Parent then return end
 
-        for _, value in ipairs(workspace:GetChildren()) do
-            if value.Name == "Football"
-            and value:IsA("BasePart")
-            and value ~= hitbox then
+        for _, football in ipairs(getgenv().FootballList) do
+            if football and football.Parent and football:FindFirstChild("Hitbox") then
+                local footballHitbox = football.Hitbox
+                if footballHitbox and footballHitbox ~= hitbox then
+                    if (hitbox.Position - footballHitbox.Position).Magnitude <= getgenv().MagDistance then
+                        firetouchinterest(hitbox, footballHitbox, 0)
+                        firetouchinterest(hitbox, footballHitbox, 1)
+                    end
+                end
+            end
+        end
+    end)
+end)
 
-                if (hitbox.Position - value.Hitbox.Position).Magnitude <= getgenv().MagDistance then
-                    firetouchinterest(hitbox, value.Hitbox, 0)
-                    firetouchinterest(hitbox, value.Hitbox, 1)
+task.spawn(function()
+    RunService.Heartbeat:Connect(function()
+        if not getgenv().TIgkhbe then return end
+        if not hitbox or not hitbox.Parent then return end
+
+        for _, diveHitbox in ipairs(getgenv().DiveList) do
+            if diveHitbox and diveHitbox.Parent then
+                if diveHitbox ~= hitbox then
+                    if (hitbox.Position - diveHitbox.Position).Magnitude <= getgenv().MagDistance then
+                        firetouchinterest(hitbox, diveHitbox, 0)
+                        firetouchinterest(hitbox, diveHitbox, 1)
+                    end
                 end
             end
         end
