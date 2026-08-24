@@ -185,7 +185,7 @@ TestSection3:Toggle({
 
 TestSection3:Toggle({
     Name = "Dive Transparency",
-    Flag = "DIVETRANS",
+    Flag = "DIVETRANSTOGGLE",
     Callback = function(Value)
         getgenv().DiveTransparencyToggle = Value
     end
@@ -203,7 +203,7 @@ TestSection3:Textbox({
 })
 
 TestSection3:Textbox({
-    Flag = "DIVETRANS",
+    Flag = "DIVETRANSVAL",
     Placeholder = "1",
     Default = "1",
     Finished = false,
