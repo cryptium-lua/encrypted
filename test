@@ -16,9 +16,9 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 
-local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = Index })
-local TestSection2 = TestSubPage:Section({ Name = "Box HBE", Icon = "", Side = Index })
-local TestSection3 = TestSubPage:Section({ Name = "Dive HBE", Icon = "", Side = Index })
+local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = 1 })
+local TestSection2 = TestSubPage:Section({ Name = "Box HBE", Icon = "", Side = 2 })
+local TestSection3 = TestSubPage:Section({ Name = "Dive HBE", Icon = "", Side = 1 })
 
 getgenv().TIhbe = false
 getgenv().MagDistance = 0
