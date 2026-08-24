@@ -6,79 +6,72 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/crypt
 local Window = Library:Window({ Name = "Mute Fc", SubTitle = "BLR", ExpiresIn = "N/A" })
 Window:Category("Catagory")
 
-local TestPage = Window:Page({ Name = "Page", Icon = "" })
-local TestSubPage = TestPage:SubPage({ Name = "Testing" })
+local MainPage = Window:Page({ Name = "Central", Icon = "" })
+local TestSubPage = MainPage:SubPage({ Name = "main stuff?" })
 
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
-for Index = 1, 2 do
-    local TestSection = TestSubPage:Section({ Name = "Test", Icon = "", Side = Index })
+		local Players = game:GetService("Players")
+		local player = Players.LocalPlayer
+		local character = player.Character
+		local RunService = game:GetService("RunService")
+
+    local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = Index })
+
+		getgenv().TIhbe = false
+		getgenv().MagDistance = 0
+
+		local hitbox
+
+		local function setupCharacter(character)
+	    hitbox = character:WaitForChild("Hitbox")
+	end
+
+		if player.Character then
+		  setupCharacter(player.Character)
+	end
+
+player.CharacterAdded:Connect(setupCharacter)
 
     TestSection:Toggle({
-        Name = "Toggle",
+        Name = "Activate",
         Flag = "Toggle",
         Callback = function(Value)
-            print("Toggle:", Value)
-        end
-    })
-
-    TestSection:Button({
-        Name = "Button",
-        Callback = function()
-            print("Button pressed")
-        end
-    })
-
-    TestSection:Slider({
-        Name = "Slider",
-        Flag = "Slider",
-        Min = 0,
-        Max = 100,
-        Default = 50,
-        Suffix = "%",
-        Decimals = 1,
-        Callback = function(Value)
-            print("Slider:", Value)
-        end
-    })
-
-    TestSection:Dropdown({
-        Name = "Dropdown",
-        Flag = "Dropdown",
-        Items = { "Optionn 1", "Optionn 2", "Optionn 3", "Optionn 4" },
-        Default = "Optionn 2",
-        Multi = false,
-        Callback = function(Value)
-            print("Dropdown:", Value)
-        end
-    })
-
-    TestSection:Label("Label"):Colorpicker({
-        Flag = "Colorpicker",
-        Default = Color3.fromRGB(255, 255, 255),
-        Callback = function(Value)
-            print("Color:", Value)
-        end
-    })
-
-    TestSection:Label("Label"):Keybind({
-        Flag = "Keybind",
-        Default = Enum.KeyCode.E,
-        Mode = "Toggle",
-        Callback = function(Value)
-            print("Keybind changed:", Value)
+            getgenv().TIhbe = Value
         end
     })
 
     TestSection:Textbox({
         Flag = "Textbox",
-        Placeholder = "Placeholder",
-        Default = "Text",
+        Placeholder = "0",
+        Default = "0",
         Finished = false,
-        Numeric = false,
+        Numeric = true,
         Callback = function(Value)
-            print("Textbox:", Value)
+					local num = tonumber(Value)
+							if num and num > 0 then
+						getgenv().MagDistance = num
+					end
         end
     })
-end
+
+-- Touch Interest Hbe
+task.spawn(function()
+    RunService.Heartbeat:Connect(function()
+        if not getgenv().TIhbe then return end
+        if not hitbox or not hitbox.Parent then return end
+
+        for _, value in ipairs(workspace:GetChildren()) do
+            if value.Name == "Football"
+            and value:IsA("BasePart")
+            and value ~= hitbox then
+
+                if (hitbox.Position - value.Hitbox.Position).Magnitude <= getgenv().MagDistance then
+                    firetouchinterest(hitbox, value, 0)
+                    firetouchinterest(hitbox, value, 1)
+                end
+            end
+        end
+    end)
+end)
