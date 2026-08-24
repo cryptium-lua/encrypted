@@ -7,7 +7,8 @@ local Window = Library:Window({ Name = "Mute Fc", SubTitle = "BLR", ExpiresIn = 
 Window:Category("Catagory")
 
 local MainPage = Window:Page({ Name = "Central", Icon = "" })
-local TestSubPage = MainPage:SubPage({ Name = "main stuff?" })
+local TestSubPage = MainPage:SubPage({ Name = "Player" })
+local TestSubPage2 = MainPage:SubPage({ Name = "GK" })
 
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
@@ -18,11 +19,13 @@ local RunService = game:GetService("RunService")
 
 local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = 1 })
 local TestSection2 = TestSubPage:Section({ Name = "Box HBE", Icon = "", Side = 2 })
-local TestSection3 = TestSubPage:Section({ Name = "Dive HBE", Icon = "", Side = 1 })
+local TestSection4 = TestSubPage2:Section({ Name = "Dive TouchInterest HBE", Icon = "", Side = 1 })
+local TestSection3 = TestSubPage2:Section({ Name = "Dive HBE", Icon = "", Side = 2 })
 
 getgenv().TIhbe = false
 getgenv().MagDistance = 0
 getgenv().TIgkhbe = false
+getgenv().TIgkDistance = 0
 
 getgenv().BXhbe = false
 getgenv().BoxHitbox = 2.5
@@ -117,22 +120,14 @@ end)
 
 TestSection:Toggle({
     Name = "HBE",
-    Flag = "Toggle",
+    Flag = "HBETOGGLE",
     Callback = function(Value)
         getgenv().TIhbe = Value
     end
 })
 
-TestSection:Toggle({
-    Name = "GKHBE",
-    Flag = "Toggle",
-    Callback = function(Value)
-        getgenv().TIgkhbe = Value
-    end
-})
-
 TestSection:Textbox({
-    Flag = "Textbox",
+    Flag = "HBEDISTANCE",
     Placeholder = "0",
     Default = "0",
     Finished = false,
@@ -144,38 +139,22 @@ TestSection:Textbox({
 
 TestSection2:Toggle({
     Name = "HBE",
-    Flag = "Toggle",
+    Flag = "BOXTOGGLE",
     Callback = function(Value)
         getgenv().BXhbe = Value
     end
 })
 
-TestSection3:Toggle({
-    Name = "Dive HBE",
-    Flag = "Toggle",
-    Callback = function(Value)
-        getgenv().DiveBXhbe = Value
-    end
-})
-
 TestSection2:Toggle({
     Name = "Transparency",
-    Flag = "Toggle",
+    Flag = "TRANSPARENCYTOGGLE",
     Callback = function(Value)
         getgenv().TransparencyToggle = Value
     end
 })
 
-TestSection3:Toggle({
-    Name = "Dive Transparency",
-    Flag = "Toggle",
-    Callback = function(Value)
-        getgenv().DiveTransparencyToggle = Value
-    end
-})
-
 TestSection2:Textbox({
-    Flag = "Textbox",
+    Flag = "BOXHITBOX",
     Placeholder = "2.5",
     Default = "2.5",
     Finished = false,
@@ -185,14 +164,71 @@ TestSection2:Textbox({
     end
 })
 
+TestSection2:Textbox({
+    Flag = "BOXTRANS",
+    Placeholder = "1",
+    Default = "1",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().BoxTransparency = tonumber(Value)
+    end
+})
+
+TestSection3:Toggle({
+    Name = "Dive HBE",
+    Flag = "DIVEHBE",
+    Callback = function(Value)
+        getgenv().DiveBXhbe = Value
+    end
+})
+
+TestSection3:Toggle({
+    Name = "Dive Transparency",
+    Flag = "DIVETRANS",
+    Callback = function(Value)
+        getgenv().DiveTransparencyToggle = Value
+    end
+})
+
 TestSection3:Textbox({
-    Flag = "Textbox2",
-    Placeholder = "2.5",
-    Default = "2.5",
+    Flag = "DIVEDISTANCE",
+    Placeholder = "5",
+    Default = "5",
     Finished = false,
     Numeric = true,
     Callback = function(Value)
         getgenv().DiveBoxHitbox = tonumber(Value)
+    end
+})
+
+TestSection3:Textbox({
+    Flag = "DIVETRANS",
+    Placeholder = "1",
+    Default = "1",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().DiveBoxTransparency = tonumber(Value)
+    end
+})
+
+TestSection4:Toggle({
+    Name = "GK HBE",
+    Flag = "GKDIVE",
+    Callback = function(Value)
+        getgenv().TIgkhbe = Value
+    end
+})
+
+TestSection4:Textbox({
+    Flag = "GKDISTANCE",
+    Placeholder = "0",
+    Default = "0",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().TIgkDistance = tonumber(Value)
     end
 })
 
@@ -223,7 +259,7 @@ task.spawn(function()
         for _, diveHitbox in ipairs(getgenv().DiveList) do
             if diveHitbox and diveHitbox.Parent then
                 if diveHitbox ~= hitbox then
-                    if (hitbox.Position - diveHitbox.Position).Magnitude <= getgenv().MagDistance then
+                    if (hitbox.Position - diveHitbox.Position).Magnitude <= getgenv().TIgkDistance then
                         firetouchinterest(hitbox, diveHitbox, 0)
                         firetouchinterest(hitbox, diveHitbox, 1)
                     end
