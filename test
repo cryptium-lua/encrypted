@@ -1,9 +1,9 @@
 getgenv().FolderName = "ModdedLibrary"
-getgenv().UILogo = "rbxassetid://126152115075698"
+getgenv().UILogo = "rbxassetid://92260093695706"
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lua%20ui"))()
 
-local Window = Library:Window({ Name = "Game Name", SubTitle = "Hub Name", ExpiresIn = "N/A" })
+local Window = Library:Window({ Name = "Mute Fc", SubTitle = "BLR", ExpiresIn = "N/A" })
 Window:Category("Catagory")
 
 local TestPage = Window:Page({ Name = "Page", Icon = "" })
