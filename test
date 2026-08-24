@@ -18,6 +18,7 @@ local RunService = game:GetService("RunService")
 
 local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = Index })
 local TestSection2 = TestSubPage:Section({ Name = "Box HBE", Icon = "", Side = Index })
+local TestSection3 = TestSubPage:Section({ Name = "Dive HBE", Icon = "", Side = Index })
 
 getgenv().TIhbe = false
 getgenv().MagDistance = 0
