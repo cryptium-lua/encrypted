@@ -17,15 +17,21 @@ local player = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 
 local TestSection = TestSubPage:Section({ Name = "TouchInterest HBE", Icon = "", Side = Index })
-local TestSection2 = TestSubPage:Section({ Name = "TouchInterest BOX", Icon = "", Side = Index })
+local TestSection2 = TestSubPage:Section({ Name = "Box HBE", Icon = "", Side = Index })
 
 getgenv().TIhbe = false
 getgenv().MagDistance = 0
 getgenv().TIgkhbe = false
 
 getgenv().BXhbe = false
-getgenv().BoxHitbox = 0
-getgenv().BoxTransparency = 0
+getgenv().BoxHitbox = 2.5
+getgenv().BoxTransparency = 1
+getgenv().TransparencyToggle = false
+
+getgenv().DiveBXhbe = false
+getgenv().DiveBoxHitbox = 2.5
+getgenv().DiveBoxTransparency = 1
+getgenv().DiveTransparencyToggle = false
 
 getgenv().FootballList = {}
 getgenv().DiveList = {}
@@ -108,8 +114,6 @@ workspace.DescendantRemoving:Connect(function(descendant)
     end
 end)
 
--- Section 1
-
 TestSection:Toggle({
     Name = "HBE",
     Flag = "Toggle",
@@ -137,13 +141,35 @@ TestSection:Textbox({
     end
 })
 
--- Section 2
-
-TestSection:Toggle({
+TestSection2:Toggle({
     Name = "HBE",
     Flag = "Toggle",
     Callback = function(Value)
         getgenv().BXhbe = Value
+    end
+})
+
+TestSection3:Toggle({
+    Name = "Dive HBE",
+    Flag = "Toggle",
+    Callback = function(Value)
+        getgenv().DiveBXhbe = Value
+    end
+})
+
+TestSection2:Toggle({
+    Name = "Transparency",
+    Flag = "Toggle",
+    Callback = function(Value)
+        getgenv().TransparencyToggle = Value
+    end
+})
+
+TestSection3:Toggle({
+    Name = "Dive Transparency",
+    Flag = "Toggle",
+    Callback = function(Value)
+        getgenv().DiveTransparencyToggle = Value
     end
 })
 
@@ -158,7 +184,17 @@ TestSection2:Textbox({
     end
 })
 
--- Touch Interest HBE
+TestSection3:Textbox({
+    Flag = "Textbox2",
+    Placeholder = "2.5",
+    Default = "2.5",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().DiveBoxHitbox = tonumber(Value)
+    end
+})
+
 task.spawn(function()
     RunService.Heartbeat:Connect(function()
         if not getgenv().TIhbe then return end
@@ -194,4 +230,44 @@ task.spawn(function()
             end
         end
     end)
+end)
+
+task.spawn(function()
+    while true do
+        for _, football in ipairs(getgenv().FootballList) do
+            if football and football.Parent and football:FindFirstChild("Hitbox") then
+                local footballHitbox = football.Hitbox
+                
+                if getgenv().BXhbe then
+                    footballHitbox.Size = Vector3.new(getgenv().BoxHitbox, getgenv().BoxHitbox, getgenv().BoxHitbox)
+                else
+                    footballHitbox.Size = Vector3.new(2.5, 2.5, 2.5)
+                end
+                
+                if getgenv().TransparencyToggle then
+                    footballHitbox.Transparency = getgenv().BoxTransparency
+                else
+                    footballHitbox.Transparency = 1
+                end
+            end
+        end
+        
+        for _, diveHitbox in ipairs(getgenv().DiveList) do
+            if diveHitbox and diveHitbox.Parent then
+                if getgenv().DiveBXhbe then
+                    diveHitbox.Size = Vector3.new(getgenv().DiveBoxHitbox, getgenv().DiveBoxHitbox, getgenv().DiveBoxHitbox)
+                else
+                    diveHitbox.Size = Vector3.new(2.5, 2.5, 2.5)
+                end
+                
+                if getgenv().DiveTransparencyToggle then
+                    diveHitbox.Transparency = getgenv().DiveBoxTransparency
+                else
+                    diveHitbox.Transparency = 1
+                end
+            end
+        end
+        
+        task.wait()
+    end
 end)
