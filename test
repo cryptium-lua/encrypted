@@ -48,10 +48,7 @@ player.CharacterAdded:Connect(setupCharacter)
         Finished = false,
         Numeric = true,
         Callback = function(Value)
-					local num = tonumber(Value)
-							if num and num > 0 then
-						getgenv().MagDistance = num
-					end
+					getgenv().MagDistance = tonumber(Value)
         end
     })
 
@@ -67,8 +64,8 @@ task.spawn(function()
             and value ~= hitbox then
 
                 if (hitbox.Position - value.Hitbox.Position).Magnitude <= getgenv().MagDistance then
-                    firetouchinterest(hitbox, value, 0)
-                    firetouchinterest(hitbox, value, 1)
+                    firetouchinterest(hitbox, value.Hitbox, 0)
+                    firetouchinterest(hitbox, value.Hitbox, 1)
                 end
             end
         end
