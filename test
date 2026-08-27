@@ -565,7 +565,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    local Event = Knit.Services.BallService.RE.Shoot
+    local Event = ReplicatedStorage.Packages.Knit.Services.BallService.RE.Shoot
     
     local mtHook
     mtHook = hookmetamethod(game, "__namecall", function(...)
