@@ -412,20 +412,15 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+    local stats = player:WaitForChild("PlayerStats")
+    local stamina = stats:WaitForChild("Stamina")
+    
     while true do
         if getgenv().Settings.Misc.InfStam then
-            local character = player.Character
-            if character then
-                local stats = character:FindFirstChild("PlayerStats")
-                if stats then
-                    local stamina = stats:FindFirstChild("Stamina")
-                    if stamina then
-                        stamina.Value = 100
-                    end
-                end
+            if stamina.Value < 100 then
+                stamina.Value = 100
             end
         end
-        
         task.wait()
     end
 end)
