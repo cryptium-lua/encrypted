@@ -385,7 +385,7 @@ SZLokiSection:Toggle({
 
 SZLokiSection:Textbox({
     Flag = "SZLokiHBE",
-    Placeholder = "20",
+    Placeholder = "Hitbox",
     Default = "20",
     Finished = false,
     Numeric = true,
@@ -396,7 +396,7 @@ SZLokiSection:Textbox({
 
 SZLokiSection:Textbox({
     Flag = "SZHeight",
-    Placeholder = "100",
+    Placeholder = "Height",
     Default = "100",
     Finished = false,
     Numeric = true,
@@ -407,7 +407,7 @@ SZLokiSection:Textbox({
 
 SZLokiSection:Textbox({
     Flag = "SZShotPower",
-    Placeholder = "140",
+    Placeholder = "ShotPower",
     Default = "140",
     Finished = false,
     Numeric = true,
