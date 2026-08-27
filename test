@@ -420,10 +420,7 @@ task.spawn(function()
                 if stats then
                     local stamina = stats:FindFirstChild("Stamina")
                     if stamina then
-                        local originalValue = stamina.Value
-                        if stamina.Value ~= originalValue then
-                            stamina.Value = originalValue
-                        end
+                        stamina.Value = 100
                     end
                 end
             end
