@@ -24,7 +24,10 @@ getgenv().Settings = {
         InfStam = false,
         NoCd = false,
         CrossbarPhase = false,
-        OpM1 = false
+        OpM1 = false,
+				M1Power = 110,
+				M1INDI = Vector3.new(0,0,0),
+				M1ChangeAt = 80
     }
 }
 
@@ -56,6 +59,7 @@ local TestSection4 = TestSubPage2:Section({ Name = "Dive TouchInterest HBE", Ico
 local TestSection3 = TestSubPage2:Section({ Name = "Dive HBE", Icon = "", Side = 2 })
 
 local MiscSection = TestSubPage3:Section({ Name = "Usual Stuff", Icon = "", Side = 1 })
+local MiscSection2 = TestSubPage3:Section({ Name = "OP M1 STUFF", Icon = "", Side = 2 })
 
 local hitbox
 local noCdEnabled = false
@@ -156,7 +160,6 @@ TestSection:Textbox({
     Numeric = true,
     Callback = function(Value)
         getgenv().Settings.TouchInterest.Distance = tonumber(Value)
-        getgenv().MagDistance = tonumber(Value)
     end
 })
 
@@ -165,7 +168,6 @@ TestSection2:Toggle({
     Flag = "BOXTOGGLE",
     Callback = function(Value)
         getgenv().Settings.Box.HBE = Value
-        getgenv().BXhbe = Value
     end
 })
 
@@ -174,7 +176,6 @@ TestSection2:Toggle({
     Flag = "TRANSPARENCYTOGGLE",
     Callback = function(Value)
         getgenv().Settings.Box.TransparencyToggle = Value
-        getgenv().TransparencyToggle = Value
     end
 })
 
@@ -186,7 +187,6 @@ TestSection2:Textbox({
     Numeric = true,
     Callback = function(Value)
         getgenv().Settings.Box.Hitbox = tonumber(Value)
-        getgenv().BoxHitbox = tonumber(Value)
     end
 })
 
@@ -198,7 +198,6 @@ TestSection2:Textbox({
     Numeric = true,
     Callback = function(Value)
         getgenv().Settings.Box.Transparency = tonumber(Value)
-        getgenv().BoxTransparency = tonumber(Value)
     end
 })
 
@@ -207,7 +206,6 @@ TestSection3:Toggle({
     Flag = "DIVEHBE",
     Callback = function(Value)
         getgenv().Settings.GK.BoxHBE = Value
-        getgenv().DiveBXhbe = Value
     end
 })
 
@@ -216,7 +214,6 @@ TestSection3:Toggle({
     Flag = "DIVETRANSTOGGLE",
     Callback = function(Value)
         getgenv().Settings.GK.TransparencyToggle = Value
-        getgenv().DiveTransparencyToggle = Value
     end
 })
 
@@ -228,7 +225,6 @@ TestSection3:Textbox({
     Numeric = true,
     Callback = function(Value)
         getgenv().Settings.GK.BoxHitbox = tonumber(Value)
-        getgenv().DiveBoxHitbox = tonumber(Value)
     end
 })
 
@@ -240,7 +236,6 @@ TestSection3:Textbox({
     Numeric = true,
     Callback = function(Value)
         getgenv().Settings.GK.BoxTransparency = tonumber(Value)
-        getgenv().DiveBoxTransparency = tonumber(Value)
     end
 })
 
@@ -249,7 +244,6 @@ TestSection4:Toggle({
     Flag = "GKDIVE",
     Callback = function(Value)
         getgenv().Settings.GK.DiveHBE = Value
-        getgenv().TIgkhbe = Value
     end
 })
 
@@ -261,7 +255,6 @@ TestSection4:Textbox({
     Numeric = true,
     Callback = function(Value)
         getgenv().Settings.GK.DiveDistance = tonumber(Value)
-        getgenv().TIgkDistance = tonumber(Value)
     end
 })
 
@@ -289,11 +282,49 @@ MiscSection:Toggle({
     end
 })
 
-MiscSection:Toggle({
+MiscSection2:Toggle({
     Name = "Op M1",
     Flag = "OPM1",
     Callback = function(Value)
         getgenv().Settings.Misc.OpM1 = Value
+    end
+})
+
+MiscSection2:Textbox({
+    Flag = "ChangeAt",
+    Placeholder = "When To Change",
+    Default = "80",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().Settings.Misc.M1ChangeAt = tonumber(Value)
+    end
+})
+
+MiscSection2:Textbox({
+    Flag = "PowerBuff",
+    Placeholder = "PowerBuff",
+    Default = "110",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().Settings.Misc.M1Power = tonumber(Value)
+    end
+})
+
+MiscSection2:Textbox({
+    Flag = "Indi",
+    Placeholder = "0, 0, 0 = ground bug",
+    Default = "0, 0, 0",
+    Finished = false,
+    Numeric = false,
+    Callback = function(Value)
+        local x, y, z = Value:match("([%d.-]+)%s*,%s*([%d.-]+)%s*,%s*([%d.-]+)")
+        if x and y and z then
+            getgenv().Settings.Misc.M1INDI = Vector3.new(tonumber(x), tonumber(y), tonumber(z))
+        else
+            getgenv().Settings.Misc.M1INDI = Vector3.new(0, 0, 0)
+        end
     end
 })
 
@@ -443,4 +474,33 @@ task.spawn(function()
         
         task.wait()
     end
+end)
+
+task.spawn(function()
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local Event = ReplicatedStorage.Packages.Knit.Services.BallService.RE.Shoot
+    
+    local mtHook
+    mtHook = hookmetamethod(game, "__namecall", function(...)
+        local self = ...
+        
+        if getgenv().Settings.Misc.OpM1 then
+            if rawequal(self, Event) and getnamecallmethod() == "FireServer" then
+                local Args = table.pack(...)
+                
+                local power = Args[2]
+                local direction = Args[5]
+                
+                if power >= getgenv().Settings.Misc.M1ChangeAt then
+                    power = getgenv().Settings.Misc.M1Power
+                    direction = getgenv().Settings.Misc.M1INDI
+                end
+                
+                local Result = table.pack(mtHook(self, power, Args[3], Args[4], direction))
+                return table.unpack(Result, 1, Result.n)
+            end
+        end
+        
+        return mtHook(...)
+    end)
 end)
