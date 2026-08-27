@@ -1,7 +1,3 @@
--- / Modded by .crucifiedbylua
-
--- / made by samet
-
 if getgenv().Library then
     getgenv().Library:Unload()
 end
@@ -498,33 +494,33 @@ local Library = { } do
         end
     end
 
-    -- Custom font
+-- Custom font
     local CustomFont = { } do
-        function CustomFont:New(Name, Weight, Style, Data)
-            if not isfile(Data.Id) then 
-                writefile(Data.Id, game:HttpGet(Data.Url))
+        function CustomFont:New(Name, Weight, Style, FontData)
+            if not isfile(FontData.Id) then 
+                writefile(FontData.Id, game:HttpGet(FontData.Url))
             end
 
-            local Data = {
+            local FontConfig = {
                 name = Name,
                 faces = {
                     {
                         name = Name,
                         weight = Weight,
                         style = Style,
-                        assetId = getcustomasset(Data.Id)
+                        assetId = getcustomasset(FontData.Id)
                     }
                 }
             }
 
-            writefile(`{Library.Folders.Fonts}/{Name}.font`, HttpService:JSONEncode(Data))
+            writefile(`{Library.Folders.Fonts}/{Name}.font`, HttpService:JSONEncode(FontConfig))
             return Font.new(getcustomasset(`{Library.Folders.Fonts}/{Name}.font`), Enum.FontWeight.Regular, Enum.FontStyle.Normal)
         end
 
 Library.Font = CustomFont:New("ProggyClean", "Regular", "Normal", {
-     Id = "ProggyClean.ttf",
-     Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
- })
+    Id = "ProggyClean.ttf",
+    Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
+})
 
 
     Library.Holder = Instances:Create("ScreenGui", {
@@ -4150,5 +4146,15 @@ end
     end
 end
 getgenv().Library = Library
+
+local Window = getgenv().Library:Window({ Name = "Game Name", SubTitle = "Hub Name", ExpiresIn = "N/A" })
+Window:Category("Catagory")
+
+local TestPage = Window:Page({ Name = "Page", Icon = "" })
+local TestSubPage = TestPage:SubPage({ Name = "Testing" })
+
+Window:Category("Settings")
+local SettingsPage = getgenv().Library:CreateSettingsPage(Window)
+
 return Library
 end
