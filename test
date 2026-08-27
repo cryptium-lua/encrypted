@@ -1,14 +1,47 @@
 getgenv().FolderName = "cuteblrstuff"
 getgenv().UILogo = "rbxassetid://124454910007637"
 
+getgenv().Settings = {
+    TouchInterest = {
+        HBE = false,
+        Distance = 0
+    },
+    GK = {
+        DiveHBE = false,
+        DiveDistance = 0,
+        BoxHBE = false,
+        BoxHitbox = 2.5,
+        BoxTransparency = 1,
+        TransparencyToggle = false
+    },
+    Box = {
+        HBE = false,
+        Hitbox = 2.5,
+        Transparency = 1,
+        TransparencyToggle = false
+    },
+    Misc = {
+        InfStam = false,
+        NoCd = false,
+        CrossbarPhase = false,
+        OpM1 = false
+    }
+}
+
+getgenv().FootballList = {}
+getgenv().DiveList = {}
+
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/cryptium-lua/encrypted/refs/heads/main/lua%20ui"))()
 
 local Window = Library:Window({ Name = "Mute Fc", SubTitle = "BLR", ExpiresIn = "N/A" })
 Window:Category("Catagory")
 
 local MainPage = Window:Page({ Name = "Central", Icon = "" })
+local StylePage = Window:Page({ Name = "Style Editor", Icon = "" })
+
 local TestSubPage = MainPage:SubPage({ Name = "Player" })
 local TestSubPage2 = MainPage:SubPage({ Name = "GK" })
+local TestSubPage3 = MainPage:SubPage({ Name = "Misc" })
 
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
@@ -22,23 +55,7 @@ local TestSection2 = TestSubPage:Section({ Name = "Box HBE", Icon = "", Side = 2
 local TestSection4 = TestSubPage2:Section({ Name = "Dive TouchInterest HBE", Icon = "", Side = 1 })
 local TestSection3 = TestSubPage2:Section({ Name = "Dive HBE", Icon = "", Side = 2 })
 
-getgenv().TIhbe = false
-getgenv().MagDistance = 0
-getgenv().TIgkhbe = false
-getgenv().TIgkDistance = 0
-
-getgenv().BXhbe = false
-getgenv().BoxHitbox = 2.5
-getgenv().BoxTransparency = 1
-getgenv().TransparencyToggle = false
-
-getgenv().DiveBXhbe = false
-getgenv().DiveBoxHitbox = 2.5
-getgenv().DiveBoxTransparency = 1
-getgenv().DiveTransparencyToggle = false
-
-getgenv().FootballList = {}
-getgenv().DiveList = {}
+local MiscSection = TestSubPage3:Section({ Name = "Usual Stuff", Icon = "", Side = 1 })
 
 local hitbox
 
@@ -122,6 +139,7 @@ TestSection:Toggle({
     Name = "HBE",
     Flag = "HBETOGGLE",
     Callback = function(Value)
+        getgenv().Settings.TouchInterest.HBE = Value
         getgenv().TIhbe = Value
     end
 })
@@ -133,6 +151,7 @@ TestSection:Textbox({
     Finished = false,
     Numeric = true,
     Callback = function(Value)
+        getgenv().Settings.TouchInterest.Distance = tonumber(Value)
         getgenv().MagDistance = tonumber(Value)
     end
 })
@@ -141,6 +160,7 @@ TestSection2:Toggle({
     Name = "HBE",
     Flag = "BOXTOGGLE",
     Callback = function(Value)
+        getgenv().Settings.Box.HBE = Value
         getgenv().BXhbe = Value
     end
 })
@@ -149,6 +169,7 @@ TestSection2:Toggle({
     Name = "Transparency",
     Flag = "TRANSPARENCYTOGGLE",
     Callback = function(Value)
+        getgenv().Settings.Box.TransparencyToggle = Value
         getgenv().TransparencyToggle = Value
     end
 })
@@ -160,6 +181,7 @@ TestSection2:Textbox({
     Finished = false,
     Numeric = true,
     Callback = function(Value)
+        getgenv().Settings.Box.Hitbox = tonumber(Value)
         getgenv().BoxHitbox = tonumber(Value)
     end
 })
@@ -171,6 +193,7 @@ TestSection2:Textbox({
     Finished = false,
     Numeric = true,
     Callback = function(Value)
+        getgenv().Settings.Box.Transparency = tonumber(Value)
         getgenv().BoxTransparency = tonumber(Value)
     end
 })
@@ -179,6 +202,7 @@ TestSection3:Toggle({
     Name = "Dive HBE",
     Flag = "DIVEHBE",
     Callback = function(Value)
+        getgenv().Settings.GK.BoxHBE = Value
         getgenv().DiveBXhbe = Value
     end
 })
@@ -187,6 +211,7 @@ TestSection3:Toggle({
     Name = "Dive Transparency",
     Flag = "DIVETRANSTOGGLE",
     Callback = function(Value)
+        getgenv().Settings.GK.TransparencyToggle = Value
         getgenv().DiveTransparencyToggle = Value
     end
 })
@@ -198,6 +223,7 @@ TestSection3:Textbox({
     Finished = false,
     Numeric = true,
     Callback = function(Value)
+        getgenv().Settings.GK.BoxHitbox = tonumber(Value)
         getgenv().DiveBoxHitbox = tonumber(Value)
     end
 })
@@ -209,6 +235,7 @@ TestSection3:Textbox({
     Finished = false,
     Numeric = true,
     Callback = function(Value)
+        getgenv().Settings.GK.BoxTransparency = tonumber(Value)
         getgenv().DiveBoxTransparency = tonumber(Value)
     end
 })
@@ -217,6 +244,7 @@ TestSection4:Toggle({
     Name = "GK HBE",
     Flag = "GKDIVE",
     Callback = function(Value)
+        getgenv().Settings.GK.DiveHBE = Value
         getgenv().TIgkhbe = Value
     end
 })
@@ -228,20 +256,53 @@ TestSection4:Textbox({
     Finished = false,
     Numeric = true,
     Callback = function(Value)
+        getgenv().Settings.GK.DiveDistance = tonumber(Value)
         getgenv().TIgkDistance = tonumber(Value)
+    end
+})
+
+MiscSection:Toggle({
+    Name = "Infinite Stamina",
+    Flag = "INFSTAM",
+    Callback = function(Value)
+        getgenv().Settings.Misc.InfStam = Value
+    end
+})
+
+MiscSection:Toggle({
+    Name = "No Cooldown",
+    Flag = "NOCD",
+    Callback = function(Value)
+        getgenv().Settings.Misc.NoCd = Value
+    end
+})
+
+MiscSection:Toggle({
+    Name = "Crossbar Phase",
+    Flag = "CROSSBARPHASE",
+    Callback = function(Value)
+        getgenv().Settings.Misc.CrossbarPhase = Value
+    end
+})
+
+MiscSection:Toggle({
+    Name = "Op M1",
+    Flag = "OPM1",
+    Callback = function(Value)
+        getgenv().Settings.Misc.OpM1 = Value
     end
 })
 
 task.spawn(function()
     RunService.Heartbeat:Connect(function()
-        if not getgenv().TIhbe then return end
+        if not getgenv().Settings.TouchInterest.HBE then return end
         if not hitbox or not hitbox.Parent then return end
 
         for _, football in ipairs(getgenv().FootballList) do
             if football and football.Parent and football:FindFirstChild("Hitbox") then
                 local footballHitbox = football.Hitbox
                 if footballHitbox and footballHitbox ~= hitbox then
-                    if (hitbox.Position - footballHitbox.Position).Magnitude <= getgenv().MagDistance then
+                    if (hitbox.Position - footballHitbox.Position).Magnitude <= getgenv().Settings.TouchInterest.Distance then
                         firetouchinterest(hitbox, footballHitbox, 0)
                         firetouchinterest(hitbox, footballHitbox, 1)
                     end
@@ -253,13 +314,13 @@ end)
 
 task.spawn(function()
     RunService.Heartbeat:Connect(function()
-        if not getgenv().TIgkhbe then return end
+        if not getgenv().Settings.GK.DiveHBE then return end
         if not hitbox or not hitbox.Parent then return end
 
         for _, diveHitbox in ipairs(getgenv().DiveList) do
             if diveHitbox and diveHitbox.Parent then
                 if diveHitbox ~= hitbox then
-                    if (hitbox.Position - diveHitbox.Position).Magnitude <= getgenv().TIgkDistance then
+                    if (hitbox.Position - diveHitbox.Position).Magnitude <= getgenv().Settings.GK.DiveDistance then
                         firetouchinterest(hitbox, diveHitbox, 0)
                         firetouchinterest(hitbox, diveHitbox, 1)
                     end
@@ -275,14 +336,18 @@ task.spawn(function()
             if football and football.Parent and football:FindFirstChild("Hitbox") then
                 local footballHitbox = football.Hitbox
                 
-                if getgenv().BXhbe then
-                    footballHitbox.Size = Vector3.new(getgenv().BoxHitbox, getgenv().BoxHitbox, getgenv().BoxHitbox)
+                if getgenv().Settings.Box.HBE then
+                    footballHitbox.Size = Vector3.new(
+                        getgenv().Settings.Box.Hitbox, 
+                        getgenv().Settings.Box.Hitbox, 
+                        getgenv().Settings.Box.Hitbox
+                    )
                 else
                     footballHitbox.Size = Vector3.new(2.5, 2.5, 2.5)
                 end
                 
-                if getgenv().TransparencyToggle then
-                    footballHitbox.Transparency = getgenv().BoxTransparency
+                if getgenv().Settings.Box.TransparencyToggle then
+                    footballHitbox.Transparency = getgenv().Settings.Box.Transparency
                 else
                     footballHitbox.Transparency = 1
                 end
@@ -291,16 +356,49 @@ task.spawn(function()
         
         for _, diveHitbox in ipairs(getgenv().DiveList) do
             if diveHitbox and diveHitbox.Parent then
-                if getgenv().DiveBXhbe then
-                    diveHitbox.Size = Vector3.new(getgenv().DiveBoxHitbox, getgenv().DiveBoxHitbox, getgenv().DiveBoxHitbox)
+                if getgenv().Settings.GK.BoxHBE then
+                    diveHitbox.Size = Vector3.new(
+                        getgenv().Settings.GK.BoxHitbox, 
+                        getgenv().Settings.GK.BoxHitbox, 
+                        getgenv().Settings.GK.BoxHitbox
+                    )
                 else
                     diveHitbox.Size = Vector3.new(2.5, 2.5, 2.5)
                 end
                 
-                if getgenv().DiveTransparencyToggle then
-                    diveHitbox.Transparency = getgenv().DiveBoxTransparency
+                if getgenv().Settings.GK.TransparencyToggle then
+                    diveHitbox.Transparency = getgenv().Settings.GK.BoxTransparency
                 else
                     diveHitbox.Transparency = 1
+                end
+            end
+        end
+        
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        local canCollide = not getgenv().Settings.Misc.CrossbarPhase
+        
+        if workspace:FindFirstChild("Goals") then
+            local goal1 = workspace.Goals:FindFirstChild("Goal")
+            local goal2 = workspace.Goals:FindFirstChild("Goal2")
+            
+            if goal1 and goal1:FindFirstChild("Model") then
+                for _, child in ipairs(goal1.Model:GetChildren()) do
+                    if child.Name == "MeshPart" then
+                        child.CanCollide = canCollide
+                    end
+                end
+            end
+            
+            if goal2 and goal2:FindFirstChild("Model") then
+                for _, child in ipairs(goal2.Model:GetChildren()) do
+                    if child.Name == "MeshPart" then
+                        child.CanCollide = canCollide
+                    end
                 end
             end
         end
