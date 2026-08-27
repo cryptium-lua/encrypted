@@ -2,7 +2,8 @@ if getgenv().Library then
     getgenv().Library:Unload()
 end
 
-local Library = { } do
+local Library
+do
     local Workspace = game:GetService("Workspace")
     local UserInputService = game:GetService("UserInputService")
     local Players = game:GetService("Players")
@@ -494,33 +495,48 @@ local Library = { } do
         end
     end
 
--- Custom font
-    local CustomFont = { } do
-        function CustomFont:New(Name, Weight, Style, FontData)
-            if not isfile(FontData.Id) then 
-                writefile(FontData.Id, game:HttpGet(FontData.Url))
-            end
+-- Custom font with fallback
+local success, fontResult = pcall(function()
+    local FontData = {
+        Id = "ProggyClean.ttf",
+        Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
+    }
+    
+    if not isfile(FontData.Id) then 
+        writefile(FontData.Id, game:HttpGet(FontData.Url))
+    end
 
-            local FontConfig = {
-                name = Name,
-                faces = {
-                    {
-                        name = Name,
-                        weight = Weight,
-                        style = Style,
-                        assetId = getcustomasset(FontData.Id)
-                    }
-                }
+    local FontConfig = {
+        name = "ProggyClean",
+        faces = {
+            {
+                name = "ProggyClean",
+                weight = "Regular",
+                style = "Normal",
+                assetId = getcustomasset(FontData.Id)
             }
+        }
+    }
 
-            writefile(`{Library.Folders.Fonts}/{Name}.font`, HttpService:JSONEncode(FontConfig))
-            return Font.new(getcustomasset(`{Library.Folders.Fonts}/{Name}.font`), Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-        end
+    writefile(`{Library.Folders.Fonts}/ProggyClean.font`, HttpService:JSONEncode(FontConfig))
+    return Font.new(getcustomasset(`{Library.Folders.Fonts}/ProggyClean.font`), Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+end)
 
-Library.Font = CustomFont:New("ProggyClean", "Regular", "Normal", {
-    Id = "ProggyClean.ttf",
-    Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
-})
+if success and fontResult then
+    Library.Font = fontResult
+else
+    warn("Failed to load custom font, using default")
+    Library.Font = Enum.Font.SourceSans
+end
+
+local success, fontResult = pcall(function()
+    return CustomFont:New("ProggyClean", "Regular", "Normal", {
+        Id = "ProggyClean.ttf",
+        Url = "https://github.com/ustteki/ui/raw/refs/heads/main/ProggyClean.ttf"
+    })
+end)
+
+Library.Font = success and fontResult or Enum.Font.SourceSans
 
 
     Library.Holder = Instances:Create("ScreenGui", {
