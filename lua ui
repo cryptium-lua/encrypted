@@ -66,12 +66,12 @@ local Library = { } do
 
         FadeSpeed = 0.2,
 
-        Folders = {
-            Directory = getgenv().FolderName,
-            Configs = getgenv().FolderName .. "/Configs",
-            Assets = getgenv().FolderName .. "/Assets",
-            Fonts = getgenv().FolderName .. "/Fonts",
-        },
+				Folders = {
+				    Directory = getgenv().FolderName or "default_folder",
+					  Configs = (getgenv().FolderName or "default_folder") .. "/Configs",
+				    Assets = (getgenv().FolderName or "default_folder") .. "/Assets",
+				    Fonts = (getgenv().FolderName or "default_folder") .. "/Fonts",
+				},
 
         -- Ignore below
         Pages = { },
