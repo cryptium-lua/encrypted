@@ -58,37 +58,13 @@ local TestSection3 = TestSubPage2:Section({ Name = "Dive HBE", Icon = "", Side =
 local MiscSection = TestSubPage3:Section({ Name = "Usual Stuff", Icon = "", Side = 1 })
 
 local hitbox
-local infStamConnection
+local noCdEnabled = false
 
-local function setupInfStam()
-    local character = player.Character
-    if not character then return end
-    
-    local stats = character:FindFirstChild("PlayerStats")
-    if not stats then return end
-    
-    local stamina = stats:FindFirstChild("Stamina")
-    if not stamina then return end
-    
-    local originalValue = stamina.Value
-    
-    if infStamConnection then
-        infStamConnection:Disconnect()
-        infStamConnection = nil
-    end
-    
-    infStamConnection = stamina:GetPropertyChangedSignal("Value"):Connect(function()
-        if getgenv().Settings.Misc.InfStam then
-            if stamina.Value ~= originalValue then
-                stamina.Value = originalValue
-            end
-        end
-    end)
-end
+local AbilityController = require(game:GetService("ReplicatedStorage").Controllers.AbilityController)
+local originalAbilityCooldown = AbilityController.legacy.AbilityCooldown
 
 local function setupCharacter(character)
     hitbox = character:WaitForChild("Hitbox")
-    setupInfStam()
     
     character.ChildAdded:Connect(function(child)
         if child.Name == "DiveHitbox" and child:IsA("BasePart") then
@@ -294,7 +270,6 @@ MiscSection:Toggle({
     Flag = "INFSTAM",
     Callback = function(Value)
         getgenv().Settings.Misc.InfStam = Value
-        setupInfStam()
     end
 })
 
@@ -429,6 +404,48 @@ task.spawn(function()
                         child.CanCollide = canCollide
                     end
                 end
+            end
+        end
+        
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if getgenv().Settings.Misc.InfStam then
+            local character = player.Character
+            if character then
+                local stats = character:FindFirstChild("PlayerStats")
+                if stats then
+                    local stamina = stats:FindFirstChild("Stamina")
+                    if stamina then
+                        local originalValue = stamina.Value
+                        if stamina.Value ~= originalValue then
+                            stamina.Value = originalValue
+                        end
+                    end
+                end
+            end
+        end
+        
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if getgenv().Settings.Misc.NoCd then
+            if not noCdEnabled then
+                noCdEnabled = true
+                AbilityController.legacy.AbilityCooldown = function(s, n, ...)
+                    return originalAbilityCooldown(s, n, 0, ...)
+                end
+            end
+        else
+            if noCdEnabled then
+                noCdEnabled = false
+                AbilityController.legacy.AbilityCooldown = originalAbilityCooldown
             end
         end
         
