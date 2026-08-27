@@ -25,9 +25,17 @@ getgenv().Settings = {
         NoCd = false,
         CrossbarPhase = false,
         OpM1 = false,
-				M1Power = 110,
-				M1INDI = Vector3.new(0,0,0),
-				M1ChangeAt = 80
+        M1Power = 110,
+        M1INDI = Vector3.new(0,0,0),
+        M1ChangeAt = 80
+    },
+    SZLoki = {
+        GodspeedHbe = false,
+        GodspeedGround = false,
+        GodspeedDistance = 20,
+        GodspeedHeight = 100,
+				GodspeedThing = 9,
+				ShotPower = 140
     }
 }
 
@@ -46,6 +54,8 @@ local TestSubPage = MainPage:SubPage({ Name = "Player" })
 local TestSubPage2 = MainPage:SubPage({ Name = "GK" })
 local TestSubPage3 = MainPage:SubPage({ Name = "Misc" })
 
+local SZLokiSubPage = StylePage:SubPage({ Name = "SubZeroLoki" })
+
 Window:Category("Settings")
 local SettingsPage = Library:CreateSettingsPage(Window)
 
@@ -61,11 +71,40 @@ local TestSection3 = TestSubPage2:Section({ Name = "Dive HBE", Icon = "", Side =
 local MiscSection = TestSubPage3:Section({ Name = "Usual Stuff", Icon = "", Side = 1 })
 local MiscSection2 = TestSubPage3:Section({ Name = "OP M1 STUFF", Icon = "", Side = 2 })
 
+local SZLokiSection = SZLokiSubPage:Section({ Name = "Godspeed Freeze", Icon = "", Side = 1 })
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local hitbox
 local noCdEnabled = false
 
-local AbilityController = require(game:GetService("ReplicatedStorage").Controllers.AbilityController)
+local AbilityController = require(ReplicatedStorage.Controllers.AbilityController)
+local AB = require(ReplicatedStorage.AbilityBalancing)
+local FlowBalancing = require(ReplicatedStorage.FlowBalancing)
+local Knit = require(ReplicatedStorage.Packages.Knit)
+local BallController = Knit.GetController("BallController")
+local AbilityService = Knit.GetService("AbilityService")
+local AbilityUtils = require(ReplicatedStorage.Shared.AbilityUtils)
+local AnimationController = require(ReplicatedStorage.Controllers.AnimationController)
+
 local originalAbilityCooldown = AbilityController.legacy.AbilityCooldown
+local originalExecuteAbilitySlot = AbilityController.ExecuteAbilitySlot
+
+local playerGui = player:WaitForChild("PlayerGui")
+
+local function getGodspeedRange()
+    return AB.GodspeedFreeze.Range or 50
+end
+
+local function isGodspeedFreeze()
+    local abilityLabel = playerGui:FindFirstChild("InGameUI") and playerGui.InGameUI:FindFirstChild("Bottom") and playerGui.InGameUI.Bottom:FindFirstChild("Abilities") and playerGui.InGameUI.Bottom.Abilities:FindFirstChild("2") and playerGui.InGameUI.Bottom.Abilities["2"]:FindFirstChild("AbilityLabel")
+    
+    if abilityLabel then
+        return abilityLabel.Text == "GodSpeed Freeze" or abilityLabel.Text:find("Freeze") ~= nil
+    end
+    
+    return false
+end
 
 local function setupCharacter(character)
     hitbox = character:WaitForChild("Hitbox")
@@ -328,6 +367,55 @@ MiscSection2:Textbox({
     end
 })
 
+SZLokiSection:Toggle({
+    Name = "Godspeed Toggle",
+    Flag = "GODSPEEDHBE",
+    Callback = function(Value)
+        getgenv().Settings.SZLoki.GodspeedHbe = Value
+    end
+})
+
+SZLokiSection:Toggle({
+    Name = "Catch Grounded",
+    Flag = "GODSPEEDGROUND",
+    Callback = function(Value)
+        getgenv().Settings.SZLoki.GodspeedGround = Value
+    end
+})
+
+SZLokiSection:Textbox({
+    Flag = "SZLokiHBE",
+    Placeholder = "20",
+    Default = "20",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().Settings.SZLoki.GodspeedDistance = tonumber(Value)
+    end
+})
+
+SZLokiSection:Textbox({
+    Flag = "SZHeight",
+    Placeholder = "100",
+    Default = "100",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().Settings.SZLoki.GodspeedHeight = tonumber(Value)
+    end
+})
+
+SZLokiSection:Textbox({
+    Flag = "SZShotPower",
+    Placeholder = "140"",
+    Default = "140",
+    Finished = false,
+    Numeric = true,
+    Callback = function(Value)
+        getgenv().Settings.SZLoki.ShotPower = tonumber(Value)
+    end
+})
+
 task.spawn(function()
     RunService.Heartbeat:Connect(function()
         if not getgenv().Settings.TouchInterest.HBE then return end
@@ -477,8 +565,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local Event = ReplicatedStorage.Packages.Knit.Services.BallService.RE.Shoot
+    local Event = Knit.Services.BallService.RE.Shoot
     
     local mtHook
     mtHook = hookmetamethod(game, "__namecall", function(...)
@@ -504,3 +591,135 @@ task.spawn(function()
         return mtHook(...)
     end)
 end)
+
+local function GroundedCheck()
+    if getgenv().Settings.SZLoki.GodspeedGround then
+        return 0
+    else
+        return 9
+    end
+end
+
+AbilityController.ExecuteAbilitySlot = function(self, slot, p3)
+    if not getgenv().Settings.SZLoki.GodspeedHbe then 
+        return originalExecuteAbilitySlot(self, slot, p3) 
+    end
+    
+    if slot ~= 2 then return originalExecuteAbilitySlot(self, slot, p3) end
+    
+    if not isGodspeedFreeze() then
+        return originalExecuteAbilitySlot(self, slot, p3)
+    end
+    
+    local character = player.Character
+    if not character then return end
+    
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return end
+    
+    if not AbilityUtils.rules.offball() or not AbilityUtils.rules.slotReady(2) then
+        return
+    end
+
+    local i = AbilityController.legacy
+    if i.AbilityTwo > tick() then return end
+    if i.ABC then i.ABC:Clean() end
+
+    i:AbilityCooldown("2", AB.GodspeedFreeze.Cooldown)
+    i.StatesController.States.Ability = true
+    i.Animations:StopAnims()
+
+    local startAnim = AnimationController:GetTrack("Abilities", "GodspeedFreezeStart")
+    startAnim:Play()
+    startAnim:AdjustSpeed(2)
+
+    task.delay(0.375, function()
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(1000000000, 1000000000, 1000000000)
+        bodyVelocity.P = 100000
+        bodyVelocity.Velocity = humanoidRootPart.CFrame.LookVector * 30 + Vector3.new(0, getgenv().Settings.SZLoki.GodspeedHeight, 0)
+        bodyVelocity.Parent = humanoidRootPart
+
+        for _ = 1, 8 do
+            local velocity = bodyVelocity.Velocity
+            bodyVelocity.Velocity = Vector3.new(velocity.X, velocity.Y * 0.9, velocity.Z)
+            task.wait(0.02)
+        end
+
+        bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+        bodyVelocity:Destroy()
+    end)
+
+    AbilityService.Ability:Fire("GodspeedFreeze")
+
+    local abilityController = i.ABC
+
+    abilityController:Add(task.delay(1.5, function()
+        abilityController:Clean()
+    end))
+
+    abilityController:Add(AbilityService.Ability:Connect(function(ball, action)
+        if not ball or action ~= "Start" then
+            return
+        end
+
+        local startTime = tick()
+        local range = getgenv().Settings.SZLoki.GodspeedDistance
+        
+        local checkConnection
+        checkConnection = RunService.Heartbeat:Connect(function()
+            local ballInRange = character.Values.HasBall.Value 
+                or (ball.Char.Value == nil or ball.Char.Value.Values.HasBall.Value == false) 
+                and ((humanoidRootPart.Position - ReplicatedStorage.Football.Value.Position).Magnitude <= range
+                and ReplicatedStorage.Football.Value.Position.Y - GroundedCheck()) >= 5)
+            
+            if ballInRange or tick() - startTime >= 1.5 then
+                checkConnection:Disconnect()
+                
+                if ballInRange then
+                    AbilityService.Ability:Fire("GodspeedFreeze", "Hit")
+                    startAnim:Stop(0)
+
+                    local hitAnim = AnimationController:GetTrack("Abilities", "GodspeedFreezeHit")
+                    hitAnim:Play(0)
+                    hitAnim:AdjustSpeed(1.5)
+
+                    humanoidRootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                    AbilityUtils.clearMovers(character)
+
+                    local hitVelocity = Instance.new("BodyVelocity")
+                    hitVelocity.MaxForce = Vector3.new(1000000000, 1000000000, 1000000000)
+                    hitVelocity.P = 100000
+                    hitVelocity.Velocity = humanoidRootPart.CFrame.LookVector * 10 + Vector3.new(0, 10, 0)
+                    hitVelocity.Parent = humanoidRootPart
+
+                    task.delay(0.55, function()
+                        hitVelocity.Velocity = Vector3.new(0, 0, 0)
+                    end)
+
+                    task.wait(1.0333333333333334)
+
+                    if hitVelocity then
+                        hitVelocity:Destroy()
+                    end
+
+                    ball.AssemblyLinearVelocity = workspace.CurrentCamera.CFrame.LookVector * getgenv().Settings.SZLoki.ShotPower + AB.GodspeedFreeze.ShotTiltVector
+
+                    i.BallController:DragBall(ball)
+
+                    if abilityController then
+                        abilityController:Clean()
+                        return
+                    end
+                elseif abilityController then
+                    abilityController:Clean()
+                end
+            end
+        end)
+    end))
+
+    abilityController:Add(function()
+        abilityController:Destroy()
+        i.StatesController.States.Ability = false
+    end)
+end
