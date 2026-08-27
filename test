@@ -665,15 +665,16 @@ AbilityController.ExecuteAbilitySlot = function(self, slot, p3)
 
         local startTime = tick()
         local range = getgenv().Settings.SZLoki.GodspeedDistance
+        local groundThreshold = GroundedCheck()
         
         local checkConnection
         checkConnection = RunService.Heartbeat:Connect(function()
             local ballInRange = character.Values.HasBall.Value 
                 or (ball.Char.Value == nil or ball.Char.Value.Values.HasBall.Value == false) 
                 and ((humanoidRootPart.Position - ReplicatedStorage.Football.Value.Position).Magnitude <= range
-                and ReplicatedStorage.Football.Value.Position.Y - GroundedCheck()) >= 5)
+                and ReplicatedStorage.Football.Value.Position.Y - groundThreshold >= 5)
             
-            if ballInRange or tick() - startTime >= 1.5 then
+            if ballInRange or tick() - startTime >= 0.3 then
                 checkConnection:Disconnect()
                 
                 if ballInRange then
@@ -703,7 +704,14 @@ AbilityController.ExecuteAbilitySlot = function(self, slot, p3)
                         hitVelocity:Destroy()
                     end
 
-                    ball.AssemblyLinearVelocity = workspace.CurrentCamera.CFrame.LookVector * getgenv().Settings.SZLoki.ShotPower + AB.GodspeedFreeze.ShotTiltVector
+                    local friendlyTarget = AbilityUtils.rules.friendlyTarget(1000, true, false)
+                    if friendlyTarget then
+                        local targetDirection = (friendlyTarget.HumanoidRootPart.Position - humanoidRootPart.Position).Unit + Vector3.new(0, 0.1, 0)
+                        local targetDistance = (friendlyTarget.HumanoidRootPart.Position - humanoidRootPart.Position).Magnitude * 1.5
+                        ball.AssemblyLinearVelocity = targetDirection * math.clamp(targetDistance, 0, 150)
+                    else
+                        ball.AssemblyLinearVelocity = workspace.CurrentCamera.CFrame.LookVector * getgenv().Settings.SZLoki.ShotPower + AB.GodspeedFreeze.ShotTiltVector
+                    end
 
                     i.BallController:DragBall(ball)
 
