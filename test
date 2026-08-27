@@ -407,7 +407,7 @@ SZLokiSection:Textbox({
 
 SZLokiSection:Textbox({
     Flag = "SZShotPower",
-    Placeholder = "140"",
+    Placeholder = "140",
     Default = "140",
     Finished = false,
     Numeric = true,
